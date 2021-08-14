@@ -1,0 +1,101 @@
+.c-tabs {
+  display: flex;
+  margin-bottom: 0 !important;
+  position: relative;
+  overflow-y: scroll;
+  background: $color__main;
+  background: linear-gradient(0deg, #268050 0%, $color__main 10%);
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+  width: 100%;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  * {
+    user-select: none;
+  }
+
+  &__content {
+    display: block;
+    overflow: hidden;
+    transition: height .2s ease;
+    position: relative;
+
+    &__inner {
+      transition: opacity .2s ease;
+      width: 100%;
+
+      &--passive {
+        opacity: 0;
+        position: absolute;
+      }
+    }
+  }
+
+  &__marker {
+    background: #fff;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    box-shadow: 0 0 20px rgba(black, .3);
+    z-index: 1;
+    transition: width .2s ease, left .2s ease;
+  }
+
+  &__title {
+    position: relative;
+    z-index: 2;
+  }
+
+  &__tab {
+    position: relative;
+    padding: 15px 25px;
+    color: white;
+    white-space: nowrap;
+    flex-grow: 1;
+    text-align: center;
+    cursor: pointer;
+    transition: background .2s ease, color .2s ease;
+
+    &:hover:not(.c-tabs__tab--active) {
+      background: $color__main--darker;
+    }
+
+    &--active {
+      color: $color__text;
+    }
+  }
+
+  &__scrollbar {
+    width: 100%;
+    max-width: $max_content_width;
+    height: 5px;
+    border-radius: 3px;
+    background: rgba(196, 196, 196, 0.25);
+    position: relative;
+    cursor: pointer;
+
+    &__thumb {
+      position: absolute;
+      background: $color__main;
+      height: 5px;
+      border-radius: 3px;
+    }
+  }
+
+  @include media(lg) {
+    &__tab {
+      padding: 20px 25px;
+    }
+  }
+  @include media(xl) {
+    &__tab {
+      padding: 35px 30px;
+    }
+  }
+}

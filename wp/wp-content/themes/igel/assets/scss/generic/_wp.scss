@@ -1,0 +1,47 @@
+
+.alignleft {
+  float: left;
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+
+.alignright {
+  float: right;
+  margin-left: 10px;
+  margin-bottom: 10px;
+}
+
+.aligncenter {
+  left: 50%;
+  transform: translateX(-50%);
+
+  img {
+    height: auto !important;
+    width: 100% !important;
+  }
+}
+
+img.aligncenter {
+  height: auto !important;
+  width: 100% !important;
+}
+
+.wp-caption {
+  background: #fff;
+  box-shadow: 0 3px 5px rgba(black, .1);
+  padding: 15px;
+  border-radius: 4px;
+  margin-bottom: 30px;
+  margin-top: 30px;
+  max-width: 100%;
+
+  img {
+    border-radius: 2px;
+  }
+}
+
+.wp-caption-text {
+  padding-top: 15px;
+  margin: 0;
+  background: #fff;
+}

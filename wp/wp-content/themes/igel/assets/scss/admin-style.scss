@@ -1,0 +1,210 @@
+$color__main-accent: #438aae;
+$color__settings: #fdcb6e;
+$color__yeslabs: #00d95a;
+$color__yeslabs: #00b894;
+$color__widgets: #74b3d2;
+$color__red: #CE1F40;
+
+pre {
+  margin-left: 170px;
+}
+
+//Widgets styling
+div[id*='widget'][id*='tippinsider'] {
+  .widget-top {
+    background-color: $color__widgets;
+  }
+}
+
+//ACF Fields Styling
+.acf-field[data-name="content_elements"] {
+  .values {
+    & > .layout {
+      border: 3px solid #377dae;
+      border-radius: 5px;
+
+      .acf-fc-layout-handle {
+        background-color: #98C1D9;
+      }
+    }
+  }
+}
+
+//Admin Menu icons styling and order
+$admin-content: (
+        '#menu-pages',
+        '#menu-posts-news',
+        '#menu-posts-realty',
+        '#menu-posts-newbuild',
+);
+
+$operator-menus: (
+        '#toplevel_page_casino-menu',
+        '#toplevel_page_poker-menu',
+        '#toplevel_page_sports-betting-menu',
+        '#toplevel_page_fantasy-betting-menu',
+        '#toplevel_page_lotteries-menu',
+);
+
+$admin-settings: (
+        '#menu-tools',
+        '#menu-settings',
+        '#menu-appearance',
+        '#menu-media',
+        '#menu-plugins',
+        '#menu-users',
+);
+
+$admin-hidden: (
+        '#menu-comments',
+        '#menu-posts',
+        '#toplevel_page_banking-menu',
+        '#toplevel_page_education-menu',
+);
+
+$admin-margin: (
+        '#menu-settings',
+);
+
+#adminmenu {
+  display: flex;
+  flex-direction: column;
+
+  #menu-dashboard {
+    order: 1;
+  }
+
+  li.wp-menu-separator {
+    height: 0;
+    margin: 0;
+  }
+
+  @each $item in $admin-hidden {
+    #{$item} {
+      display: none;
+    }
+  }
+
+  @each $item in $admin-content {
+    #{$item} {
+      order: 20;
+
+      div.wp-menu-image {
+        &:before {
+          color: $color__main-accent;
+        }
+      }
+
+      &.wp-menu-open {
+        div.wp-menu-image {
+          &:before {
+            color: $color__main-accent;
+          }
+        }
+      }
+
+      &:hover {
+        div.wp-menu-image {
+          &:before {
+            color: $color__main-accent;
+          }
+        }
+      }
+    }
+  }
+
+  @each $item in $operator-menus {
+    #{$item} {
+      order: 30;
+
+      div.wp-menu-image {
+        &:before {
+          color: $color__yeslabs;
+        }
+      }
+
+      &.wp-menu-open {
+        div.wp-menu-image {
+          &:before {
+            color: $color__yeslabs;
+          }
+        }
+      }
+
+      &:hover {
+        div.wp-menu-image {
+          &:before {
+            color: $color__yeslabs;
+          }
+        }
+      }
+    }
+  }
+
+  @each $item in $admin-settings {
+    #{$item} {
+      order: 40;
+
+      div.wp-menu-image {
+        &:before {
+          color: $color__settings;
+        }
+      }
+
+      &.wp-menu-open {
+        div.wp-menu-image {
+          &:before {
+            color: $color__settings;
+          }
+        }
+      }
+
+      &:hover {
+        div.wp-menu-image {
+          &:before {
+            color: $color__settings;
+          }
+        }
+      }
+    }
+  }
+
+  & > li {
+    order: 80;
+
+    #collapse-menu {
+      order: 90;
+    }
+  }
+
+  @each $item in $admin-margin {
+
+    #{$item} {
+
+      border-bottom: 1px solid grey;
+      margin-bottom: 10px;
+      padding-bottom: 10px;
+    }
+
+    div.wp-menu-image {
+      &:before {
+        color: $color__widgets;
+      }
+    }
+    &.wp-menu-open {
+      div.wp-menu-image {
+        &:before {
+          color: $color__widgets;
+        }
+      }
+    }
+    &:hover {
+      div.wp-menu-image {
+        &:before {
+          color: $color__widgets;
+        }
+      }
+    }
+  }
+}
+

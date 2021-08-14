@@ -1,0 +1,37 @@
+.c-icon-text {
+  margin-bottom: 20px;
+  display: flex;
+
+  &:last-of-type {
+    margin-bottom: 0;
+  }
+
+  &__icon {
+    color: $color__text--subtle;
+    margin-right: 15px;
+    font-size: 18px;
+    transform: translateY(4px);
+  }
+
+  &__value {
+    font-size: 16px;
+  }
+
+  @include media(lg) {
+    margin-bottom: 25px;
+
+    &__icon {
+      font-size: 22px;
+      transform: translateY(3px);
+    }
+
+    &:last-of-type {
+      margin-bottom: 0;
+    }
+
+    &__value {
+      color: $color__text;
+      font-size: 18px;
+    }
+  }
+}

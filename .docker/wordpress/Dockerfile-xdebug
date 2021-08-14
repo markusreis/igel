@@ -1,0 +1,21 @@
+ARG PHP_VERSION
+FROM yeslabs:php${PHP_VERSION}-wordpress
+
+
+RUN set -ex \
+    && pecl install -o -f xdebug \
+    && rm -rf /tmp/pear \
+    && docker-php-ext-enable xdebug
+
+
+ARG XDEBUG_LOG=/tmp/xdebug-remote.log
+ENV XDEBUG_LOG=$XDEBUG_LOG
+
+RUN { \
+            echo "xdebug.remote_log = $XDEBUG_LOG"; \
+        } | tee -a '/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini'
+
+
+RUN set -ex \
+    && ln -sfT /dev/stdout "$XDEBUG_LOG"
+

@@ -1,0 +1,66 @@
+.c-contact-form {
+
+  margin-bottom: 320px;
+
+  &__form {
+    margin-bottom: -300px;
+
+    &.c-hero__box {
+      display: block;
+    }
+  }
+
+
+  &__text-area-wrap {
+    margin-top: 15px;
+
+    div {
+      height: 100%;
+    }
+  }
+
+  button {
+    width: 100%;
+    margin-top: 15px;
+  }
+
+  @include media(md) {
+    margin-bottom: 270px;
+    &__form {
+      margin-bottom: -240px;
+    }
+  }
+
+  @include media(lg) {
+    margin-bottom: 200px;
+    &__form {
+      margin-bottom: -180px;
+    }
+
+    &__text-area-wrap {
+      margin-top: 0;
+    }
+
+    button {
+      margin-top: 25px;
+    }
+  }
+
+  @include media(xl) {
+    margin-bottom: 190px;
+    &__form {
+      margin-bottom: -160px;
+    }
+
+    button {
+      margin-top: 30px;
+    }
+  }
+
+  @include media(xxl) {
+    margin-bottom: 160px;
+    &__form {
+      margin-bottom: -120px;
+    }
+  }
+}

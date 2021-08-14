@@ -1,0 +1,142 @@
+<?php
+if (function_exists('acf_add_local_field_group')):
+
+    acf_add_local_field_group(array(
+                                  'key'                   => 'group_60abab3fc4852',
+                                  'title'                 => 'Inhalt',
+                                  'fields'                => array(
+                                      array(
+                                          'key'               => 'field_60abab51721e9',
+                                          'label'             => 'Liste',
+                                          'name'              => 'list',
+                                          'type'              => 'group',
+                                          'instructions'      => '',
+                                          'required'          => 0,
+                                          'conditional_logic' => 0,
+                                          'wrapper'           => array(
+                                              'width' => '',
+                                              'class' => '',
+                                              'id'    => '',
+                                          ),
+                                          'layout'            => 'block',
+                                          'sub_fields'        => getTitleFields('field_688172c943427', 'field_61ffeff943427'),
+                                      ),
+                                      array(
+                                          'key'               => 'field_60abab5e721ea',
+                                          'label'             => 'Info-Block',
+                                          'name'              => 'info',
+                                          'type'              => 'group',
+                                          'instructions'      => '',
+                                          'required'          => 0,
+                                          'conditional_logic' => 0,
+                                          'wrapper'           => array(
+                                              'width' => '',
+                                              'class' => '',
+                                              'id'    => '',
+                                          ),
+                                          'layout'            => 'block',
+                                          'sub_fields'        => array_merge(
+                                              getTitleFields('field_6881f87213427', 'field_6199182943427'),
+                                              [
+                                                  array(
+                                                      'key'               => 'field_60abab7b721eb',
+                                                      'label'             => 'Text',
+                                                      'name'              => 'text',
+                                                      'type'              => 'wysiwyg',
+                                                      'instructions'      => '',
+                                                      'required'          => 0,
+                                                      'conditional_logic' => 0,
+                                                      'wrapper'           => array(
+                                                          'width' => '',
+                                                          'class' => '',
+                                                          'id'    => '',
+                                                      ),
+                                                      'default_value'     => '',
+                                                      'tabs'              => 'all',
+                                                      'toolbar'           => 'full',
+                                                      'media_upload'      => 1,
+                                                      'delay'             => 0,
+                                                  ),
+                                                  array(
+                                                      'key'               => 'field_60abab8e721ec',
+                                                      'label'             => 'Stichpunkte',
+                                                      'name'              => 'list',
+                                                      'type'              => 'repeater',
+                                                      'instructions'      => '',
+                                                      'required'          => 0,
+                                                      'conditional_logic' => 0,
+                                                      'wrapper'           => array(
+                                                          'width' => '',
+                                                          'class' => '',
+                                                          'id'    => '',
+                                                      ),
+                                                      'collapsed'         => '',
+                                                      'min'               => 0,
+                                                      'max'               => 0,
+                                                      'layout'            => 'block',
+                                                      'button_label'      => '',
+                                                      'sub_fields'        => array(
+                                                          array(
+                                                              'key'               => 'field_60abab9f721ed',
+                                                              'label'             => 'Titel',
+                                                              'name'              => 'title',
+                                                              'type'              => 'text',
+                                                              'instructions'      => '',
+                                                              'required'          => 0,
+                                                              'conditional_logic' => 0,
+                                                              'wrapper'           => array(
+                                                                  'width' => '',
+                                                                  'class' => '',
+                                                                  'id'    => '',
+                                                              ),
+                                                              'default_value'     => '',
+                                                              'placeholder'       => '',
+                                                              'prepend'           => '',
+                                                              'append'            => '',
+                                                              'maxlength'         => '',
+                                                          ),
+                                                          array(
+                                                              'key'               => 'field_60ababa9721ee',
+                                                              'label'             => 'Text',
+                                                              'name'              => 'text',
+                                                              'type'              => 'textarea',
+                                                              'instructions'      => '',
+                                                              'required'          => 0,
+                                                              'conditional_logic' => 0,
+                                                              'wrapper'           => array(
+                                                                  'width' => '',
+                                                                  'class' => '',
+                                                                  'id'    => '',
+                                                              ),
+                                                              'default_value'     => '',
+                                                              'placeholder'       => '',
+                                                              'maxlength'         => '',
+                                                              'rows'              => 4,
+                                                              'new_lines'         => '',
+                                                          ),
+                                                      ),
+                                                  ),
+                                              ]
+                                          ),
+                                      ),
+                                  ),
+                                  'location'              => array(
+                                      array(
+                                          array(
+                                              'param'    => 'page_template',
+                                              'operator' => '==',
+                                              'value'    => 'template-new-build.php',
+                                          ),
+                                      ),
+                                  ),
+                                  'menu_order'            => 0,
+                                  'position'              => 'normal',
+                                  'style'                 => 'default',
+                                  'label_placement'       => 'top',
+                                  'instruction_placement' => 'label',
+                                  'hide_on_screen'        => '',
+                                  'active'                => true,
+                                  'description'           => '',
+                              ));
+
+endif;

@@ -1,0 +1,69 @@
+[data-page="Homepage"] {
+
+  .c-frontpage {
+
+    &__button-title {
+
+      &__title {
+      }
+
+      .button {
+        display: none;
+      }
+
+      @include media(xl) {
+        margin-bottom: 45px;
+
+        h2 {
+          margin: 0 !important;
+        }
+        .button {
+          display: flex;
+        }
+      }
+    }
+
+    &__services-image {
+      width: 100%;
+      @include aspect-ratio(1135, 400);
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 35px;
+
+      img {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: top;
+      }
+    }
+  }
+
+  .mobile-all-immo {
+    width: 100%;
+    margin-top: 40px;
+
+    @include media(xl) {
+      display: none;
+    }
+  }
+
+  .c-immo-list__el__title {
+    margin-bottom: 0 !important;
+  }
+
+  .c-immo-list__el__details {
+    display: none !important;
+  }
+
+  .c-immo-list__el {
+    &:nth-of-type(3) {
+      display: none;
+
+      @include media(lg) {
+        display: block;
+      }
+    }
+  }
+}

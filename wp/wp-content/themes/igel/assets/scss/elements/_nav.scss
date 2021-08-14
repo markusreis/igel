@@ -1,0 +1,213 @@
+header {
+  .nav {
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+    transition: height .3s cubic-bezier(.17, .67, .32, .99);
+    height: 0;
+
+    &__container {
+      position: absolute;
+      background: white;
+      width: 100%;
+      height: 100vh;
+      top: 0;
+      left: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 90;
+    }
+
+    &__contact-link {
+      background: rgba($color__main, .75);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 50%;
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-10px);
+      width: 58px;
+      height: 58px;
+      z-index: 90;
+      color: white;
+      font-size: 24px;
+      opacity: 0;
+
+      &:hover {
+        background: $color__main;
+        color: white;
+      }
+    }
+
+    ul {
+      list-style: none;
+    }
+
+    li a {
+      color: $color__text;
+      font-weight: 700;
+      font-size: 18px;
+      display: block;
+      text-align: center;
+      padding: 15px 0;
+      opacity: 0;
+      transform: translateY(-10px);
+      transition: transform .5s ease, opacity .5s ease;
+
+      &:hover {
+        color: $color__main;
+      }
+    }
+
+    &--active {
+      a {
+        //color: $color__main !important;
+      }
+    }
+
+    &__toggle {
+      display: none;
+
+      &__bars {
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        padding: 0 20px;
+        transform: translateX(20px);
+        z-index: 100;
+
+        &__bg {
+          position: relative;
+          display: block;
+          width: 33px;
+          height: 33px;
+          border-radius: 50%;
+          background: $color__main;
+        }
+      }
+
+      &__bar {
+        width: 17px;
+        height: 3px;
+        border-radius: 2px;
+        background: #fff;
+        display: block;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transition: transform .2s cubic-bezier(.17, .67, .65, 1.16);
+        will-change: transform;
+
+        &--top {
+          transform: translate(-50%, -50%) translateY(-3px);
+        }
+
+        &--bottom {
+          transform: translate(-50%, -50%) translateY(3px);
+        }
+      }
+
+      &:checked {
+
+        & ~ .nav__toggle__bars {
+          .nav__toggle__bar {
+            &--top {
+              transform: translate(-50%, -50%) rotate(-45deg);
+            }
+
+            &--bottom {
+              transform: translate(-50%, -50%) rotate(45deg);
+            }
+          }
+        }
+
+        & ~ .nav {
+          height: 100vh;
+
+          .nav__contact-link {
+            transition: transform .5s ease, opacity .5s ease;
+            opacity: 1;
+            transition-delay: 200ms;
+            transform: translateX(-50%) translateY(0);
+          }
+
+          li {
+            a {
+              opacity: 1;
+              transform: translateY(0);
+            }
+
+            @for $i from 1 through 8 {
+              &:nth-of-type(#{$i}) {
+                a {
+                  transition-delay: #{(($i - 1) * 30) + 30}ms;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    @include media(xl) {
+      &__contact-link {
+        position: static;
+        transform: none;
+        opacity: 1;
+        align-self: center;
+        margin-left: 15px;
+      }
+
+      &, &__container {
+        width: auto !important;
+        height: auto !important;
+        position: relative;
+        top: auto;
+        left: auto;
+        display: flex;
+        align-items: stretch;
+
+        ul {
+          display: flex;
+        }
+
+        li {
+          display: flex;
+          align-items: stretch;
+
+          a {
+            display: flex;
+            align-items: center;
+            padding: 0 13px;
+            opacity: 1;
+            transform: none;
+            font-weight: 600;
+            border-top: 5px solid transparent;
+            border-bottom: 5px solid transparent;
+            transition: border-bottom-color .15s ease;
+
+            &:hover {
+              border-bottom: 5px solid $color__main--light;
+            }
+          }
+        }
+      }
+      &__toggle__bars {
+        display: none;
+      }
+    }
+    @include media(xxl) {
+      ul li a {
+        padding: 0 30px;
+      }
+      &__contact-link {
+        margin-left: 30px;
+      }
+    }
+  }
+}

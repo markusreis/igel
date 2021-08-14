@@ -1,0 +1,71 @@
+.c-services {
+  counter-reset: row-counter;
+  list-style: none;
+
+  &__el {
+    margin-bottom: 10px;
+    counter-increment: row-counter;
+    padding: 0 15px 25px 20%;
+    position: relative;
+    background: $color__gray--light;
+
+    &:before {
+      padding-top: 25px;
+      content: counter(row-counter);
+      width: 20%;
+      height: 100%;
+      position: absolute;
+      left: 0;
+      top: 0;
+      background: $color__main;
+      color: white;
+      font-size: 28px;
+      font-weight: 700;
+      display: flex;
+      justify-content: center;
+    }
+  }
+
+  span {
+    padding-left: 20px;
+    display: block;
+  }
+
+  &__title {
+    padding-top: 20px;
+    color: $color__text;
+    margin-bottom: 10px;
+  }
+
+  @include media(lg) {
+    justify-content: space-between;
+    &__el {
+      width: 45%;
+      width: calc(50% - 20px);
+      padding-left: 10%;
+      margin-bottom: 40px;
+      padding-right: 30px;
+
+      &:before {
+        font-size: 40px;
+        padding-top: 30px;
+      }
+    }
+    &__title {
+      margin-bottom: 12px;
+      padding-top: 22px;
+    }
+    span {
+      padding-left: 30px;
+    }
+  }
+
+  @include media(xl) {
+    justify-content: space-between;
+    &__el {
+      &:before {
+        padding-top: 35px;
+      }
+    }
+  }
+}

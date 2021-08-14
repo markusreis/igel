@@ -1,0 +1,27 @@
+$color__main--light: #A8CF99;
+$color__main--medium: #46c783;
+$color__main: #2B975D;
+$color__main--dark: #1C7947;
+$color__main--darker: #1b7243;
+$color__main--darkest: #2a3628;
+
+$color__accent: #d7c379;
+$color__accent--light: #F5F0DE;
+
+$gradient__main: linear-gradient(45deg, $color__main--dark 0%, $color__main--light 100%);
+
+$color__text: $color__main--darkest;
+$color__text--subtle: #7B8579;
+$color__text--info: #7B8579;
+
+$color__border: #E0E0E0;
+
+$color__bg: #fff;
+$color__light: #f9fbf8;
+
+$color__gray--light: #f6f6f6;
+
+$color__success: #46d4b2;
+$color__success--light: #D1F4EC;
+$color__error: #f59197;
+$color__error--light: #FCDBDC;

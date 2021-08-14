@@ -1,0 +1,51 @@
+.c-highlights {
+  display: flex;
+  flex-wrap: wrap;
+  flex-grow: 1;
+  margin-bottom: -15px;
+
+  &__el {
+    flex: 0 0 50%;
+    margin-bottom: 15px;
+    padding-right: 15px;
+
+    &--desktop {
+      display: none;
+    }
+
+    &__desc {
+      color: $color__text--subtle;
+    }
+  }
+
+  .text-highlight {
+    display: flex;
+    align-items: center;
+
+    i {
+      margin-right: 8px;
+      font-size: 34px;
+    }
+  }
+
+
+  @include media(lg) {
+    flex-wrap: nowrap;
+    margin-bottom: 0;
+
+    &__el {
+      flex: 1 1 auto;
+      margin-bottom: 0;
+    }
+
+    &__el {
+      &--mobile {
+        display: none !important;
+      }
+
+      &--desktop {
+        display: block;
+      }
+    }
+  }
+}

@@ -1,0 +1,204 @@
+$layout__column-count: 12;
+$layout__gap: 40; // px
+$layout__gap--mobile: 20; // px
+
+$used-breakpoints: '', 'xs', 'sm', 'md', 'lg', 'xl', 'xxl';
+
+.row {
+  &, &-reverse {
+    display: flex;
+    flex-wrap: wrap;
+  }
+}
+
+.cols {
+  &, &-reverse {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+  }
+
+  @each $breakpoint in $used-breakpoints {
+    $breakpoint: str-replace($breakpoint, ' ');
+    @if $breakpoint == '' {
+      &-reverse {
+        flex-direction: column-reverse;
+      }
+    } @else {
+      & {
+        &\@#{$breakpoint} {
+          @include media(#{$breakpoint}) {
+            flex-direction: column;
+          }
+        }
+      }
+      &-reverse {
+        &\@#{$breakpoint} {
+          @include media(#{$breakpoint}) {
+            flex-direction: column-reverse;
+          }
+        }
+      }
+    }
+  }
+}
+
+.row {
+  @each $breakpoint in $used-breakpoints {
+    $breakpoint: str-replace($breakpoint, ' ');
+    @if $breakpoint == '' {
+      &-reverse {
+        flex-direction: row-reverse;
+      }
+    } @else {
+      & {
+        &\@#{$breakpoint} {
+          @include media(#{$breakpoint}) {
+            flex-direction: row;
+          }
+        }
+      }
+      &-reverse {
+        &\@#{$breakpoint} {
+          @include media(#{$breakpoint}) {
+            flex-direction: row-reverse;
+          }
+        }
+      }
+    }
+  }
+
+}
+
+.col {
+  @each $breakpoint in $used-breakpoints {
+    @for $i from 1 through ($layout__column-count) {
+      $breakpoint: str-replace($breakpoint, ' ');
+      @if $breakpoint == '' {
+        &-#{$i} {
+          width: #{$i * (100% / ($layout__column-count))};
+
+          @if $i < $layout__column-count {
+            padding-left: #{$layout__gap--mobile / 2}px;
+            padding-right: #{$layout__gap--mobile / 2}px;
+
+            @include media(lg) {
+              padding-left: #{$layout__gap / 2}px;
+              padding-right: #{$layout__gap / 2}px;
+            }
+          }
+
+          &:first-child {
+            padding-left: 0;
+          }
+
+          &:last-child {
+            padding-right: 0;
+          }
+        }
+      } @else {
+        &-#{$i}\@#{$breakpoint} {
+          @include media($breakpoint) {
+            width: #{$i * (100% / ($layout__column-count))};
+
+            @if $i < $layout__column-count {
+              padding-left: #{$layout__gap--mobile / 2}px;
+              padding-right: #{$layout__gap--mobile / 2}px;
+
+              @include media(lg) {
+                padding-left: #{$layout__gap / 2}px;
+                padding-right: #{$layout__gap / 2}px;
+              }
+            }
+          }
+
+          &:first-child {
+            padding-left: 0;
+          }
+
+          &:last-child {
+            padding-right: 0;
+          }
+        }
+      }
+    }
+  }
+}
+
+.content {
+  width: 100%;
+  margin: 0 auto;
+  max-width: #{$max_content_width + 2 * $mobile-padding};
+  padding-left: $mobile-padding;
+  padding-right: $mobile-padding;
+
+  p {
+    margin-bottom: 15px;
+  }
+
+  &--gray {
+    background: $color__gray--light;
+    position: relative;
+    padding: 30px 0;
+    margin-top: 30px;
+
+    .text-title {
+      margin-bottom: 30px;
+    }
+
+    & > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    @include media(md) {
+      margin-top: 35px;
+      padding: 35px 0;
+
+      .text-title {
+        margin-bottom: 35px;
+      }
+    }
+
+    @include media(lg) {
+      margin-top: 40px;
+      padding: 40px 0;
+
+      .text-title {
+        margin-bottom: 40px;
+      }
+    }
+
+    @include media(xl) {
+      margin-top: 50px;
+      padding: 50px 0;
+
+      .text-title {
+        margin-bottom: 45px;
+      }
+    }
+
+    @include media(xxl) {
+      margin-top: 60px;
+      padding: 60px 0;
+
+      .text-title {
+        margin-bottom: 50px;
+      }
+    }
+
+    &:before {
+      pointer-events: none;
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      content: '';
+      display: block;
+      top: 0;
+      left: 0;
+      background-image: url("../../img/brand-box-green.svg");
+      background-position: top right;
+      background-repeat: no-repeat;
+    }
+  }
+}

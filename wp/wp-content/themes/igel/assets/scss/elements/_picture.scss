@@ -1,0 +1,21 @@
+.picture {
+
+  &--w-full {
+    width: 100%;
+  }
+
+  &--h-full {
+    height: 100%;
+  }
+
+  &--cover {
+    position: relative;
+
+    img {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+}

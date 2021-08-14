@@ -1,0 +1,19 @@
+{
+    "name": "justimmo/php-sdk",
+    "description": "PHP-SDK for the JUSTIMMO API",
+    "type": "library",
+    "license": "MIT",
+    "require": {
+        "php": ">=5.3.3",
+        "psr/log": "~1.0"
+    },
+    "require-dev": {
+        "symfony/debug": "~2.4"
+    },
+    "suggest": {
+        "monolog/monolog": "~1.7"
+    },
+    "autoload": {
+        "psr-0": { "Justimmo": "src/" }
+    }
+}

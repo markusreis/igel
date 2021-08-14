@@ -1,0 +1,33 @@
+.c-mini-contact {
+  margin-top: 40px;
+
+  @include media(sm) {
+    margin-top: 50px;
+  }
+
+  @include media(lg) {
+    margin-top: 60px;
+  }
+
+  @include media(xxl) {
+    margin-top: 80px;
+  }
+
+  & > div {
+    margin-bottom: 20px;
+    @include media(lg) {
+      margin-bottom: 30px;
+    }
+  }
+
+  &__name-row {
+
+  }
+
+  &__details-row {
+  }
+
+  button {
+    width: 100%;
+  }
+}

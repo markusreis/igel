@@ -1,0 +1,241 @@
+pre {
+  margin-left: 170px;
+}
+
+div[id*=widget][id*=tippinsider] .widget-top {
+  background-color: #74b3d2;
+}
+
+.acf-field[data-name=content_elements] .values > .layout {
+  border: 3px solid #377dae;
+  border-radius: 5px;
+}
+.acf-field[data-name=content_elements] .values > .layout .acf-fc-layout-handle {
+  background-color: #98C1D9;
+}
+
+#adminmenu {
+  display: flex;
+  flex-direction: column;
+}
+#adminmenu #menu-dashboard {
+  order: 1;
+}
+#adminmenu li.wp-menu-separator {
+  height: 0;
+  margin: 0;
+}
+#adminmenu #menu-comments {
+  display: none;
+}
+#adminmenu #menu-posts {
+  display: none;
+}
+#adminmenu #toplevel_page_banking-menu {
+  display: none;
+}
+#adminmenu #toplevel_page_education-menu {
+  display: none;
+}
+#adminmenu #menu-pages {
+  order: 20;
+}
+#adminmenu #menu-pages div.wp-menu-image:before {
+  color: #438aae;
+}
+#adminmenu #menu-pages.wp-menu-open div.wp-menu-image:before {
+  color: #438aae;
+}
+#adminmenu #menu-pages:hover div.wp-menu-image:before {
+  color: #438aae;
+}
+#adminmenu #menu-posts-news {
+  order: 20;
+}
+#adminmenu #menu-posts-news div.wp-menu-image:before {
+  color: #438aae;
+}
+#adminmenu #menu-posts-news.wp-menu-open div.wp-menu-image:before {
+  color: #438aae;
+}
+#adminmenu #menu-posts-news:hover div.wp-menu-image:before {
+  color: #438aae;
+}
+#adminmenu #menu-posts-realty {
+  order: 20;
+}
+#adminmenu #menu-posts-realty div.wp-menu-image:before {
+  color: #438aae;
+}
+#adminmenu #menu-posts-realty.wp-menu-open div.wp-menu-image:before {
+  color: #438aae;
+}
+#adminmenu #menu-posts-realty:hover div.wp-menu-image:before {
+  color: #438aae;
+}
+#adminmenu #menu-posts-newbuild {
+  order: 20;
+}
+#adminmenu #menu-posts-newbuild div.wp-menu-image:before {
+  color: #438aae;
+}
+#adminmenu #menu-posts-newbuild.wp-menu-open div.wp-menu-image:before {
+  color: #438aae;
+}
+#adminmenu #menu-posts-newbuild:hover div.wp-menu-image:before {
+  color: #438aae;
+}
+#adminmenu #toplevel_page_casino-menu {
+  order: 30;
+}
+#adminmenu #toplevel_page_casino-menu div.wp-menu-image:before {
+  color: #00b894;
+}
+#adminmenu #toplevel_page_casino-menu.wp-menu-open div.wp-menu-image:before {
+  color: #00b894;
+}
+#adminmenu #toplevel_page_casino-menu:hover div.wp-menu-image:before {
+  color: #00b894;
+}
+#adminmenu #toplevel_page_poker-menu {
+  order: 30;
+}
+#adminmenu #toplevel_page_poker-menu div.wp-menu-image:before {
+  color: #00b894;
+}
+#adminmenu #toplevel_page_poker-menu.wp-menu-open div.wp-menu-image:before {
+  color: #00b894;
+}
+#adminmenu #toplevel_page_poker-menu:hover div.wp-menu-image:before {
+  color: #00b894;
+}
+#adminmenu #toplevel_page_sports-betting-menu {
+  order: 30;
+}
+#adminmenu #toplevel_page_sports-betting-menu div.wp-menu-image:before {
+  color: #00b894;
+}
+#adminmenu #toplevel_page_sports-betting-menu.wp-menu-open div.wp-menu-image:before {
+  color: #00b894;
+}
+#adminmenu #toplevel_page_sports-betting-menu:hover div.wp-menu-image:before {
+  color: #00b894;
+}
+#adminmenu #toplevel_page_fantasy-betting-menu {
+  order: 30;
+}
+#adminmenu #toplevel_page_fantasy-betting-menu div.wp-menu-image:before {
+  color: #00b894;
+}
+#adminmenu #toplevel_page_fantasy-betting-menu.wp-menu-open div.wp-menu-image:before {
+  color: #00b894;
+}
+#adminmenu #toplevel_page_fantasy-betting-menu:hover div.wp-menu-image:before {
+  color: #00b894;
+}
+#adminmenu #toplevel_page_lotteries-menu {
+  order: 30;
+}
+#adminmenu #toplevel_page_lotteries-menu div.wp-menu-image:before {
+  color: #00b894;
+}
+#adminmenu #toplevel_page_lotteries-menu.wp-menu-open div.wp-menu-image:before {
+  color: #00b894;
+}
+#adminmenu #toplevel_page_lotteries-menu:hover div.wp-menu-image:before {
+  color: #00b894;
+}
+#adminmenu #menu-tools {
+  order: 40;
+}
+#adminmenu #menu-tools div.wp-menu-image:before {
+  color: #fdcb6e;
+}
+#adminmenu #menu-tools.wp-menu-open div.wp-menu-image:before {
+  color: #fdcb6e;
+}
+#adminmenu #menu-tools:hover div.wp-menu-image:before {
+  color: #fdcb6e;
+}
+#adminmenu #menu-settings {
+  order: 40;
+}
+#adminmenu #menu-settings div.wp-menu-image:before {
+  color: #fdcb6e;
+}
+#adminmenu #menu-settings.wp-menu-open div.wp-menu-image:before {
+  color: #fdcb6e;
+}
+#adminmenu #menu-settings:hover div.wp-menu-image:before {
+  color: #fdcb6e;
+}
+#adminmenu #menu-appearance {
+  order: 40;
+}
+#adminmenu #menu-appearance div.wp-menu-image:before {
+  color: #fdcb6e;
+}
+#adminmenu #menu-appearance.wp-menu-open div.wp-menu-image:before {
+  color: #fdcb6e;
+}
+#adminmenu #menu-appearance:hover div.wp-menu-image:before {
+  color: #fdcb6e;
+}
+#adminmenu #menu-media {
+  order: 40;
+}
+#adminmenu #menu-media div.wp-menu-image:before {
+  color: #fdcb6e;
+}
+#adminmenu #menu-media.wp-menu-open div.wp-menu-image:before {
+  color: #fdcb6e;
+}
+#adminmenu #menu-media:hover div.wp-menu-image:before {
+  color: #fdcb6e;
+}
+#adminmenu #menu-plugins {
+  order: 40;
+}
+#adminmenu #menu-plugins div.wp-menu-image:before {
+  color: #fdcb6e;
+}
+#adminmenu #menu-plugins.wp-menu-open div.wp-menu-image:before {
+  color: #fdcb6e;
+}
+#adminmenu #menu-plugins:hover div.wp-menu-image:before {
+  color: #fdcb6e;
+}
+#adminmenu #menu-users {
+  order: 40;
+}
+#adminmenu #menu-users div.wp-menu-image:before {
+  color: #fdcb6e;
+}
+#adminmenu #menu-users.wp-menu-open div.wp-menu-image:before {
+  color: #fdcb6e;
+}
+#adminmenu #menu-users:hover div.wp-menu-image:before {
+  color: #fdcb6e;
+}
+#adminmenu > li {
+  order: 80;
+}
+#adminmenu > li #collapse-menu {
+  order: 90;
+}
+#adminmenu #menu-settings {
+  border-bottom: 1px solid grey;
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+}
+#adminmenu div.wp-menu-image:before {
+  color: #74b3d2;
+}
+#adminmenu.wp-menu-open div.wp-menu-image:before {
+  color: #74b3d2;
+}
+#adminmenu:hover div.wp-menu-image:before {
+  color: #74b3d2;
+}
+
+/*# sourceMappingURL=admin-style.css.map */

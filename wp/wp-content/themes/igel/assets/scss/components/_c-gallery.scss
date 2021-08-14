@@ -1,0 +1,217 @@
+.single-realty {
+  .c-hero__box {
+    display: flex;
+    flex-direction: column-reverse;
+  }
+}
+
+.c-gallery {
+
+
+  &__icon-toggle {
+    text-transform: uppercase;
+    color: white;
+    background: rgba(black, .5);
+    transition: background .2s ease;
+    display: flex;
+    align-items: center;
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    padding: 10px 15px;
+    z-index: 1;
+    cursor: pointer;
+    font-size: 14px;
+
+    &:hover {
+      background: rgba(black, .8);
+    }
+
+    i {
+      font-size: 18px;
+      margin-left: 10px;
+    }
+  }
+
+  &__button {
+    margin-bottom: 25px;
+    cursor: pointer;
+
+    .ig-media {
+      &:before {
+        font-size: 24px;
+      }
+
+      margin-right: 10px;
+    }
+  }
+
+  &__modal {
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    position: fixed;
+    z-index: 100;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0s linear .7s;
+
+    &__overlay {
+      background: rgba(black, .85);
+      opacity: 0;
+      transition: opacity .3s ease;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      backdrop-filter: blur(50px);
+    }
+
+    &__inner {
+
+      picture {
+        box-shadow: 0 10px 40px rgba(black, .4);
+        position: fixed;
+        top: 2.5vh;
+        left: 2.5vw;
+        width: 94vw;
+        height: 94vh;
+        overflow: hidden;
+
+        transition: width .5s ease .05s,
+        height .5s ease .05s,
+        top .5s ease .05s,
+        left .5s ease .05s,
+        opacity .2s linear .5s;
+
+        img {
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+      }
+    }
+
+    &__arrow-buttons, #modal-close {
+      box-shadow: 0 0 10px rgba(black, .3);
+    }
+
+    &__arrow-buttons {
+      display: flex;
+      cursor: pointer;
+    }
+
+    &__previews {
+      position: fixed;
+      height: 48px;
+      padding-right: 114px;
+      bottom: 0;
+      left: 0;
+      width: 100vw;
+      display: flex;
+      overflow: hidden;
+      opacity: 0;
+      background: rgba(white, .1);
+
+      picture {
+        opacity: .2;
+        transition: opacity .3s ease;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+        flex-grow: 1;
+
+        img {
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+
+        &:hover {
+          opacity: 1;
+        }
+
+        &[data-active="true"] {
+          opacity: 1;
+          box-shadow: 0 0 10px 3px rgba(black, .4);
+          z-index: 150;
+        }
+      }
+    }
+
+    &__buttons {
+      opacity: 0;
+      transition: .4s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: fixed;
+      top: 0;
+      right: 0;
+      height: 100vh;
+
+      .button {
+        cursor: pointer;
+        margin-bottom: 0;
+
+
+        i {
+          margin: 0 !important;
+        }
+
+        &[data-action="prev"] {
+          i {
+            transform: rotate(180deg);
+          }
+
+          &:hover {
+            i {
+              transform: translateX(-7px) rotate(180deg);
+            }
+          }
+        }
+      }
+    }
+
+    &[data-active="true"] {
+      pointer-events: initial;
+      opacity: 1;
+      transition: opacity 0s linear 0s;
+
+      .c-gallery__modal__overlay {
+        opacity: 1;
+      }
+
+      .c-gallery__modal__buttons {
+        opacity: 1;
+      }
+
+      .c-gallery__modal__previews {
+        opacity: 1;
+      }
+    }
+  }
+}
+
+@include media(lg) {
+  .c-gallery__modal__previews {
+    height: 60px;
+    padding-right: 155px;
+  }
+}
+
+@include media(xl) {
+  .single-realty {
+    .c-hero__box {
+      flex-direction: row;
+    }
+  }
+  .c-gallery__button {
+    margin-left: 20px;
+    margin-bottom: 0;
+  }
+}

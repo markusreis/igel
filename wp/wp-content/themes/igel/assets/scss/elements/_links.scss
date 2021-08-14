@@ -1,0 +1,8 @@
+a {
+  color: $color__main;
+  text-decoration: none;
+
+  &:hover {
+    color: $color__main--medium;
+  }
+}

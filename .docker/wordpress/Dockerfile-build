@@ -1,0 +1,35 @@
+FROM yesdevs/wordpress:php7.4
+
+# copy over own wp-content and htaccess prod
+COPY --chown=www-data:www-data ./wp /var/www/html/
+COPY --chown=www-data:www-data ./.docker/wordpress/.htaccess.prod /var/www/html/.htaccess
+COPY ./wp/robots.txt /var/www/html/robots.txt
+
+RUN apt-get update && \
+    apt-get install nano
+
+# Copy Config etc.
+COPY .docker/wordpress/supervisord.conf /etc/supervisord.conf
+COPY .docker/wordpress/supervisord.d /etc/supervisord.d
+COPY .docker/wordpress/apache2-foreground /usr/local/bin/apache2-foreground
+
+# Additional Verfication files
+COPY ./wp/dmca-validation.html /var/www/html/dmca-validation.html
+COPY ./wp/fo-verify.html /var/www/html/fo-verify.html
+COPY ./wp/ahrefs /var/www/html/ahrefs_f2ab0458ca1cbaa989e630b7b6c7500115245ff186a4f0c9bc0a49c239f198af
+COPY ./wp/ahrefs2 /var/www/html/ahrefs_480edd1cc19b23e23e1f29e770295fdf3b1b7d6162fd52fe574a90f3379986bf
+COPY ./wp/majestic_verification.txt /var/www/html/MJ12_cd56afcf-ca52-4e44-829b-490bda0b52de.txt
+
+# fix permissions
+RUN chmod a+x /usr/local/bin/apache2-foreground
+RUN chown www-data:www-data -R /var/www/html && a2enmod headers
+
+# Add log file
+RUN touch /var/log/wp-debug.log
+RUN chown www-data:www-data /var/log/wp-debug.log
+
+# copy production php.ini
+COPY ./.docker/wordpress/php-prod.ini /usr/local/etc/php/conf.d/99-php.ini
+
+# add ssl offloading proxy support
+RUN echo "SetEnvIf x-forwarded-proto https HTTPS=on" >> /etc/apache2/conf-available/docker-php.conf

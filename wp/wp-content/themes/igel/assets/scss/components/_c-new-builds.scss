@@ -1,0 +1,70 @@
+.c-new-builds {
+  display: flex;
+  flex-wrap: wrap;
+
+  button {
+    margin: 0 !important;
+    width: 100%;
+  }
+
+  &__el {
+    width: 100%;
+
+    &__image-wrap {
+      width: 100%;
+      position: relative;
+      @include aspect-ratio(340, 230);
+      background: rgba($color__text--subtle, .2);
+      margin-bottom: 5px;
+
+      img {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+  }
+
+  @include media(md) {
+    margin-bottom: -35px;
+    &__el {
+      flex: 0 0 50%;
+      margin-bottom: 35px;
+
+      &:nth-of-type(2n - 1) {
+        padding-right: 10px;
+      }
+
+      &:nth-of-type(2n) {
+        padding-left: 10px;
+      }
+    }
+  }
+
+  @include media(lg) {
+    margin-bottom: -40px;
+    &__el {
+      flex: 0 0 33.33333%;
+      margin-bottom: 40px;
+
+      &:nth-of-type(3n - 2) {
+        padding-left: 0;
+        padding-right: 20px;
+      }
+
+      &:nth-of-type(3n - 1) {
+        padding: 0 10px;
+      }
+
+      &:nth-of-type(3n) {
+        padding-right: 0;
+        padding-left: 20px;
+      }
+
+      &__image-wrap {
+        margin-bottom: 10px;
+      }
+    }
+  }
+}

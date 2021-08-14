@@ -1,0 +1,108 @@
+$base-font-size: 16;
+
+@mixin lato() {
+  font-family: 'Lato', Helvetica, Arial, sans-serif;
+}
+
+@mixin font-size( $px ) {
+  font-size: #{ $px / $base-font-size }rem;
+}
+
+@mixin line-height( $px ) {
+  line-height: #{ $px / $base-font-size }rem;
+}
+
+@mixin responsive-font($nm,$md,$xl) {
+  @include font-size($nm);
+  @include media(md) {
+    @include font-size($md);
+  }
+  @include media(xl) {
+    @include font-size($xl);
+  }
+}
+
+@mixin responsive-height($nm,$md,$xl) {
+  @include line-height($nm);
+  @include media(md) {
+    @include line-height($md);
+  }
+  @include media(xl) {
+    @include line-height($xl);
+  }
+}
+
+
+body {
+  @include lato;
+  color: $color__text;
+  line-height: 24px;
+}
+
+::-moz-selection {
+  background: $color__main;
+  color: white;
+}
+
+::selection {
+  background: $color__main--light;
+  color: white;
+}
+
+.text-title, h1, h2 {
+  @include responsive-font(32, 36, 40);
+  @include responsive-height(36, 42, 50);
+  margin-bottom: 30px;
+  @include media(md) {
+    margin-bottom: 35px;
+  }
+  @include media(lg) {
+    margin-bottom: 40px;
+  }
+  @include media(xl) {
+    margin-bottom: 45px;
+  }
+}
+
+.text-pretitle, button, .button, .c-tabs {
+  margin-bottom: 5px;
+  text-transform: uppercase;
+  font-weight: 700;
+  @include responsive-font(18, 19, 20);
+  @include responsive-height(26, 28, 30);
+  @include media(md) {
+    margin-bottom: 3px;
+  }
+}
+
+.text-pretitle {
+  color: $color__text--subtle;
+}
+
+.text-big {
+  @include font-size(18);
+  @include line-height(28);
+}
+
+.text-small {
+  @include font-size(14);
+  @include line-height(20);
+}
+
+.text-highlight {
+  font-weight: 900;
+  @include responsive-font(32, 36, 40);
+  @include responsive-height(32, 36, 40);
+}
+
+.text-subtle {
+  color: $color__text--subtle;
+}
+
+.text-main {
+  color: $color__main;
+}
+
+.text-white {
+  color: white;
+}

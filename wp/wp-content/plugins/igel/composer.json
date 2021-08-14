@@ -1,0 +1,19 @@
+{
+  "name": "markusreis/igel",
+  "description": "Adds basic functionality required for IGEL Immobilien Wordpress",
+  "type": "wordpress-plugin",
+  "authors": [
+    {
+      "name": "Markus Reis",
+      "email": "markus.reis@yesdevs.com"
+    }
+  ],
+  "require": {
+    "justimmo/php-sdk": "1.0.*"
+  },
+  "autoload": {
+    "psr-4": {
+      "Igel\\": "inc"
+    }
+  }
+}

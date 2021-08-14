@@ -1,0 +1,50 @@
+$mobile-padding: 20px;
+$hero-margin: 25px;
+
+$max_content_width: 1240px;
+$breakpoint_xs: 380px;
+$breakpoint_sm: 480px;
+$breakpoint_md: 600px;
+$breakpoint_lg: 768px;
+$breakpoint_xl: 1024px;
+$breakpoint_xxl: 1180px;
+
+// Responsive breakpoints mixin
+@mixin media( $res ) {
+
+  @if xs == $res {
+    @media only screen and (min-width: #{$breakpoint_xs}) {
+      @content;
+    }
+  }
+
+  @if sm == $res {
+    @media only screen and (min-width: #{$breakpoint_sm}) {
+      @content;
+    }
+  }
+
+  @if md == $res {
+    @media only screen and (min-width: #{$breakpoint_md}) {
+      @content;
+    }
+  }
+
+  @if lg == $res {
+    @media only screen and (min-width: #{$breakpoint_lg}) {
+      @content;
+    }
+  }
+
+  @if xl == $res {
+    @media only screen and (min-width: #{$breakpoint_xl}) {
+      @content;
+    }
+  }
+
+  @if xxl == $res {
+    @media only screen and (min-width: #{$breakpoint_xxl}) {
+      @content;
+    }
+  }
+}

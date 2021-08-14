@@ -1,0 +1,41 @@
+.c-two-cols {
+
+  .button {
+    margin-top: 5px;
+  }
+
+  picture {
+    margin-top: 30px;
+    @include aspect-ratio(335, 210);
+  }
+
+
+  &--agents {
+    picture {
+      margin-top: 0;
+      margin-bottom: 30px;
+    }
+  }
+
+  @include media(lg) {
+    .button {
+      margin-top: 8px;
+    }
+
+    picture {
+      margin-top: 0;
+      height: 90%;
+      height: calc(100% - 68px);
+
+      &:before {
+        display: none;
+      }
+    }
+
+    &--agents {
+      picture {
+        height: 100%;
+      }
+    }
+  }
+}

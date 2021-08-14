@@ -1,0 +1,143 @@
+/*------------------------
+	icons
+-------------------------*/
+@function unicode($str) {
+  @return unquote("\"\\#{$str}\"");
+}
+
+$ig-area-2: unicode(ea02);
+$ig-caret: unicode(ea03);
+$ig-check: unicode(ea04);
+$ig-error: unicode(ea05);
+$ig-facebook: unicode(ea06);
+$ig-handshake: unicode(ea07);
+$ig-house: unicode(ea08);
+$ig-houses: unicode(ea09);
+$ig-mail: unicode(ea0a);
+$ig-people: unicode(ea0b);
+$ig-phone: unicode(ea0c);
+$ig-plus: unicode(ea0d);
+$ig-search: unicode(ea0e);
+$ig-time: unicode(ea0f);
+$ig-arrow: unicode(ea10);
+$ig-area: unicode(ea11);
+$ig-bill: unicode(ea12);
+$ig-instagram: unicode(ea13);
+$ig-linkedin: unicode(ea14);
+$ig-caret-right: unicode(ea15);
+$ig-info: unicode(ea16);
+$ig-reload: unicode(ea17);
+$ig-bed: unicode(ea18);
+$ig-area-3: unicode(ea19);
+$ig-car: unicode(ea1a);
+$ig-media: unicode(ea1b);
+$ig-image: unicode(ea1c);
+
+.ig-area-2::before {
+  content: $ig-area-2;
+}
+
+.ig-caret::before {
+  content: $ig-caret;
+}
+
+.ig-check::before {
+  content: $ig-check;
+}
+
+.ig-error::before {
+  content: $ig-error;
+}
+
+.ig-facebook::before {
+  content: $ig-facebook;
+}
+
+.ig-handshake::before {
+  content: $ig-handshake;
+}
+
+.ig-house::before {
+  content: $ig-house;
+}
+
+.ig-houses::before {
+  content: $ig-houses;
+}
+
+.ig-mail::before {
+  content: $ig-mail;
+}
+
+.ig-people::before {
+  content: $ig-people;
+}
+
+.ig-phone::before {
+  content: $ig-phone;
+}
+
+.ig-plus::before {
+  content: $ig-plus;
+}
+
+.ig-search::before {
+  content: $ig-search;
+}
+
+.ig-time::before {
+  content: $ig-time;
+}
+
+.ig-arrow::before {
+  content: $ig-arrow;
+}
+
+.ig-area::before {
+  content: $ig-area;
+}
+
+.ig-bill::before {
+  content: $ig-bill;
+}
+
+.ig-instagram::before {
+  content: $ig-instagram;
+}
+
+.ig-linkedin::before {
+  content: $ig-linkedin;
+}
+
+.ig-caret-right::before {
+  content: $ig-caret-right;
+}
+
+.ig-info::before {
+  content: $ig-info;
+}
+
+.ig-reload::before {
+  content: $ig-reload;
+}
+
+.ig-bed::before {
+  content: $ig-bed;
+}
+
+.ig-area-3::before {
+  content: $ig-area-3;
+}
+
+.ig-car::before {
+  content: $ig-car;
+}
+
+.ig-media::before {
+  content: $ig-media;
+}
+
+.ig-image::before {
+  content: $ig-image;
+}
+
