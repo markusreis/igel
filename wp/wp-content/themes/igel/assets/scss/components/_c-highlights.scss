@@ -21,6 +21,8 @@
   .text-highlight {
     display: flex;
     align-items: center;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 
     i {
       margin-right: 8px;

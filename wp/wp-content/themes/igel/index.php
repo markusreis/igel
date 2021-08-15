@@ -13,18 +13,9 @@
  */
 
 get_header();
+hero('', '', false);
+
 ?>
-
-    <div class="c-hero c-hero--green c-hero--simple">
-        <div class="c-hero__brand">
-            <img src="<?php echo get_stylesheet_directory_uri() . '/assets/img/brand-box-white.svg'; ?>"
-                 alt="IGEL Logo weiß">
-        </div>
-        <div class="content">
-            <?php igTitle(get_field('section_title'), get_field('pretext'), 'h1'); ?>
-        </div>
-    </div>
-
     <div id="primary" class="content-area">
         <main id="main" class="site-main">
 

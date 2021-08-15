@@ -67,7 +67,7 @@
       height: 100%;
     }
 
-    @include aspect-ratio(1390, 600);
+    @include aspect-ratio(1, 1);
     max-height: 70vh;
     background: rgba($color__text--subtle, .2);
     position: relative;
@@ -169,6 +169,11 @@
   }
 
   @include media(lg) {
+
+    &--img {
+      @include aspect-ratio(1390, 600);
+    }
+
     h1 {
       font-weight: 400;
       margin-bottom: 75px;

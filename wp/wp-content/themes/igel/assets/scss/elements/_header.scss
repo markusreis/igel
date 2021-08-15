@@ -4,6 +4,7 @@
     display: flex;
     justify-content: space-between;
     height: 60px;
+    transition: height .5s ease;
   }
 
   &__brand {

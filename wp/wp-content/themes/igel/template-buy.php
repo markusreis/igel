@@ -51,20 +51,12 @@ function printOptions($key, $options, $old)
 
 if (!isset(getallheaders()['X-Ajax']) || getallheaders()['X-Ajax'] !== 'internal') :
     get_header();
+    hero();
 
     $data = get_field('about_page_settings');
     ?>
     <span id="pagename" data-name="Buy"></span>
-    <div class="c-hero c-hero--green c-hero--with-box">
-        <div class="c-hero__brand">
-            <img src="<?php echo get_stylesheet_directory_uri() . '/assets/img/brand-box-white.svg'; ?>"
-                 alt="IGEL Logo weiß">
-        </div>
-        <div class="content">
-            <?php igTitle(get_field('section_title'), get_field('pretext'), 'h1'); ?>
-        </div>
-        <div class="c-hero__overlay"></div>
-    </div>
+
     <div class="c-hero__box-wrap">
         <div class="c-hero__box c-buy-filter__wrap">
             <form class="c-buy-filter" action="<?php echo get_permalink(); ?>" method="get">

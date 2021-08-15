@@ -125,6 +125,13 @@ $used-breakpoints: '', 'xs', 'sm', 'md', 'lg', 'xl', 'xxl';
   }
 }
 
+#main {
+  margin-top: 30px;
+  @include media(lg) {
+    margin-top: 45px;
+  }
+}
+
 .content {
   width: 100%;
   margin: 0 auto;

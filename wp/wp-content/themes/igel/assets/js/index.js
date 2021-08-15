@@ -4,6 +4,8 @@ import {initBarba} from "./modules/Barba";
 
 import {Agents, Buy, Homepage, NewBuild, NewBuilds, Realty, Sell} from './pages/all'
 import {initPartnerToggle} from "./handlers/partnertoggle";
+import {Page} from "./pages/Page";
+import {getCumulativeElementOffset, selfOrClosestData} from "./utils/dom";
 
 (function () {
 
@@ -14,6 +16,8 @@ import {initPartnerToggle} from "./handlers/partnertoggle";
             initPartnerToggle()
             this.loadCurrentPage()
 
+            this._initScrollClickActions()
+
             initBarba(this)
 
             document.documentElement.classList.add('-preloaded')
@@ -21,6 +25,7 @@ import {initPartnerToggle} from "./handlers/partnertoggle";
 
         createPages() {
             this.pages = {
+                Page     : new Page({app: this}),
                 Agents   : new Agents({app: this}),
                 Buy      : new Buy({app: this}),
                 Homepage : new Homepage({app: this}),
@@ -32,13 +37,33 @@ import {initPartnerToggle} from "./handlers/partnertoggle";
         }
 
         loadCurrentPage() {
-            const pageName = document.getElementById('pagename').dataset.name
+            const pageInfoBox = document.getElementById('pagename')
+            const pageName = !!pageInfoBox ? pageInfoBox.dataset.name : 'Page'
             document.documentElement.dataset.page = pageName
             return this.pages[pageName].create()
         }
 
         leaveCurrentPage() {
-            return this.pages[document.getElementById('pagename').dataset.name].leave()
+            const pageInfoBox = document.getElementById('pagename')
+            const pageName = !!pageInfoBox ? pageInfoBox.dataset.name : 'Page'
+            return this.pages[pageName].leave()
+        }
+
+        _initScrollClickActions() {
+            document.addEventListener('click', e => {
+                const scrollAction = selfOrClosestData(e.target, 'scrollto')
+                if (scrollAction) {
+                    const target = document.querySelector('[data-scroll-target="' + scrollAction.dataset.scrollto + '"]')
+                    if (target) {
+                        const {top} = getCumulativeElementOffset(target)
+                        window.scrollTo({
+                                            top     : top,
+                                            left    : 0,
+                                            behavior: 'smooth'
+                                        })
+                    }
+                }
+            })
         }
     }
 

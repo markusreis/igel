@@ -8,10 +8,13 @@
 
     &.-loading {
       transform: scale(0.985);
-      opacity: .8;
 
       &, & * {
         cursor: progress;
+      }
+
+      & * {
+        opacity: .8;
       }
     }
   }

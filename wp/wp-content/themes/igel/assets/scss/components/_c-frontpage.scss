@@ -1,5 +1,9 @@
 [data-page="Homepage"] {
 
+  footer {
+    margin-top: 0 !important;
+  }
+
   .c-frontpage {
 
     &__button-title {
@@ -24,8 +28,8 @@
     }
 
     &__services-image {
+      @include aspect-ratio(4, 3);
       width: 100%;
-      @include aspect-ratio(1135, 400);
       position: relative;
       overflow: hidden;
       margin-bottom: 35px;
@@ -36,6 +40,10 @@
         height: 100%;
         object-fit: cover;
         object-position: top;
+      }
+
+      @include media(lg) {
+        @include aspect-ratio(1135, 400);
       }
     }
   }

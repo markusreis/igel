@@ -33,7 +33,7 @@ get_header();
 </div>
 
 <div class="c-hero__box-wrap">
-    <div class="c-hero__box">
+    <div class="c-hero__box col">
         <div class="c-highlights">
             <?php
 
@@ -201,13 +201,13 @@ get_header();
 
                     <form action="" class="c-mini-contact" data-js="contact-form" data-js-contact-form="mini">
                         <div class="row c-mini-contact__name-row">
-                            <div class="col-6">
+                            <div class="col-12 col-6@md">
                                 <div class="input-wrap">
                                     <input type="text" id="firstname" placeholder=" " required>
                                     <label for="firstname">Vorname</label>
                                 </div>
                             </div>
-                            <div class="col-6">
+                            <div class="col-12 col-6@md">
                                 <div class="input-wrap">
                                     <input type="text" id="lastname" placeholder=" " required>
                                     <label for="lastname">Nachname</label>
@@ -215,13 +215,13 @@ get_header();
                             </div>
                         </div>
                         <div class="row c-mini-contact__details-row">
-                            <div class="col-6">
+                            <div class="col-12 col-6@md">
                                 <div class="input-wrap">
                                     <input type="email" id="email" placeholder=" " required>
                                     <label for="email">E-Mail Adresse</label>
                                 </div>
                             </div>
-                            <div class="col-6">
+                            <div class="col-12 col-6@md">
                                 <div class="input-wrap">
                                     <input type="text" id="phone" placeholder=" ">
                                     <label for="phone">Telefonnummer</label>

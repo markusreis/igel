@@ -9,44 +9,11 @@
 
 get_header();
 
-$heroBgDesktop = get_field('hero_bg_desktop');
-$heroBgMobile  = get_field('hero_bg_mobile');
-$hasBg         = !empty($heroBgDesktop) && !empty($heroBgMobile);
+hero('Sie wollen verkaufen?', 'Wir bewerten Ihre Immobilie. Sofort und kostenlos.');
+
 ?>
 
     <span id="pagename" data-name="Homepage"></span>
-    <div class="c-hero <?php echo $hasBg ? 'c-hero--img' : 'c-hero--green'; ?> c-hero--with-box">
-
-        <?php if (!$hasBg) : ?>
-
-            <div class="c-hero__brand">
-                <img src="<?php echo get_stylesheet_directory_uri() . '/assets/img/brand-box-white.svg'; ?>"
-                     alt="IGEL Logo weiß">
-            </div>
-
-        <?php else : ?>
-            <?php
-            $aspectMobile  = $heroBgMobile['sizes']['medium-height'] / $heroBgMobile['sizes']['medium-width'];
-            $aspectDesktop = $heroBgDesktop['sizes']['medium-height'] / $heroBgMobile['sizes']['medium-width'];
-            ?>
-
-            <picture class="c-hero__bg">
-                <img alt="<?php echo get_the_title(); ?> Thumbnail"
-                     src="<?php echo wp_get_attachment_image_url(155) ?>"
-                     srcset="<?php echo wp_get_attachment_image_srcset(155) ?>"/>
-            </picture>
-
-        <?php endif; ?>
-        <div class="content">
-            <?php
-            $t = get_field('section_title');
-            $p = get_field('pretext');
-            igTitle(empty($t) ? 'Sie wollen verkaufen?' : $t, empty($p) ? 'Wir bewerten Ihre Immobilie. Sofort und kostenlos.' : 'p', 'h1');
-            ?>
-        </div>
-
-        <div class="c-hero__overlay"></div>
-    </div>
 
 
     <div class="c-hero__box-wrap">
@@ -146,10 +113,12 @@ $hasBg         = !empty($heroBgDesktop) && !empty($heroBgMobile);
                     <div class="c-frontpage__button-title__title col-12 col-8@xl">
                         <?php igTitle('Entdecken Sie unser Immobilenangebot', 'Igel verkauft'); ?>
                     </div>
-                    <a href="<?php echo igPagelink('realties'); ?>" class="button col-12 col-4@xl">
-                        Komplettes Angebot
-                        <i class="button--after ig ig-arrow"></i>
-                    </a>
+                    <div class="col-12 col-4@xl">
+                        <a href="<?php echo igPagelink('realties'); ?>" class="button h-full">
+                            Komplettes Angebot
+                            <i class="button--after ig ig-arrow"></i>
+                        </a>
+                    </div>
                 </div>
 
                 <div class="c-immo-list">
@@ -244,11 +213,12 @@ $hasBg         = !empty($heroBgDesktop) && !empty($heroBgMobile);
                     <div class="c-frontpage__button-title__title col-12 col-8@xl">
                         <?php igTitle('Unser Serviceangebot', 'Das machen wir für Sie'); ?>
                     </div>
-                    <a href="<?php echo igPagelink('employees'); ?>"
-                       class="button col-12 col-4@xl">
-                        Mehr über uns
-                        <i class="button--after ig ig-arrow"></i>
-                    </a>
+                    <div class="col-12 col-4@xl">
+                        <a href="<?php echo igPagelink('employees'); ?>" class="button h-full">
+                            Mehr über uns
+                            <i class="button--after ig ig-arrow"></i>
+                        </a>
+                    </div>
                 </div>
 
                 <?php

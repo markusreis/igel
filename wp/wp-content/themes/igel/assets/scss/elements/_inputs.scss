@@ -157,6 +157,7 @@ textarea {
 }
 
 button, .button {
+  cursor: pointer;
   color: white;
   background: $color__main;
   min-height: 48px;

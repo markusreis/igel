@@ -62,41 +62,51 @@ export class Page {
                       duration: 1.25,
                       ease    : 'Power4.easeOut'
                   }, "<4%")
-        tl.fromTo(box,
+        if (!!box) {
+            tl.fromTo(box,
+                      {
+                          opacity: 0,
+                          y      : 0,
+                      },
+                      {
+                          opacity : 1,
+                          y       : window.innerWidth >= 768 ? -50 : -15,
+                          duration: 1.5,
+                          ease    : 'Power4.easeOut'
+                      }, "<5%")
+        }
+        if (!!boxOverlay) {
+            tl.to(boxOverlay,
                   {
-                      opacity: 0,
-                      y      : 0,
-                  },
-                  {
-                      opacity : 1,
-                      y       : window.innerWidth >= 768 ? -50 : -15,
+                      height  : 0,
                       duration: 1.5,
                       ease    : 'Power4.easeOut'
                   }, "<5%")
-        tl.to(boxOverlay,
-              {
-                  height  : 0,
-                  duration: 1.5,
-                  ease    : 'Power4.easeOut'
-              }, "<5%")
-        tl.to(main,
-              {
-                  opacity : 1,
-                  duration: 2,
-                  ease    : 'Power4.easeOut'
-              }, "<25%")
-        tl.to(sections,
-              {
-                  opacity : 1,
-                  duration: 2,
-                  ease    : 'Power4.easeOut'
-              }, "<0%")
-        tl.to(footer,
-              {
-                  opacity : 1,
-                  duration: 2,
-                  ease    : 'Power4.easeOut'
-              }, "<0%")
+        }
+        if (!!main) {
+            tl.to(main,
+                  {
+                      opacity : 1,
+                      duration: 2,
+                      ease    : 'Power4.easeOut'
+                  }, "<25%")
+        }
+        if (!!sections) {
+            tl.to(sections,
+                  {
+                      opacity : 1,
+                      duration: 2,
+                      ease    : 'Power4.easeOut'
+                  }, "<0%")
+        }
+        if (!!footer) {
+            tl.to(footer,
+                  {
+                      opacity : 1,
+                      duration: 2,
+                      ease    : 'Power4.easeOut'
+                  }, "<0%")
+        }
 
         return tl
     }
@@ -114,10 +124,14 @@ export class Page {
         const preloadOverlay = document.getElementById('preload')
         const sections = document.querySelectorAll('section')
 
+
         heroOverlay.style.top = 'auto';
-        boxOverlay.style.bottom = 'auto';
         heroOverlay.style.bottom = 0;
-        boxOverlay.style.top = 0;
+
+        if (boxOverlay) {
+            boxOverlay.style.bottom = 'auto';
+            boxOverlay.style.top = 0;
+        }
 
         const ease = 'Power3.easeIn'
 
@@ -141,37 +155,47 @@ export class Page {
                   duration: 0.75,
                   ease    : ease
               }, "<4%")
-        tl.to(box,
-              {
-                  opacity : 0,
-                  y       : window.innerWidth >= 768 ? -80 : -30,
-                  duration: 0.75,
-                  ease    : ease
-              }, "<0%")
-        tl.to(boxOverlay,
-              {
-                  height  : '100%',
-                  duration: 0.75,
-                  ease    : ease
-              }, "<0%")
-        tl.to(main,
-              {
-                  opacity : 0,
-                  duration: 1,
-                  ease    : ease
-              }, "<0%")
-        tl.to(sections,
-              {
-                  opacity : 0,
-                  duration: 1,
-                  ease    : ease
-              }, "<0%")
-        tl.to(footer,
-              {
-                  opacity : 0,
-                  duration: 1,
-                  ease    : ease
-              }, "<0%")
+        if (!!box) {
+            tl.to(box,
+                  {
+                      opacity : 0,
+                      y       : window.innerWidth >= 768 ? -80 : -30,
+                      duration: 0.75,
+                      ease    : ease
+                  }, "<0%")
+        }
+        if (!!boxOverlay) {
+            tl.to(boxOverlay,
+                  {
+                      height  : '100%',
+                      duration: 0.75,
+                      ease    : ease
+                  }, "<0%")
+        }
+        if (!!main) {
+            tl.to(main,
+                  {
+                      opacity : 0,
+                      duration: 1,
+                      ease    : ease
+                  }, "<0%")
+        }
+        if (!!sections) {
+            tl.to(sections,
+                  {
+                      opacity : 0,
+                      duration: 1,
+                      ease    : ease
+                  }, "<0%")
+        }
+        if (!!footer) {
+            tl.to(footer,
+                  {
+                      opacity : 0,
+                      duration: 1,
+                      ease    : ease
+                  }, "<0%")
+        }
         tl.to(preloadOverlay, {
             opacity : 1,
             duration: 0.05

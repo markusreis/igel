@@ -1653,6 +1653,15 @@
   padding-right: 0;
 }
 
+#main {
+  margin-top: 30px;
+}
+@media only screen and (min-width: 768px) {
+  #main {
+    margin-top: 45px;
+  }
+}
+
 .content {
   width: 100%;
   margin: 0 auto;

@@ -20,11 +20,14 @@
     }
   }
 
-  &__name-row {
+  &__name-row, &__details-row {
+    & > div:first-of-type {
+      margin-bottom: 20px;
 
-  }
-
-  &__details-row {
+      @include media(md) {
+        margin-bottom: 0;
+      }
+    }
   }
 
   button {

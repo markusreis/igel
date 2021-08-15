@@ -7,21 +7,11 @@
 if (have_posts()) the_post();
 
 get_header();
+hero();
 
 $data = get_field('about_page_settings');
 ?>
     <span id="pagename" data-name="NewBuilds"></span>
-    <div class="c-hero c-hero--green c-hero--with-box">
-        <div class="c-hero__brand">
-            <img src="<?php echo get_stylesheet_directory_uri() . '/assets/img/brand-box-white.svg'; ?>"
-                 alt="IGEL Logo weiß">
-        </div>
-        <div class="content">
-            <?php igTitle(get_field('section_title'), get_field('pretext'), 'h1'); ?>
-        </div>
-        <div class="c-hero__overlay"></div>
-    </div>
-
 
 <?php
 $projects = get_posts(['post_type' => 'newbuild', 'numberposts' => -1, 'orderby' => 'date']);
@@ -65,7 +55,7 @@ if (!empty($projects)):
                         endforeach;
                         ?>
                     </div>
-                    <a href="<?php echo get_permalink($project); ?>" class="button">
+                    <a href="<?php echo get_permalink($project); ?>" class="button -mt-20 -mt-0@lg">
                         <?php echo $project->post_title; ?><i class="button--after ig ig-arrow"></i>
                     </a>
                 </div>

@@ -452,6 +452,7 @@ img.aligncenter {
   display: flex;
   justify-content: space-between;
   height: 60px;
+  transition: height 0.5s ease;
 }
 .header__brand {
   position: relative;
@@ -518,10 +519,6 @@ img.aligncenter {
   .header img {
     width: 255px;
   }
-}
-
-.home .site-footer {
-  margin: 0 !important;
 }
 
 .site-footer {
@@ -969,6 +966,7 @@ textarea {
 }
 
 button, .button {
+  cursor: pointer;
   color: white;
   background: #2B975D;
   min-height: 48px;
@@ -1122,6 +1120,20 @@ ul:not([class]) li:last-of-type {
 
 .-mt-35 {
   margin-top: 35px;
+}
+
+.-mt-20 {
+  margin-top: 20px;
+}
+
+.h-full {
+  height: 100%;
+}
+
+@media only screen and (min-width: 768px) {
+  .-mt-0\@lg {
+    margin-top: 0 !important;
+  }
 }
 
 @media only screen and (min-width: 768px) {
@@ -1344,7 +1356,7 @@ body {
   margin-left: -1px;
   float: left;
   height: 0;
-  padding-top: 43.1654676259%;
+  padding-top: 100%;
 }
 .c-hero--img:after {
   /* to clear float */
@@ -1445,6 +1457,20 @@ body {
   }
 }
 @media only screen and (min-width: 768px) {
+  .c-hero--img:before {
+    content: "";
+    width: 1px;
+    margin-left: -1px;
+    float: left;
+    height: 0;
+    padding-top: 43.1654676259%;
+  }
+  .c-hero--img:after {
+    /* to clear float */
+    content: "";
+    display: table;
+    clear: both;
+  }
   .c-hero h1 {
     font-weight: 400;
     margin-bottom: 75px;
@@ -1919,10 +1945,6 @@ body {
   display: table;
   clear: both;
 }
-.c-two-cols--agents picture {
-  margin-top: 0;
-  margin-bottom: 30px;
-}
 @media only screen and (min-width: 768px) {
   .c-two-cols .button {
     margin-top: 8px;
@@ -1949,10 +1971,12 @@ body {
 }
 .c-buy-filter__wrap.-loading {
   transform: scale(0.985);
-  opacity: 0.8;
 }
 .c-buy-filter__wrap.-loading, .c-buy-filter__wrap.-loading * {
   cursor: progress;
+}
+.c-buy-filter__wrap.-loading * {
+  opacity: 0.8;
 }
 .c-buy-filter > div {
   flex: 0 0 50%;
@@ -2295,6 +2319,15 @@ body {
 .c-tabs * {
   user-select: none;
 }
+.c-tabs__list__el {
+  padding-bottom: 15px;
+  margin-bottom: 15px;
+  border-bottom: 1px solid #E0E0E0;
+}
+.c-tabs__list__el:last-of-type {
+  border-bottom: none;
+  margin-bottom: 0;
+}
 .c-tabs__content {
   display: block;
   overflow: hidden;
@@ -2349,6 +2382,7 @@ body {
   background: rgba(196, 196, 196, 0.25);
   position: relative;
   cursor: pointer;
+  overflow: hidden;
 }
 .c-tabs__scrollbar__thumb {
   position: absolute;
@@ -2387,6 +2421,8 @@ body {
 .c-highlights .text-highlight {
   display: flex;
   align-items: center;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 .c-highlights .text-highlight i {
   margin-right: 8px;
@@ -2606,6 +2642,14 @@ body {
 @media only screen and (min-width: 768px) {
   .c-mini-contact > div {
     margin-bottom: 30px;
+  }
+}
+.c-mini-contact__name-row > div:first-of-type, .c-mini-contact__details-row > div:first-of-type {
+  margin-bottom: 20px;
+}
+@media only screen and (min-width: 600px) {
+  .c-mini-contact__name-row > div:first-of-type, .c-mini-contact__details-row > div:first-of-type {
+    margin-bottom: 0;
   }
 }
 .c-mini-contact button {
@@ -2924,6 +2968,9 @@ html.-preloaded #preload {
   pointer-events: none;
 }
 
+[data-page=Homepage] footer {
+  margin-top: 0 !important;
+}
 [data-page=Homepage] .c-frontpage__button-title .button {
   display: none;
 }
@@ -2950,7 +2997,7 @@ html.-preloaded #preload {
   margin-left: -1px;
   float: left;
   height: 0;
-  padding-top: 35.2422907489%;
+  padding-top: 75%;
 }
 [data-page=Homepage] .c-frontpage__services-image:after {
   /* to clear float */
@@ -2964,6 +3011,22 @@ html.-preloaded #preload {
   height: 100%;
   object-fit: cover;
   object-position: top;
+}
+@media only screen and (min-width: 768px) {
+  [data-page=Homepage] .c-frontpage__services-image:before {
+    content: "";
+    width: 1px;
+    margin-left: -1px;
+    float: left;
+    height: 0;
+    padding-top: 35.2422907489%;
+  }
+  [data-page=Homepage] .c-frontpage__services-image:after {
+    /* to clear float */
+    content: "";
+    display: table;
+    clear: both;
+  }
 }
 [data-page=Homepage] .mobile-all-immo {
   width: 100%;

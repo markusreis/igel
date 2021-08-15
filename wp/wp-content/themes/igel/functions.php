@@ -394,3 +394,65 @@ function igel_eval_form(\WP_REST_Request $request)
         exit();
     }
 }
+
+
+function hero($titleFallback = '', $pretitleFallback = '', $hasBox = true)
+{
+
+    $heroBgDesktop = get_field('hero_bg_desktop');
+    $heroBgMobile  = get_field('hero_bg_mobile');
+    $hasBg         = !empty($heroBgDesktop) && !empty($heroBgMobile);
+
+    ?>
+    <div class="c-hero <?php echo $hasBg ? 'c-hero--img' : 'c-hero--green'; ?> <?php echo !$hasBox ? 'c-hero--simple' : 'c-hero--with-box'; ?>">
+
+        <?php if (!$hasBg) : ?>
+
+            <div class="c-hero__brand">
+                <img src="<?php echo get_stylesheet_directory_uri() . '/assets/img/brand-box-white.svg'; ?>"
+                     alt="IGEL Logo weiß">
+            </div>
+
+        <?php else : ?>
+            <?php
+            $srcArr = [
+                '300w'  => $heroBgMobile['sizes']['medium'],
+                '400w'  => isset($heroBgMobile['sizes']['newbuildthumb']) ? $heroBgMobile['sizes']['newbuildthumb'] : null,
+                '768w'  => $heroBgMobile['sizes']['medium_large'],
+                '1024w' => $heroBgDesktop['sizes']['large'],
+                '1536w' => $heroBgDesktop['sizes']['1536x1536'],
+                '2000w' => $heroBgDesktop['url'],
+            ];
+
+
+            $srcArr = array_filter($srcArr, function ($el) {
+                return !empty($el);
+            });
+
+            $srcSet = '';
+            foreach ($srcArr as $key => $src) {
+                $srcSet .= $src . ' ' . $key . ', ';
+            }
+            $srcSet = rtrim($srcSet, ', ');
+            ?>
+
+            <picture class="c-hero__bg">
+                <img alt="<?php echo get_the_title(); ?> Titelbild"
+                     src="<?php echo wp_get_attachment_image_url($heroBgMobile['ID']); ?>"
+                     srcset="<?php echo $srcSet; ?>"/>
+            </picture>
+
+        <?php endif; ?>
+
+        <div class="content">
+            <?php
+            $t = get_field('section_title');
+            $p = get_field('pretext');
+            igTitle(empty($t) ? $titleFallback : $t, empty($p) ? $pretitleFallback : $p, 'h1');
+            ?>
+        </div>
+        <div class="c-hero__overlay"></div>
+
+    </div>
+    <?php
+}

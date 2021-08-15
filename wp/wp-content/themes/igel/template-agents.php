@@ -7,21 +7,11 @@
 if (have_posts()) the_post();
 
 get_header();
+hero();
 
 $data = get_field('about_page_settings');
 ?>
     <span id="pagename" data-name="Agents"></span>
-    <div class="c-hero c-hero--green c-hero--with-box">
-        <div class="c-hero__brand">
-            <img src="<?php echo get_stylesheet_directory_uri() . '/assets/img/brand-box-white.svg'; ?>"
-                 alt="IGEL Logo weiß">
-        </div>
-        <div class="content">
-            <?php igTitle(get_field('section_title'), get_field('pretext'), 'h1'); ?>
-        </div>
-        <div class="c-hero__overlay"></div>
-    </div>
-
 
     <div class="c-hero__box-wrap">
         <div class="c-hero__box">
@@ -68,7 +58,7 @@ $data = get_field('about_page_settings');
             $data = get_field('company');
             if (!empty($data)):
                 ?>
-                <section class="content cols-reverse row@lg c-two-cols c-two-cols--agents">
+                <section class="content cols row@lg c-two-cols c-two-cols--agents">
                     <div class="col-12 col-6@lg">
                         <?php igTitle($data['section_title'], $data['pretext']); ?>
                         <?php

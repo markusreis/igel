@@ -178,7 +178,6 @@ export class Tabs {
     }
 
     show(slug, previousSlug) {
-        
 
         const active = this.contentNode.querySelector('.c-tabs__content__inner--active')
         const passive = this.contentNode.querySelector('.c-tabs__content__inner[data-slug="' + slug + '"]')
