@@ -169,7 +169,7 @@ class Sync
             [
                 'post_type'   => 'attachment',
                 'meta_key'    => $remoteKeyMetaName,
-                'meta_value'  => $model->getId(),
+                'meta_value'  => get_class($model) === Employee::class ? $this->posts->getUniqueUserMail($model) : $model->getId(),
                 'numberposts' => -1
             ]
         );
@@ -186,8 +186,8 @@ class Sync
         foreach ($superfluous as $superfluousKey => $post) {
             foreach ($missing as $missingKey => $attachment) {
                 /** @var Attachment $attachment */
-                $attachmentSize = $this->getAvailableAttachmentSize($attachment, $attachmentSize);
-                if ($post->remote_url_hash === $this->hashUrl($attachment->getUrl($attachmentSize))) {
+                $tmpAttachmentSize = $this->getAvailableAttachmentSize($attachment, $attachmentSize);
+                if ($post->remote_url_hash === $this->hashUrl($attachment->getUrl($tmpAttachmentSize))) {
                     unset($superfluous[$superfluousKey]);
                     unset($missing[$missingKey]);
                 }
@@ -197,11 +197,12 @@ class Sync
         $missing = array_map(function ($attachment) use ($model, $localKeyMetaName, $remoteKeyMetaName, $mediaTitle, $attachmentSize) {
             /** @var Attachment $attachment */
             $attachmentSize = $this->getAvailableAttachmentSize($attachment, $attachmentSize);
-            $out            = [
+
+            $out = [
                 'title'              => $mediaTitle,
                 'remoteKeyMetaName'  => $remoteKeyMetaName,
                 'localKeyMetaName'   => $localKeyMetaName,
-                'remoteKeyMetaValue' => $model->getId(),
+                'remoteKeyMetaValue' => get_class($model) === Employee::class ? $this->posts->getUniqueUserMail($model) : $model->getId(),
                 'group'              => $attachment->getGroup(),
                 'ig_remote_url_hash' => $this->hashUrl($attachment->getUrl($attachmentSize)),
                 'ig_remote_url'      => $attachment->getUrl($attachmentSize),
