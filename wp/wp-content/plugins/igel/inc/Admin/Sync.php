@@ -6,6 +6,7 @@ namespace Igel\Admin;
 use Igel\Cache\DatabaseCache;
 use Igel\Services\RealtyPostService;
 use Igel\Traits\Singleton;
+use Justimmo\Exception\AttachmentSizeNotFoundException;
 use Justimmo\Model\Attachment;
 use Justimmo\Model\Employee;
 use Justimmo\Model\Realty;
@@ -80,13 +81,20 @@ class Sync
     {
         DatabaseCache::clear();
         $allRealties  = igel()->justImmo()->all();
+        $allEmployees = igel()->justImmo()->employeeQuery()->setLimit(999)->find();
         $contactsDone = [];
 
         $allPosts      = get_posts(['post_type' => 'realty', 'numberposts' => -1]);
         $existingPosts = [];
 
-        // TODO: Fetch users individually (=> https://api-docs.justimmo.at/api/employee.html)
-        // TODO: Add Sort field on users to sort on makler view!
+        foreach ($allEmployees as $employee) {
+            /** @var Employee $employee */
+            if (is_null($this->posts->getWpUser($employee))) {
+                $this->posts->createWpUser($employee);
+            } else {
+                $this->posts->updateWpUser($employee);
+            }
+        }
 
         foreach ($allRealties as $realty) {
             /** @var Realty $realty */
@@ -95,20 +103,9 @@ class Sync
             } else {
                 $existingPosts[] = $this->posts->update($realty);
             }
-
-            /** @var  Employee $contact */
-            $contact = $realty->getContact();
-            if (!isset($contactsDone[$contact->getId()])) {
-                $contactsDone[$contact->getId()] = $contact;
-                if (is_null($this->posts->getWpUser($contact))) {
-                    $this->posts->createWpUser($contact);
-                } else {
-                    $this->posts->updateWpUser($contact);
-                }
-            }
         }
 
-        $downloadList = $this->generateDownloadList($allRealties, $contactsDone);
+        $downloadList = $this->generateDownloadList($allRealties, $allEmployees);
 
         if ($complete) {
             foreach ($downloadList['realtyToDownload'] as $k => $r) {
@@ -142,7 +139,7 @@ class Sync
         igel()->justImmo()->data()->get('regions');
     }
 
-    public function generateDownloadList(ListPager $allRealties, array $allUsers)
+    public function generateDownloadList(ListPager $allRealties, ListPager $allUsers)
     {
         $realtyToDownload = [];
         $userToDownload   = [];
@@ -189,6 +186,7 @@ class Sync
         foreach ($superfluous as $superfluousKey => $post) {
             foreach ($missing as $missingKey => $attachment) {
                 /** @var Attachment $attachment */
+                $attachmentSize = $this->getAvailableAttachmentSize($attachment, $attachmentSize);
                 if ($post->remote_url_hash === $this->hashUrl($attachment->getUrl($attachmentSize))) {
                     unset($superfluous[$superfluousKey]);
                     unset($missing[$missingKey]);
@@ -198,7 +196,8 @@ class Sync
 
         $missing = array_map(function ($attachment) use ($model, $localKeyMetaName, $remoteKeyMetaName, $mediaTitle, $attachmentSize) {
             /** @var Attachment $attachment */
-            $out = [
+            $attachmentSize = $this->getAvailableAttachmentSize($attachment, $attachmentSize);
+            $out            = [
                 'title'              => $mediaTitle,
                 'remoteKeyMetaName'  => $remoteKeyMetaName,
                 'localKeyMetaName'   => $localKeyMetaName,
@@ -218,6 +217,17 @@ class Sync
         }
 
         return $missing;
+    }
+
+    public function getAvailableAttachmentSize(Attachment $attachment, $size, $options = ['fullhd', 'big2', 'big', 'medium', 'small', 'orig'])
+    {
+        try {
+            $attachment->getUrl($size);
+            return $size;
+        } catch (AttachmentSizeNotFoundException $e) {
+            $size = array_shift($options);
+            return $this->getAvailableAttachmentSize($attachment, $size, $options);
+        }
     }
 
     public function hashUrl($url)

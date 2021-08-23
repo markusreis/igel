@@ -182,7 +182,7 @@ class RealtyPostService
         $users = get_users(
             array(
                 'meta_key'    => 'remote_user_id',
-                'meta_value'  => $employee->getId(),
+                'meta_value'  => md5($this->getUniqueUserMail($employee)),
                 'number'      => 1,
                 'count_total' => false
             )
@@ -192,18 +192,11 @@ class RealtyPostService
 
     public function createWpUser(Employee $employee)
     {
-        $e = strtolower($employee->getEmail());
-        // As klagenfurt@igel.at is used a few times, but emails must be random, we might have to create a non existing
-        // email for the user
-        $email = (strpos($e, 'villach') !== false || strpos($e, 'klagenfurt') !== false)
-            ? sanitize_title($employee->getFirstName() . $employee->getLastName()) . '@igel-immobilien.at'
-            : $employee->getEmail();
-
         $id = wp_insert_user(
             [
                 'user_login'   => sanitize_title($employee->getFirstName() . $employee->getLastName()),
                 'user_pass'    => $this->generateRandomString(),
-                'user_email'   => $email,
+                'user_email'   => $this->getUniqueUserMail($employee),
                 'first_name'   => $employee->getFirstName(),
                 'last_name'    => $employee->getLastName(),
                 'display_name' => $employee->getFirstName() . ' ' . $employee->getLastName(),
@@ -211,12 +204,12 @@ class RealtyPostService
         );
 
         if (is_wp_error($id)) {
-            throw new \Exception('Error creating new user! ' . json_encode($e));
+            throw new \Exception('Error creating new user! ' . json_encode($id));
         }
 
         update_user_meta($id, 'remote_email', $employee->getEmail());
         update_user_meta($id, 'phone', $employee->getPhone());
-        update_user_meta($id, 'remote_user_id', $employee->getId());
+        update_user_meta($id, 'remote_user_id', md5($this->getUniqueUserMail($employee)));
         update_field('show_agent', true, 'user_' . $id);
         update_field('role', $employee->getPosition(), 'user_' . $id);
 
@@ -225,19 +218,12 @@ class RealtyPostService
 
     public function updateWpUser(Employee $employee)
     {
-        $e = strtolower($employee->getEmail());
-        // As klagenfurt@igel.at is used a few times, but emails must be random, we might have to create a non existing
-        // email for the user
-        $email = (strpos($e, 'villach') !== false || strpos($e, 'klagenfurt') !== false)
-            ? sanitize_title($employee->getFirstName() . $employee->getLastName()) . '@igel-immobilien.at'
-            : $employee->getEmail();
-
         $user = $this->getWpUser($employee);
         $id   = wp_update_user(
             [
                 'ID'           => $user->ID,
                 'user_login'   => sanitize_title($employee->getFirstName() . $employee->getLastName()),
-                'user_email'   => $email,
+                'user_email'   => $this->getUniqueUserMail($employee),
                 'first_name'   => $employee->getFirstName(),
                 'last_name'    => $employee->getLastName(),
                 'display_name' => $employee->getFirstName() . ' ' . $employee->getLastName(),
@@ -250,6 +236,20 @@ class RealtyPostService
             update_field('role', $employee->getPosition(), 'user_' . $id);
         }
         return $id;
+    }
+
+    /**
+     * @param Employee $employee
+     * @return string|null
+     */
+    public function getUniqueUserMail(Employee $employee): string
+    {
+        $e = strtolower($employee->getEmail());
+        // As klagenfurt@igel.at is used a few times, but emails must be random, we might have to create a non existing
+        // email for the user
+        return (strpos($e, 'villach') !== false || strpos($e, 'klagenfurt') !== false)
+            ? sanitize_title($employee->getFirstName() . $employee->getLastName()) . '@igel-immobilien.at'
+            : $employee->getEmail();
     }
 
     public function generateRandomString($length = 32)

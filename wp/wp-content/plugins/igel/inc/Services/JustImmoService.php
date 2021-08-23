@@ -39,14 +39,26 @@ class JustImmoService
      */
     private $realtyWrapper;
 
+    /**
+     * @var EmployeeMapper $employeeMapper
+     */
+    private $employeeMapper;
+
+    /**
+     * @var EmployeeWrapper $employeeWrapper
+     */
+    private $employeeWrapper;
+
     /** @var DataService $dataService */
     private $dataService;
 
     private function __construct()
     {
-        $this->api           = new JustimmoApi('api-12962', 'PY-wZtsZ4M', new WpLogger(), new DatabaseCache());
-        $this->realtyMapper  = new RealtyMapper();
-        $this->realtyWrapper = new RealtyWrapper($this->realtyMapper);
+        $this->api             = new JustimmoApi('api-12962', 'PY-wZtsZ4M', new WpLogger(), new DatabaseCache());
+        $this->realtyMapper    = new RealtyMapper();
+        $this->realtyWrapper   = new RealtyWrapper($this->realtyMapper);
+        $this->employeeMapper  = new EmployeeMapper();
+        $this->employeeWrapper = new EmployeeWrapper($this->employeeMapper);
     }
 
     public function data()
@@ -64,6 +76,15 @@ class JustImmoService
     public function query(): RealtyQuery
     {
         return new RealtyQuery($this->api, $this->realtyWrapper, $this->realtyMapper);
+    }
+
+    /**
+     * Create a new Query to JustImmo
+     * @return EmployeeQuery
+     */
+    public function employeeQuery(): EmployeeQuery
+    {
+        return new EmployeeQuery($this->api, $this->employeeWrapper, $this->employeeMapper);
     }
 
     /**
