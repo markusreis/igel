@@ -257,13 +257,6 @@ hero('Sie wollen verkaufen?', 'Wir bewerten Ihre Immobilie. Sofort und kostenlos
                             <div class="c-partners__list__inner">
                                 <?php
                                 $partners = get_field('partners');
-                                $partners = array_merge($partners, $partners);
-                                $partners = array_merge($partners, $partners);
-                                $partners = array_merge($partners, $partners);
-                                $partners = array_merge($partners, $partners);
-                                $partners = array_merge($partners, $partners);
-
-                                shuffle($partners);
 
                                 foreach ($partners as $partner) {
                                     $data = $partner['details'];

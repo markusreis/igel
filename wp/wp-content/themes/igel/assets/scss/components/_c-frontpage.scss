@@ -4,6 +4,16 @@
     margin-top: 0 !important;
   }
 
+  @include media(md) {
+    .c-hero--img {
+      max-height: none;
+
+      &:before {
+        padding-top: 21%;
+      }
+    }
+  }
+
   .c-frontpage {
 
     &__button-title {

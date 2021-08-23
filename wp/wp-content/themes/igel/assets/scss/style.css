@@ -2971,6 +2971,14 @@ html.-preloaded #preload {
 [data-page=Homepage] footer {
   margin-top: 0 !important;
 }
+@media only screen and (min-width: 600px) {
+  [data-page=Homepage] .c-hero--img {
+    max-height: none;
+  }
+  [data-page=Homepage] .c-hero--img:before {
+    padding-top: 21%;
+  }
+}
 [data-page=Homepage] .c-frontpage__button-title .button {
   display: none;
 }

@@ -98,9 +98,8 @@ endif;
 
                 <div class="c-new-builds">
                     <?php
-                    foreach ($projects
-
-                             as $project):
+                    $projects = [$project, $project, $project, $project, $project, $project];
+                    foreach ($projects as $project):
                         ?>
                         <div class="c-new-builds__el">
                             <div class="c-new-builds__el__image-wrap">
@@ -114,7 +113,7 @@ endif;
                                 ?>
                             </div>
                             <a href="<?php echo get_permalink($project); ?>" class="c-new-builds__el__button button">
-                                <?php echo $project->post_title; ?>, <?php echo get_field('place', $project) ?>
+                                <?php echo $project->post_title; ?>
                                 <i class="button--after ig ig-arrow"></i>
                             </a>
                         </div>

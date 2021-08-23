@@ -25,7 +25,12 @@ class SimpleUserOrdering_Plugin
 
     protected function should_kick_in()
     {
-        $screen = function_exists('get_current_screen');
+        if (function_exists('get_current_screen')) {
+            $screen = get_current_screen();
+        } else {
+            $screen = false;
+        }
+
         if (!is_admin()) return FALSE;
         if (!$screen || (!is_object($screen) || $screen->id !== 'users')) return FALSE;
         if (isset($_GET['orderby'])) return FALSE;
