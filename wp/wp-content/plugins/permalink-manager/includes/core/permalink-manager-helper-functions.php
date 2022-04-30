@@ -45,14 +45,24 @@ class Permalink_Manager_Helper_Functions extends Permalink_Manager_Class {
 	static function get_primary_term($post_id, $taxonomy, $slug_only = true) {
 		global $permalink_manager_options;
 
-		$primary_term_enabled = apply_filters('permalink_manager_primary_term', true);
+		$primary_term_enabled = (isset($permalink_manager_options['general']['primary_category'])) ? (bool) $permalink_manager_options['general']['primary_category'] : true;
+		$primary_term_enabled = apply_filters('permalink_manager_primary_term', $primary_term_enabled);
 
 		if(!$primary_term_enabled) { return; }
 
 		// A. Yoast SEO
 		if(class_exists('WPSEO_Primary_Term')) {
-			$primary_term = new WPSEO_Primary_Term($taxonomy, $post_id);
-			$primary_term = get_term($primary_term->get_primary_term());
+			$yoast_primary_term_label = sprintf('yoast_wpseo_primary_%s_term', $taxonomy);
+
+			// Hotfix: Yoast SEO saves the primary term using 'save_post' hook with highest priority, so the primary term ID is taken directly from $_POST
+			if(!empty($_POST[$yoast_primary_term_label])) {
+				$yoast_primary_term_id = filter_input(INPUT_POST, $yoast_primary_term_label, FILTER_SANITIZE_NUMBER_INT);
+			} else {
+				$yoast_primary_term = new WPSEO_Primary_Term($taxonomy, $post_id);
+				$yoast_primary_term_id = $yoast_primary_term->get_primary_term();
+			}
+
+			$primary_term = (is_numeric($yoast_primary_term_id)) ? get_term($yoast_primary_term_id, $taxonomy) : '';
 		}
 		// B. The SEO Framework
 		else if(function_exists('the_seo_framework')) {
@@ -180,7 +190,7 @@ class Permalink_Manager_Helper_Functions extends Permalink_Manager_Class {
 		global $wp_post_types, $permalink_manager_options;
 
 		$disabled_post_types = array(
-			'revision', 'algolia_task', 'fl_builder', 'fl-builder', 'fl-builder-template', 'fl-theme-layout', 'fusion_tb_layout', 'fusion_tb_section', 'fusion_template', 'fusion_element', 'wc_product_tab', 'wc_voucher', 'wc_voucher_template',
+			'revision', 'nav_menu_item', 'algolia_task', 'fl_builder', 'fl-builder', 'fl-builder-template', 'fl-theme-layout', 'fusion_tb_layout', 'fusion_tb_section', 'fusion_template', 'fusion_element', 'wc_product_tab', 'wc_voucher', 'wc_voucher_template',
 			'sliders', 'thirstylink', 'elementor_library', 'elementor_menu_item', 'cms_block', 'nooz_coverage'
 		);
 
@@ -225,20 +235,68 @@ class Permalink_Manager_Helper_Functions extends Permalink_Manager_Class {
 		return apply_filters('permalink_manager_disabled_taxonomies', $disabled_taxonomies);
 	}
 
-	static public function is_disabled($content_name, $content_type = 'post_type', $check_if_exists = true) {
-		$out = false;
-
-		if($content_type == 'post_type') {
-			$disabled_post_types = self::get_disabled_post_types();
-			$post_type_exists = ($check_if_exists) ? post_type_exists($content_name) : true;
-			$out = ((is_array($disabled_post_types) && in_array($content_name, $disabled_post_types)) || empty($post_type_exists)) ? true : false;
-		} else {
-			$disabled_taxonomies = self::get_disabled_taxonomies();
-			$taxonomy_exists = ($check_if_exists) ? taxonomy_exists($content_name) : true;
-			$out = ((is_array($disabled_taxonomies) && in_array($content_name, $disabled_taxonomies)) || empty($taxonomy_exists)) ? true : false;
-		}
+	/**
+	 * Check if post type should be ignored by Permalink Manager
+	 */
+	static public function is_post_type_disabled($post_type, $check_if_exists = true) {
+		$disabled_post_types = self::get_disabled_post_types();
+		$post_type_exists = ($check_if_exists) ? post_type_exists($post_type) : true;
+		$out = ((is_array($disabled_post_types) && in_array($post_type, $disabled_post_types)) || empty($post_type_exists)) ? true : false;
 
 		return $out;
+	}
+
+	/**
+	 * Check if taxonomy should be ignored by Permalink Manager
+	 */
+	static public function is_taxonomy_disabled($taxonomy, $check_if_exists = true) {
+		$disabled_taxonomies = self::get_disabled_taxonomies();
+		$taxonomy_exists = ($check_if_exists) ? taxonomy_exists($taxonomy) : true;
+		$out = ((is_array($disabled_taxonomies) && in_array($taxonomy, $disabled_taxonomies)) || empty($taxonomy_exists)) ? true : false;
+
+		return $out;
+	}
+
+	/**
+	 * Check if single post should be ignored by Permalink Manager
+	 */
+	public static function is_post_excluded($post = null) {
+		$post = (is_integer($post)) ? get_post($post) : $post;
+
+		// A. Check if post type is disabled
+		if(!empty($post->post_type) && self::is_post_type_disabled($post->post_type)) {
+			return true;
+		}
+
+		$excluded_post_ids = apply_filters('permalink_manager_excluded_post_ids', array());
+
+		// B. Check if post ID is excluded
+		if(is_array($excluded_post_ids) && !empty($post->ID) && in_array($post->ID, $excluded_post_ids)) {
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Check if single term should be ignored by Permalink Manager
+	 */
+	public static function is_term_excluded($term = null) {
+		$term = (is_numeric($term)) ? get_term($term) : $term;
+
+		// A. Check if post type is disabled
+		if(!empty($term->taxonomy) && self::is_taxonomy_disabled($term->taxonomy)) {
+			return true;
+		}
+
+		$excluded_term_ids = apply_filters('permalink_manager_excluded_term_ids', array());
+
+		// B. Check if post ID is excluded
+		if(is_array($excluded_term_ids) && !empty($term->term_id) && in_array($term->term_id, $excluded_term_ids)) {
+			return true;
+		}
+
+		return false;
 	}
 
 	/**
@@ -571,7 +629,15 @@ class Permalink_Manager_Helper_Functions extends Permalink_Manager_Class {
 		if($force_custom_slugs) {
 			// A. Custom slug (title)
 			if($force_custom_slugs == 1) {
-				$title = (!empty($object->name)) ? $object->name : $object->post_title;
+				if(!empty($object->name) && !empty($object->taxonomy)) {
+					$title = $object->name;
+				} else if(!empty($object->post_title) && !empty($object->post_type)) {
+					$title = $object->post_title;
+				} else {
+					return $slug;
+				}
+
+				$title = strip_tags($title);
 				$title = self::remove_slashes($title);
 
 				$new_slug = self::sanitize_title($title, false, null, null);

@@ -87,9 +87,9 @@ class JustimmoApi implements JustimmoApiInterface
      * @param                 $username
      * @param                 $password
      * @param LoggerInterface $logger
-     * @param CacheInterface $cache
-     * @param string $version
-     * @param string $culture
+     * @param CacheInterface  $cache
+     * @param string          $version
+     * @param string          $culture
      */
     public function __construct($username, $password, LoggerInterface $logger, CacheInterface $cache, $version = 'v1', $culture = 'de')
     {
@@ -299,7 +299,7 @@ class JustimmoApi implements JustimmoApiInterface
         if (count($params) > 0) {
             $queryString = http_build_query($params);
             $queryString = preg_replace('/%5B[0-9]+%5D/simU', '%5B%5D', $queryString);
-            $url         .= '?' . $queryString;
+            $url .= '?' . $queryString;
         }
 
         return $url;
@@ -323,12 +323,11 @@ class JustimmoApi implements JustimmoApiInterface
 
         $url = $this->generateUrl($call, $params);
         $this->logger->debug('call start', array(
-            'url' => $url,
+            'url'      => $url,
         ));
 
-        $key     = $this->cache->generateCacheKey($url);
+        $key = $this->cache->generateCacheKey($url);
         $content = $this->cache->get($key);
-        $content = false;
         if ($content !== false) {
             $this->logger->debug('call end', array(
                 'url'      => $url,
@@ -341,7 +340,6 @@ class JustimmoApi implements JustimmoApiInterface
         }
 
         $request = $this->createRequest($url);
-
 
         if (!ini_get('open_basedir') && filter_var(ini_get('safe_mode'), FILTER_VALIDATE_BOOLEAN) === false) {
             $request->setOption(CURLOPT_FOLLOWLOCATION, true);
@@ -565,8 +563,8 @@ class JustimmoApi implements JustimmoApiInterface
     protected function createRequest($url)
     {
         return new CurlRequest($url, array(
-                                         CURLOPT_USERPWD  => $this->username . ':' . $this->password,
-                                         CURLOPT_HTTPAUTH => CURLAUTH_ANY,
-                                     ) + $this->curlOptions);
+                CURLOPT_USERPWD        => $this->username . ':' . $this->password,
+                CURLOPT_HTTPAUTH       => CURLAUTH_ANY,
+            ) + $this->curlOptions);
     }
 }

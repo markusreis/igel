@@ -87,7 +87,7 @@ class Sync
         $allPosts      = get_posts(['post_type' => 'realty', 'numberposts' => -1]);
         $existingPosts = [];
 
-        foreach ($allEmployees as $employee) {
+        foreach ($allEmployees as $k => $employee) {
             /** @var Employee $employee */
             if (is_null($this->posts->getWpUser($employee))) {
                 $this->posts->createWpUser($employee);
@@ -123,7 +123,6 @@ class Sync
 
         update_option(self::LAST_SYNC_TIMESTAMP_OPTION, time());
 
-        // 21 OPEN!!!
         foreach ($allPosts as $post) {
             if (!in_array($post->ID, $existingPosts)) {
                 wp_delete_post($post->ID);

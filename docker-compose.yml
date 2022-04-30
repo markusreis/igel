@@ -2,18 +2,19 @@ version: "3"
 
 services:
   db:
-    image: "mariadb:${MARIADB_VERSION}"
+    image: "mariadb:10.5"
+    command: [ "mysqld","--innodb-buffer-pool-size=2G" ]
     volumes:
-      #- "./initdb:/docker-entrypoint-initdb.d"
       - "db_data:/var/lib/mysql"
+      - "./.docker/db/initdb.d:/docker-entrypoint-initdb.d"
     ports:
-      - "${HOST_INTERFACE}:3306:3306"
-    restart: always
+      - "${HOST_INTERFACE:-127.0.0.1}:3306:3306"
     environment:
       MYSQL_ROOT_PASSWORD: mysql
       MYSQL_DATABASE: wordpress
       MYSQL_USER: wordpress
       MYSQL_PASSWORD: wordpress
+    restart: on-failure
 
   wordpress:
     depends_on:

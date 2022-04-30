@@ -1,12 +1,12 @@
 <?php return array (
   'root' => 
   array (
-    'pretty_version' => '1.0.0+no-version-set',
-    'version' => '1.0.0.0',
+    'pretty_version' => 'dev-master',
+    'version' => 'dev-master',
     'aliases' => 
     array (
     ),
-    'reference' => NULL,
+    'reference' => '26b9d2af7a65f2f1a6683374ccec28c04e0b574e',
     'name' => 'markusreis/igel',
   ),
   'versions' => 
@@ -22,12 +22,12 @@
     ),
     'markusreis/igel' => 
     array (
-      'pretty_version' => '1.0.0+no-version-set',
-      'version' => '1.0.0.0',
+      'pretty_version' => 'dev-master',
+      'version' => 'dev-master',
       'aliases' => 
       array (
       ),
-      'reference' => NULL,
+      'reference' => '26b9d2af7a65f2f1a6683374ccec28c04e0b574e',
     ),
     'psr/log' => 
     array (

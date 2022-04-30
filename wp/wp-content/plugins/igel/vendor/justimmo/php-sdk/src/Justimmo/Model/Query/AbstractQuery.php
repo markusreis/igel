@@ -1,5 +1,4 @@
 <?php
-
 namespace Justimmo\Model\Query;
 
 use Justimmo\Api\JustimmoApiInterface;
@@ -44,9 +43,9 @@ abstract class AbstractQuery implements QueryInterface
     abstract public function getDetailCall();
 
     /**
-     * @param JustimmoApiInterface $api
+     * @param JustimmoApiInterface                     $api
      * @param \Justimmo\Model\Wrapper\WrapperInterface $wrapper
-     * @param \Justimmo\Model\Mapper\MapperInterface $mapper
+     * @param \Justimmo\Model\Mapper\MapperInterface   $mapper
      */
     public function __construct(JustimmoApiInterface $api, WrapperInterface $wrapper, MapperInterface $mapper)
     {
@@ -91,7 +90,7 @@ abstract class AbstractQuery implements QueryInterface
      */
     public function find()
     {
-        $method   = $this->getListCall();
+        $method = $this->getListCall();
         $response = $this->api->$method($this->params);
 
         $return = $this->wrapper->transformList($response);
@@ -119,7 +118,7 @@ abstract class AbstractQuery implements QueryInterface
      */
     public function findPk($pk)
     {
-        $method   = $this->getDetailCall();
+        $method = $this->getDetailCall();
         $response = $this->api->$method($pk);
 
         $return = $this->wrapper->transformSingle($response);

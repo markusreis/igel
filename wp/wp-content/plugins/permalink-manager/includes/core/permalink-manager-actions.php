@@ -123,8 +123,33 @@ class Permalink_Manager_Actions extends Permalink_Manager_Class {
 			$uniq_id = $_POST['pm_session_id'];
 		}
 
+		// Get content type & post statuses
+		if(!empty($_POST['content_type']) && $_POST['content_type'] == 'taxonomies') {
+			$content_type = 'taxonomies';
+
+			if(empty($_POST['taxonomies'])) {
+				$error = true;
+				$return = array('alert' => Permalink_Manager_Admin_Functions::get_alert_message(__( '<strong>No taxonomy</strong> selected!', 'permalink-manager' ), 'error updated_slugs'));
+			}
+		} else {
+			$content_type = 'post_types';
+
+			// Check if any post type was selected
+			if(empty($_POST['post_types'])) {
+				$error = true;
+				$return = array('alert' => Permalink_Manager_Admin_Functions::get_alert_message(__( '<strong>No post type</strong> selected!', 'permalink-manager' ), 'error updated_slugs'));
+			}
+
+			// Check post status
+			if(empty($_POST['post_statuses'])) {
+				$error = true;
+				$return = array('alert' => Permalink_Manager_Admin_Functions::get_alert_message(__( '<strong>No post status</strong> selected!', 'permalink-manager' ), 'error updated_slugs'));
+			}
+		}
+
 		// Check if both strings are set for "Find and replace" tool
-		if(!empty($function_name)) {
+		if(!empty($function_name) && !empty($content_type) && empty($error)) {
+
 			// Hotfix for WPML (start)
 			if($sitepress) {
 				remove_filter('get_terms_args', array($sitepress, 'get_terms_args_filter'), 10);
@@ -137,7 +162,7 @@ class Permalink_Manager_Actions extends Permalink_Manager_Class {
 			$mode = isset($_POST['mode']) ? $_POST['mode'] : 'custom_uris';
 
 			// Get the content type
-			if(!empty($_POST['content_type']) && $_POST['content_type'] == 'taxonomies') {
+			if($content_type == 'taxonomies') {
 				$class_name = 'Permalink_Manager_URI_Functions_Tax';
 			} else {
 				$class_name = 'Permalink_Manager_URI_Functions_Post';
@@ -239,10 +264,6 @@ class Permalink_Manager_Actions extends Permalink_Manager_Class {
 
 			// Reload URI Editor & clean post cache
 			clean_post_cache($element_id);
-			$element = get_post($element_id);
-			$html = Permalink_Manager_Admin_Functions::display_uri_box($element, true);
-
-			echo $html;
 			die();
 		}
 	}
@@ -464,20 +485,27 @@ class Permalink_Manager_Actions extends Permalink_Manager_Class {
 		// 1. Check if element exists
 		if(strpos($element_id, 'tax-') !== false) {
 			$term_id = preg_replace("/[^0-9]/", "", $element_id);
-			$taxonomy = $wpdb->get_var($wpdb->prepare("SELECT t.taxonomy FROM $wpdb->term_taxonomy AS t WHERE t.term_id = %s LIMIT 1", $term_id));
+			$term_info = $wpdb->get_row($wpdb->prepare("SELECT taxonomy, meta_value FROM {$wpdb->term_taxonomy} AS t LEFT JOIN {$wpdb->termmeta} AS tm ON tm.term_id = t.term_id AND tm.meta_key = 'auto_update_uri' WHERE t.term_id = %d", $term_id));
 
 			// Remove custom URIs for removed terms or disabled taxonomies
-			$remove = (!empty($taxonomy)) ? Permalink_Manager_Helper_Functions::is_disabled($taxonomy, 'taxonomy', $check_if_exists) : true;
+			$remove = (!empty($term_info->taxonomy)) ? Permalink_Manager_Helper_Functions::is_taxonomy_disabled($term_info->taxonomy, $check_if_exists) : true;
+
+			// Remove custom URIs for URIs disabled in URI Editor
+			$remove = (!empty($term_info->meta_value) && $term_info->meta_value == 2) ? true : $remove;
+
 		} else if(is_numeric($element_id)) {
-			$post_type = $wpdb->get_var("SELECT post_type FROM {$wpdb->prefix}posts WHERE ID = {$element_id} AND post_status NOT IN ('auto-draft', 'trash') AND post_type != 'nav_menu_item'");
+			$post_info = $wpdb->get_row($wpdb->prepare("SELECT post_type, meta_value FROM {$wpdb->posts} AS p LEFT JOIN {$wpdb->postmeta} AS pm ON pm.post_ID = p.ID AND pm.meta_key = 'auto_update_uri' WHERE ID = %d AND post_status NOT IN ('auto-draft', 'trash') AND post_type != 'nav_menu_item'", $element_id));
 
 			// Remove custom URIs for removed, auto-draft posts or disabled post types
-			$remove = (!empty($post_type)) ? Permalink_Manager_Helper_Functions::is_disabled($post_type, 'post_type', $check_if_exists) : true;
+			$remove = (!empty($post_info->post_type)) ? Permalink_Manager_Helper_Functions::is_post_type_disabled($post_info->post_type, $check_if_exists) : true;
+
+			// Remove custom URIs for URIs disabled in URI Editor
+			$remove = (!empty($post_info->meta_value) && $post_info->meta_value == 2) ? true : $remove;
 
 			// Remove custom URIs for attachments redirected with Yoast's SEO Premium
 			$yoast_permalink_options = (class_exists('WPSEO_Premium')) ? get_option('wpseo_permalinks') : array();
 
-			if(!empty($yoast_permalink_options['redirectattachment']) && $post_type == 'attachment') {
+			if(!empty($yoast_permalink_options['redirectattachment']) && $post_info->post_type == 'attachment') {
 				$attachment_parent = $wpdb->get_var("SELECT post_parent FROM {$wpdb->prefix}posts WHERE ID = {$element_id} AND post_type = 'attachment'");
 				if(!empty($attachment_parent)) {
 					$remove = true;

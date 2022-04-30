@@ -25,14 +25,14 @@ import {getCumulativeElementOffset, selfOrClosestData} from "./utils/dom";
 
         createPages() {
             this.pages = {
-                Page     : new Page({app: this}),
-                Agents   : new Agents({app: this}),
-                Buy      : new Buy({app: this}),
-                Homepage : new Homepage({app: this}),
-                NewBuild : new NewBuild({app: this}),
+                Page: new Page({app: this}),
+                Agents: new Agents({app: this}),
+                Buy: new Buy({app: this}),
+                Homepage: new Homepage({app: this}),
+                NewBuild: new NewBuild({app: this}),
                 NewBuilds: new NewBuilds({app: this}),
-                Realty   : new Realty({app: this}),
-                Sell     : new Sell({app: this})
+                Realty: new Realty({app: this}),
+                Sell: new Sell({app: this})
             }
         }
 
@@ -57,10 +57,10 @@ import {getCumulativeElementOffset, selfOrClosestData} from "./utils/dom";
                     if (target) {
                         const {top} = getCumulativeElementOffset(target)
                         window.scrollTo({
-                                            top     : top,
-                                            left    : 0,
-                                            behavior: 'smooth'
-                                        })
+                            top: top,
+                            left: 0,
+                            behavior: 'smooth'
+                        })
                     }
                 }
             })
@@ -79,6 +79,8 @@ import {getCumulativeElementOffset, selfOrClosestData} from "./utils/dom";
     }
 
     document.addEventListener('DOMContentLoaded', function () {
-        preload(({p}) => {console.log(p)}).then(() => new App())
+        preload(({p}) => {
+            console.log(p)
+        }).then(() => new App())
     })
 })()

@@ -80,6 +80,7 @@ class Permalink_Manager_Third_Parties extends Permalink_Manager_Class {
 		add_filter('seopress_pro_breadcrumbs_crumbs', array($this, 'filter_breadcrumbs'), 9);
 		add_filter('woocommerce_get_breadcrumb', array($this, 'filter_breadcrumbs'), 9);
 		add_filter('slim_seo_breadcrumbs_links', array($this, 'filter_breadcrumbs'), 9);
+		add_filter('avia_breadcrumbs_trail', array($this, 'filter_breadcrumbs'), 100);
 
 		// 8. WooCommerce Wishlist Plugin
 		if(function_exists('tinv_get_option')) {
@@ -123,7 +124,7 @@ class Permalink_Manager_Third_Parties extends Permalink_Manager_Class {
 		if(class_exists('\MyListing\Post_Types')) {
 			add_filter('permalink_manager_filter_default_post_uri', array($this, 'ml_listing_custom_fields'), 5, 5 );
 			add_action('mylisting/submission/save-listing-data', array($this, 'ml_set_listing_uri'), 100);
-			add_filter('permalink_manager_filter_query', array($this, 'ml_detect_archives'), 1);
+			add_filter('permalink_manager_filter_query', array($this, 'ml_detect_archives'), 1, 2);
 		}
 
 		// 14. bbPress
@@ -576,9 +577,12 @@ class Permalink_Manager_Third_Parties extends Permalink_Manager_Class {
 				$yoast_canonical_url = get_post_meta($element->ID, '_yoast_wpseo_canonical', true);
 				if(!empty($yoast_canonical_url)) { return $url; }
 
-				$paged = (get_query_var('page')) ? get_query_var('page') : 1;
-				if($paged > 1) {
-					$new_url = sprintf('%s/%d', trim($new_url, '/'), $paged);
+				if(is_home()) {
+					$paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
+					$new_url = ($paged > 1) ? sprintf('%s/%s/%d', trim($new_url, '/'), $wp_rewrite->pagination_base, $paged) : $new_url;
+				} else {
+					$paged = (get_query_var('page')) ? get_query_var('page') : 1;
+					$new_url = ($paged > 1) ? sprintf('%s/%d', trim($new_url, '/'), $paged) : $new_url;
 				}
 			} else if(!empty($element->taxonomy) && !empty($element->term_id)) {
 				$new_url = get_term_link($element, $element->taxonomy);
@@ -618,7 +622,9 @@ class Permalink_Manager_Third_Parties extends Permalink_Manager_Class {
  			$element_id = $queried_element->ID;
  		} else if(!empty($queried_element->term_id)) {
  			$element_id = "tax-{$queried_element->term_id}";
- 		}
+ 		} else if(defined('REST_REQUEST') && !empty($post->ID)) {
+			$element_id = $post->ID;
+		}
 
  		// Get the custom permalink (if available) or the current request URL (if unavailable)
  		if(!empty($element_id) && !empty($permalink_manager_uris[$element_id])) {
@@ -627,7 +633,7 @@ class Permalink_Manager_Third_Parties extends Permalink_Manager_Class {
  			$custom_uri = trim(preg_replace("/([^\/]+)$/", '', $wp->request), "/");
  		}
 
- 		$all_uris = array_flip($permalink_manager_uris);
+		$all_uris = array_flip($permalink_manager_uris);
  		$custom_uri_parts = explode('/', trim($custom_uri));
  		$breadcrumbs = array();
  		$snowball = '';
@@ -683,10 +689,17 @@ class Permalink_Manager_Third_Parties extends Permalink_Manager_Class {
 				$term_id = apply_filters('wpml_object_id', $element->term_id, $element->taxonomy, true);
 				$term = ($element->term_id !== $term_id) ? get_term($term_id) : $element;
 
- 				$title = (!empty($yoast_meta_terms[$term->taxonomy][$term->term_id]['wpseo_bctitle'])) ? $yoast_meta_terms[$term->taxonomy][$term->term_id]['wpseo_bctitle'] : $term->name;
+				// Alternative title
+				if($current_filter == 'wpseo_breadcrumb_links') {
+					$alt_title = (!empty($yoast_meta_terms[$term->taxonomy][$term->term_id]['wpseo_bctitle'])) ? $yoast_meta_terms[$term->taxonomy][$term->term_id]['wpseo_bctitle'] : '';
+				} else if($current_filter == 'seopress_pro_breadcrumbs_crumbs') {
+					$alt_title = get_term_meta($term->term_id, '_seopress_robots_breadcrumbs', true);
+				}
+
+ 				$title = (!empty($alt_title)) ? $alt_title : $term->name;
 
  				$breadcrumbs[] = array(
- 					'text' => $title,
+ 					'text' => wp_strip_all_tags($title),
  					'url' => get_term_link((int) $term->term_id, $term->taxonomy),
  				);
  			}
@@ -695,11 +708,17 @@ class Permalink_Manager_Third_Parties extends Permalink_Manager_Class {
 				$page_id = apply_filters('wpml_object_id', $element->ID, $element->post_type, true);
 				$page = ($element->ID !== $page_id) ? get_post($page_id) : $element;
 
- 				$title = get_post_meta($page->ID, '_yoast_wpseo_bctitle', true);
- 				$title = (!empty($title)) ? $title : $page->post_title;
+				// Alternative title
+				if($current_filter == 'wpseo_breadcrumb_links') {
+					$alt_title = get_post_meta($page->ID, '_yoast_wpseo_bctitle', true);
+				} else if($current_filter == 'seopress_pro_breadcrumbs_crumbs') {
+					$alt_title = get_post_meta($page->ID, '_seopress_robots_breadcrumbs', true);
+				}
+
+ 				$title = (!empty($alt_title)) ? $alt_title : $page->post_title;
 
  				$breadcrumbs[] = array(
- 					'text' => $title,
+ 					'text' => wp_strip_all_tags($title),
  					'url' => get_permalink($page->ID),
  				);
  			}
@@ -712,7 +731,7 @@ class Permalink_Manager_Third_Parties extends Permalink_Manager_Class {
  			}
  		}
 
- 		// Add new links to current breadcrumbs array
+		// Add new links to current breadcrumbs array
  		if(!empty($links) && is_array($links)) {
  			$first_element = reset($links);
  			$last_element = end($links);
@@ -726,13 +745,24 @@ class Permalink_Manager_Third_Parties extends Permalink_Manager_Class {
  						$breadcrumb[1] = $breadcrumb['url'];
  					}
  				}
- 			}
 
- 			if(in_array($current_filter, array('slim_seo_breadcrumbs_links'))) {
- 				$links = array_merge(array($first_element), $breadcrumbs);
- 			} else {
- 				$links = array_merge(array($first_element), $breadcrumbs, array($last_element));
+				if(in_array($current_filter, array('slim_seo_breadcrumbs_links'))) {
+					$links = array_merge(array($first_element), $breadcrumbs);
+				} else {
+					$links = array_merge(array($first_element), $breadcrumbs, array($last_element));
+				}
  			}
+			// Support Avia/Enfold breadcrumbs
+			else if($current_filter == 'avia_breadcrumbs_trail') {
+				foreach($breadcrumbs as &$breadcrumb) {
+ 					if(isset($breadcrumb['text'])) {
+						$breadcrumb = sprintf('<a href="%s" title="%2$s">%2$s</a>', esc_attr($breadcrumb['url']), esc_attr($breadcrumb['text']));
+ 					}
+ 				}
+
+				$links = $breadcrumbs;
+				$links['trail_end'] = $last_element;
+			}
  		}
 
  		return array_filter($links);
@@ -794,7 +824,7 @@ class Permalink_Manager_Third_Parties extends Permalink_Manager_Class {
 	 */
 	function wpaiextra_uri_display($content_type, $current_values) {
 		// Check if post type is supported
-		if($content_type !== 'taxonomies' && Permalink_Manager_Helper_Functions::is_disabled($content_type)) {
+		if($content_type !== 'taxonomies' && Permalink_Manager_Helper_Functions::is_post_type_disabled($content_type)) {
 			return;
 		}
 
@@ -885,7 +915,7 @@ class Permalink_Manager_Third_Parties extends Permalink_Manager_Class {
 		// Check if the imported elements are terms
 		if($importData['post_type'] == 'taxonomies') {
 			$is_term = true;
-		} else if(Permalink_Manager_Helper_Functions::is_disabled($importData['post_type'], 'post_type')) {
+		} else if(Permalink_Manager_Helper_Functions::is_post_type_disabled($importData['post_type'])) {
 			return;
 		}
 
@@ -1010,7 +1040,7 @@ class Permalink_Manager_Third_Parties extends Permalink_Manager_Class {
 		global $permalink_manager_uris;
 
 		// Use only for "listing" post type & custom permalink
-		if(empty($element->post_type) || $element->post_type !== 'job_listing' || $native_uri) { return $default_uri; }
+		if(empty($element->post_type) || $element->post_type !== 'job_listing') { return $default_uri; }
 
 		// A1. Listing type
 		if(strpos($default_uri, '%listing-type%') !== false || strpos($default_uri, '%listing_type%') !== false) {
@@ -1096,27 +1126,46 @@ class Permalink_Manager_Third_Parties extends Permalink_Manager_Class {
 		}
 	}
 
-	function ml_detect_archives($query) {
+	function ml_detect_archives($query, $old_query) {
 		if(function_exists('mylisting_custom_taxonomies') && empty($_POST['submit_job'])) {
 			$explore_page_id = get_option('options_general_explore_listings_page', false);
 			if(empty($explore_page_id)) { return $query; }
 
-			$taxonomies = mylisting_custom_taxonomies();
-			$taxonomies = array_merge(array_keys($taxonomies), array('job_listing_category', 'region', 'case27_job_listing_tags'));
+			// 1. Set-up new query array variable
+			$new_query = array(
+				"page_id" => $explore_page_id
+			);
 
-			// Check if any MyListing taxonomy was detected
-			foreach($taxonomies as $taxonomy) {
-				if(!empty($query[$taxonomy]) && empty($_GET[$taxonomy])) {
-					return array(
-						"page_id" => $explore_page_id,
-						"explore_tab" => $taxonomy,
-						"explore_{$taxonomy}" => $query['term']
-					);
+			// 2A. Check if any custom MyListing taxonomy was detected
+			$ml_taxonomies = mylisting_custom_taxonomies();
+
+			if(!empty($ml_taxonomies) && is_array($ml_taxonomies)) {
+				$ml_taxonomies = array_keys($ml_taxonomies);
+
+				foreach($ml_taxonomies as $taxonomy) {
+					if(!empty($query[$taxonomy]) && empty($_GET[$taxonomy])) {
+						$new_query["explore_tab"] = $taxonomy;
+						$new_query["explore_{$taxonomy}"] = $query['term'];
+					}
+				}
+			}
+
+			// 2b. Check if any MyListing query var was detected
+			$ml_query_vars = array(
+				'explore_tag' => 'tags',
+				'explore_region' => 'regions',
+				'explore_category' => 'categories'
+			);
+
+			foreach($ml_query_vars as $query_var => $explore_tab) {
+				if(!empty($old_query[$query_var]) && empty($_GET[$query_var])) {
+					$new_query[$query_var] = $old_query[$query_var];
+					$new_query["explore_tab"] = $explore_tab;
 				}
 			}
 		}
 
-		return $query;
+		return (!empty($new_query["explore_tab"])) ? $new_query : $query;
 	}
 
 	/**
@@ -1159,7 +1208,7 @@ class Permalink_Manager_Third_Parties extends Permalink_Manager_Class {
 		global $post, $wp_query, $wp, $pm_query;
 
 		// Check if Dokan is activated
-		if(!function_exists('dokan_get_option') || is_admin()) { return; }
+		if(!function_exists('dokan_get_option') || is_admin() || empty($pm_query['id'])) { return; }
 
 		// Get Dokan dashboard page id
 		$dashboard_page = dokan_get_option('dashboard', 'dokan_pages');
@@ -1284,7 +1333,7 @@ class Permalink_Manager_Third_Parties extends Permalink_Manager_Class {
 				if(!empty($parts[2])) {
 					$uri_parts['uri'] = $parts[1];
 					$uri_parts['endpoint'] = $query_var;
-					$uri_parts['endpoint_value'] = sanitize_title($parts[2]);
+					$uri_parts['endpoint_value'] = Permalink_Manager_Helper_Functions::sanitize_title($parts[2], null, null, false);
 				}
 			}
 		}

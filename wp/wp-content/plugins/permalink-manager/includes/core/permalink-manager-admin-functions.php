@@ -71,9 +71,9 @@ class Permalink_Manager_Admin_Functions extends Permalink_Manager_Class {
 		// 1. Get current section
 		if(isset($_GET['page']) && $_GET['page'] == PERMALINK_MANAGER_PLUGIN_SLUG) {
 			if(isset($_POST['section'])) {
-				$this->active_section = $_POST['section'];
+				$this->active_section = sanitize_title_with_dashes($_POST['section']);
 			} else if(isset($_GET['section'])) {
-				$this->active_section = $_GET['section'];
+				$this->active_section = sanitize_title_with_dashes($_GET['section']);
 			} else {
 				$sections_names = array_keys($this->sections);
 				$this->active_section = $sections_names[0];
@@ -83,9 +83,9 @@ class Permalink_Manager_Admin_Functions extends Permalink_Manager_Class {
 		// 2. Get current subsection
 		if($this->active_section && isset($this->sections[$this->active_section]['subsections'])) {
 			if(isset($_POST['subsection'])) {
-				$this->active_subsection = $_POST['subsection'];
+				$this->active_subsection = sanitize_title_with_dashes($_POST['subsection']);
 			} else if(isset($_GET['subsection'])) {
-				$this->active_subsection = $_GET['subsection'];
+				$this->active_subsection = sanitize_title_with_dashes($_GET['subsection']);
 			} else {
 				$subsections_names = array_keys($this->sections[$this->active_section]['subsections']);
 				$this->active_subsection = $subsections_names[0];
@@ -259,8 +259,8 @@ class Permalink_Manager_Admin_Functions extends Permalink_Manager_Class {
 
 					if(empty($choice['label']) && is_array($choice)) {
 						if(in_array($choice_value, array('post_types', 'taxonomies'))) {
-							$group_labela = array('post_types' => __('Post types', 'permalink-manager'), 'taxonomies' => __('Taxonomies', 'permalink-manager'));
-							$fields .= sprintf('<p>%s</p>', $group_labela[$choice_value]);
+							$group_labels = array('post_types' => __('Post types', 'permalink-manager'), 'taxonomies' => __('Taxonomies', 'permalink-manager'));
+							$fields .= sprintf('<p>%s</p>', $group_labels[$choice_value]);
 						}
 
 						foreach($choice as $sub_choice_value => $sub_choice) {
@@ -327,7 +327,11 @@ class Permalink_Manager_Admin_Functions extends Permalink_Manager_Class {
 					$atts = ($choice_value == $value) ? "selected='selected'" : "";
 					$atts .= (!empty($choice['atts'])) ? " {$choice['atts']}" : "";
 
-					$fields .= "<option value='{$choice_value}' {$atts}>{$label}</option>";
+					if($choice == '---') {
+						$fields .= "<option disabled=\"disabled\">------------------</option>";
+					} else {
+						$fields .= "<option value='{$choice_value}' {$atts}>{$label}</option>";
+					}
 				}
 				$fields .= '</select>';
 				$fields .= '</span>';
@@ -404,10 +408,11 @@ class Permalink_Manager_Admin_Functions extends Permalink_Manager_Class {
 
 					foreach($languages as $lang => $name) {
 						$current_lang_permastruct = isset($permastructures["{$type_name}_{$lang}"]) ? $permastructures["{$type_name}_{$lang}"] : '';
+						$lang_siteurl = Permalink_Manager_Language_Plugins::prepend_lang_prefix($siteurl, null, $lang);
 
 						$fields .= "<label>{$name}</label>";
 						$fields .= "<div class=\"permastruct-container\">";
-						$fields .= "<span><code>{$siteurl}/</code></span>";
+						$fields .= "<span><code>{$lang_siteurl}/</code></span>";
 						$fields .= sprintf("<span><input type='text' %s value='%s' name='%s'/></span>", $input_atts, $current_lang_permastruct, str_replace("]", "_{$lang}]", $input_name));
 						$fields .= "</div>";
 					}
@@ -488,9 +493,13 @@ class Permalink_Manager_Admin_Functions extends Permalink_Manager_Class {
 				$sidebar_class = 'column column-1_3';
 				break;
 
+			case 'tabs' :
+				$wrapper_class = 'form settings-tabs';
+				$sidebar_class = $form_column_class = '';
+				break;
+
 			// there will be more cases in future ...
 			default :
-				$form_column_class = 'form';
 				$sidebar_class = 'sidebar';
 				$wrapper_class = $form_column_class = '';
 		}
@@ -503,10 +512,23 @@ class Permalink_Manager_Admin_Functions extends Permalink_Manager_Class {
 		$nonce_name = (!empty($nonce['name'])) ? $nonce['name'] : '';
 		$form_classes = (!empty($form_class)) ? $form_class : '';
 
-		// 2. Now get the HTML output (start section row container)
+		// 3. Now get the HTML output (start section row container)
 		$html = ($wrapper_class) ? "<div class=\"{$wrapper_class}\">" : '';
 
-		// 3. Display some notes
+		// 4. Display settings tabs
+		if($container == 'tabs') {
+			// Get active section
+			$active_tab = (!empty($_POST['pm_active_tab'])) ? $_POST['pm_active_tab'] : key(array_slice($fields, 0, 1, true));
+
+			$html .= "<ul class=\"subsubsub\">";
+			foreach ($fields as $tab_name => $tab) {
+				$active_class = ($active_tab === $tab_name) ? 'current' : '';
+				$html .= sprintf("<li><a href=\"%s\" class=\"%s\" data-tab=\"%s\">%s</a></li>", "#pm_tab_{$tab_name}", $active_class, $tab_name, $tab['section_name']);
+			}
+			$html .= "</ul>";
+		}
+
+		// 5. Display some notes
 		if($sidebar_class && $sidebar) {
 			$html .= "<div class=\"{$sidebar_class}\">";
 			$html .= "<div class=\"section-notes\">";
@@ -515,13 +537,14 @@ class Permalink_Manager_Admin_Functions extends Permalink_Manager_Class {
 			$html .= "</div>";
 		}
 
-		// 4. Start fields' section
+		// 6. Start fields' section
 		$html .= ($form_column_class) ? "<div class=\"{$form_column_class}\">" : "";
 		$html .= "<form method=\"POST\" class=\"{$form_classes}\">";
 		$html .= ($wrap) ? "<table class=\"form-table\">" : "";
 
-		// Loop through all fields assigned to this section
+		// 7. Loop through all fields assigned to this section
 		foreach($fields as $field_name => $field) {
+			$tab_name = (isset($field['fields'])) ? $field_name : '';
 			$field_name = (!empty($field['name'])) ? $field['name'] : $field_name;
 
 			// A. Display table row
@@ -541,10 +564,17 @@ class Permalink_Manager_Admin_Functions extends Permalink_Manager_Class {
 				}
 
 				if(isset($field['section_name'])) {
+					if($container == 'tabs') {
+						$is_active_tab = (!empty($active_tab) && $active_tab == $tab_name) ? 'class="active-tab"' : '';
+
+						$html .= "<div id=\"pm_{$tab_name}\" data-tab=\"{$tab_name}\" {$is_active_tab}>";
+					}
+
 					$html .= "<h3>{$field['section_name']}</h3>";
 					$html .= (isset($field['append_content'])) ? $field['append_content'] : "";
 					$html .= (isset($field['description'])) ? "<p class=\"description\">{$field['description']}</p>" : "";
 					$html .= "<table class=\"form-table\" data-field=\"{$field_name}\">{$row_output}</table>";
+					$html .= ($container == 'tabs') ? "</div>" : "";
 				} else {
 					$html .= $row_output;
 				}
@@ -557,7 +587,12 @@ class Permalink_Manager_Admin_Functions extends Permalink_Manager_Class {
 
 		$html .= ($wrap) ? "</table>" : "";
 
-		// End the fields' section + add button & nonce fields
+		// 8. Add a hidden field with section name for settings page
+		if($container == 'tabs' && !empty($active_tab)) {
+			$html .= self::generate_option_field('pm_active_tab', array('value' => $active_tab, 'type' => 'hidden', 'readonly' => true));
+		}
+
+		// 9. End the fields' section + add button & nonce fields
 		if($nonce_action && $nonce_name) {
 			$html .= wp_nonce_field($nonce_action, $nonce_name, true, true);
 			$html .= self::generate_option_field('pm_session_id', array('value' => uniqid(), 'type' => 'hidden'));
@@ -566,7 +601,7 @@ class Permalink_Manager_Admin_Functions extends Permalink_Manager_Class {
 		$html .= '</form>';
 		$html .= ($form_column_class) ? "</div>" : "";
 
-		// 5. End the section row container
+		// 10. End the section row container
 		$html .= ($wrapper_class) ? "</div>" : "";
 
 		return $html;
@@ -579,9 +614,7 @@ class Permalink_Manager_Admin_Functions extends Permalink_Manager_Class {
 		global $wpdb, $permalink_manager_before_sections_html, $permalink_manager_after_sections_html;
 
 		$html = "<div id=\"permalink-manager\" class=\"wrap\">";
-
-		$donate_link = (self::is_pro_active()) ? "" : sprintf("<a href=\"%s\" target=\"_blank\" class=\"page-title-action\">%s</a>", PERMALINK_MANAGER_DONATE, __("Donate", "permalink-manager"));
-		$html .= sprintf("<h2 id=\"plugin-name-heading\">%s <a href=\"http://maciejbis.net\" class=\"author-link\" target=\"_blank\">%s</a> %s</h2>", PERMALINK_MANAGER_PLUGIN_NAME, __("by Maciej Bis", "permalink-manager"), $donate_link);
+		$html .= sprintf("<h2 id=\"plugin-name-heading\">%s <a href=\"http://maciejbis.net\" class=\"author-link\" target=\"_blank\">%s</a></h2>", PERMALINK_MANAGER_PLUGIN_NAME, __("by Maciej Bis", "permalink-manager"));
 
 		// Display the tab navigation
 		$html .= "<div id=\"permalink-manager-tab-nav\" class=\"nav-tab-wrapper\">";
@@ -735,9 +768,25 @@ class Permalink_Manager_Admin_Functions extends Permalink_Manager_Class {
 	}
 
 	/**
+	 * Check if URI Editors should be displayed for current user
+	 */
+	public static function current_user_can_edit_uris() {
+		global $permalink_manager_options;
+
+		$edit_uris_cap = (!empty($permalink_manager_options['general']['edit_uris_cap'])) ? $permalink_manager_options['general']['edit_uris_cap'] : 'publish_posts';
+
+		return current_user_can($edit_uris_cap);
+	}
+
+	/**
 	 * "Quick Edit" Box
 	 */
 	public static function quick_edit_column_form($is_taxonomy = false) {
+		// Check the user capabilities
+		if(self::current_user_can_edit_uris() === false) {
+			return;
+		}
+
 		$html = self::generate_option_field('permalink-manager-quick-edit', array('value' => true, 'type' => 'hidden'));
 		$html .= "<fieldset class=\"inline-edit-permalink\">";
 		$html .= sprintf("<legend class=\"inline-edit-legend\">%s</legend>", __("Permalink Manager", "permalink-manager"));
@@ -773,8 +822,7 @@ class Permalink_Manager_Admin_Functions extends Permalink_Manager_Class {
 		global $permalink_manager_options, $permalink_manager_uris;
 
 		// Check the user capabilities
-		$edit_uris_cap = (!empty($permalink_manager_options['general']['edit_uris_cap'])) ? $permalink_manager_options['general']['edit_uris_cap'] : 'publish_posts';
-		if(!current_user_can($edit_uris_cap)) {
+		if(self::current_user_can_edit_uris() === false) {
 			return;
 		}
 
@@ -807,12 +855,23 @@ class Permalink_Manager_Admin_Functions extends Permalink_Manager_Class {
 
 		// Auto-update settings
 		$auto_update_def_val = $permalink_manager_options["general"]["auto_update_uris"];
-		$auto_update_def_label = ($auto_update_def_val) ? __("Yes", "permalink-manager") : __("No", "permalink-manager");
+
+		if($auto_update_def_val == 1) {
+			$auto_update_def_label = __("Auto-update \"Current URI\"", "permalink-manager");
+		} else if($auto_update_def_val == 2) {
+			$auto_update_def_label = __("Disable URI Editor", "permalink-manager");
+		} else {
+			$auto_update_def_label = __("Don't auto-update \"Current URI\"", "permalink-manager");
+		}
+
 		$auto_update_choices = array(
-			0 => array("label" => sprintf(__("Use global settings [%s]", "permalink-manager"), $auto_update_def_label), "atts" => "data-auto-update=\"{$auto_update_def_val}\""),
-			1 => array("label" => __("Yes", "permalink-manager"), "atts" => "data-auto-update=\"1\""),
-			-1 => array("label" => __("No", "permalink-manager"), "atts" => "data-auto-update=\"0\""),
-			-2 => array("label" => __("No (ignore this URI in bulk tools)", "permalink-manager"), "atts" => "data-auto-update=\"2\"")
+			0		=> array("label" => sprintf(__("Use global settings [%s]", "permalink-manager"), $auto_update_def_label), "atts" => "data-readonly=\"{$auto_update_def_val}\""),
+			10	=> '---',
+			-1	=> array("label" => __("Don't auto-update \"Current URI\"", "permalink-manager"), "atts" => "data-readonly=\"0\""),
+			-2	=> array("label" => __("Don't auto-update \"Current URI\" and exclude from the \"Regenerate/reset\" tool", "permalink-manager"), "atts" => "data-readonly=\"0\""),
+			1		=> array("label" => __("Auto-update \"Current URI\"", "permalink-manager"), "atts" => "data-readonly=\"1\""),
+			11	=> '---',
+			2		=> array("label" => __("Disable URI Editor to disallow permalink changes", "permalink-manager"), "atts" => "data-readonly=\"2\""),
 		);
 
 		// Decode default URI
@@ -841,12 +900,11 @@ class Permalink_Manager_Admin_Functions extends Permalink_Manager_Class {
 			$custom_uri_field .= __("The custom URI cannot be edited on frontpage.", "permalink-manager");
 		} else {
 			$custom_uri_field = self::generate_option_field("custom_uri", array("extra_atts" => "data-default=\"{$default_uri}\" data-element-id=\"{$element_id}\"", "input_class" => "widefat custom_uri", "value" => rawurldecode($uri)));
-			$custom_uri_field .= sprintf('<p class="uri_locked hidden">%s %s</p>', '<span class="dashicons dashicons-lock"></span>', __('The above permalink will be automatically updated to "Default URI" and is locked for editing.', 'permalink-manager'));
+			$custom_uri_field .= sprintf('<p class="uri_locked hidden">%s %s</p>', '<span class="dashicons dashicons-lock"></span>', __('The URL above is displayed in read-only mode. To enable editing, change the "<strong>URI update mode</strong>" to <em>Don\'t auto-update "Current URI"</em>.', 'permalink-manager'));
 		}
 
-		$html .= sprintf("<div class=\"custom_uri_container\"><p><label for=\"custom_uri\" class=\"strong\">%s %s</label></p><span>%s</span><span class=\"duplicated_uri_alert\"></span></div>",
+		$html .= sprintf("<div class=\"custom_uri_container\"><p><label for=\"custom_uri\" class=\"strong\">%s</label></p><span>%s</span><span class=\"duplicated_uri_alert\"></span></div>",
 			__("Current URI", "permalink-manager"),
-			($element->ID) ? self::help_tooltip(__("If custom URI is not defined, a default URI will be set (see below). The custom URI can be edited only if 'Auto-update the URI' feature is not enabled.", "permalink-manager")) : "",
 			$custom_uri_field
 		);
 
@@ -854,8 +912,8 @@ class Permalink_Manager_Admin_Functions extends Permalink_Manager_Class {
 		if(empty($is_front_page)) {
 			if(!empty($auto_update_choices)) {
 				$html .= sprintf("<div><p><label for=\"auto_auri\" class=\"strong\">%s %s</label></p><span>%s</span></div>",
-					__("Auto-update \"Current URI\"", "permalink-manager"),
-					self::help_tooltip(__("If enabled, the 'Current URI' field will be automatically changed to 'Default URI' (displayed below) after the post is saved or updated.", "permalink-manager")),
+					__("URI update mode", "permalink-manager"),
+					self::help_tooltip(__("If 'auto-update mode' is turned on, the 'Current URI' field will be automatically changed to 'Default URI' (displayed below) after the post is saved or updated.", "permalink-manager")),
 					self::generate_option_field("auto_update_uri", array("type" => "select", "input_class" => "widefat auto_update", "value" => $auto_update_val, "choices" => $auto_update_choices))
 				);
 			}

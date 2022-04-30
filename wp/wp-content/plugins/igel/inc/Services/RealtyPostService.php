@@ -166,9 +166,10 @@ class RealtyPostService
     {
         return get_posts(
             [
-                'post_type'  => 'attachment',
-                'meta_key'   => 'ig_for_realty_remote',
-                'meta_value' => $realty->getId()
+                'numberposts' => -1,
+                'post_type'   => 'attachment',
+                'meta_key'    => 'ig_for_realty_remote',
+                'meta_value'  => $realty->getId()
             ]
         );
     }
@@ -182,7 +183,7 @@ class RealtyPostService
         $users = get_users(
             array(
                 'meta_key'    => 'remote_user_id',
-                'meta_value'  => md5($this->getUniqueUserMail($employee)),
+                'meta_value'  => $employee->getId(),
                 'number'      => 1,
                 'count_total' => false
             )
@@ -208,8 +209,8 @@ class RealtyPostService
         }
 
         update_user_meta($id, 'remote_email', $employee->getEmail());
-        update_user_meta($id, 'phone', $employee->getPhone());
-        update_user_meta($id, 'remote_user_id', md5($this->getUniqueUserMail($employee)));
+        update_user_meta($id, 'phone', $employee->getMobile());
+        update_user_meta($id, 'remote_user_id', $employee->getId());
         update_field('show_agent', true, 'user_' . $id);
         update_field('role', $employee->getPosition(), 'user_' . $id);
 
@@ -231,7 +232,7 @@ class RealtyPostService
         );
 
         update_user_meta($id, 'remote_email', $employee->getEmail());
-        update_user_meta($id, 'phone', $employee->getPhone());
+        update_user_meta($id, 'phone', $employee->getMobile());
         if (!empty($employee->getPosition())) {
             update_field('role', $employee->getPosition(), 'user_' . $id);
         }

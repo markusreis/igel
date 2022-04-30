@@ -1,5 +1,4 @@
 <?php
-
 namespace Justimmo\Curl;
 
 /**
@@ -302,7 +301,6 @@ class CurlRequest
         $this->content = curl_exec($ch);
         $this->infos   = curl_getinfo($ch);
         $this->error   = curl_error($ch);
-
 
         curl_close($ch);
 
