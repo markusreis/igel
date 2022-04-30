@@ -57,6 +57,11 @@
     opacity: 0;
     transition: opacity 0s linear .7s;
 
+    &__counter {
+      margin-left: 8px;
+    }
+
+
     &__overlay {
       background: rgba(black, .85);
       opacity: 0;
@@ -101,7 +106,16 @@
 
     &__arrow-buttons {
       display: flex;
+      touch-action: pan-x;
       cursor: pointer;
+
+      .button {
+        width: 50%;
+
+        &:focus, &:active {
+          background: #1c6b41;
+        }
+      }
     }
 
     &__previews {
@@ -153,6 +167,7 @@
       top: 0;
       right: 0;
       height: 100vh;
+      width: 100%;
 
       .button {
         cursor: pointer;
@@ -201,6 +216,13 @@
   .c-gallery__modal__previews {
     height: 60px;
     padding-right: 155px;
+  }
+  .c-gallery__modal__counter {
+    display: none;
+  }
+
+  .c-gallery__modal__buttons {
+    width: 155px;
   }
 }
 

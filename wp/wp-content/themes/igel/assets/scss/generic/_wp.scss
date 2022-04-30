@@ -14,16 +14,10 @@
 .aligncenter {
   left: 50%;
   transform: translateX(-50%);
-
-  img {
-    height: auto !important;
-    width: 100% !important;
-  }
 }
 
 img.aligncenter {
-  height: auto !important;
-  width: 100% !important;
+  position: relative;
 }
 
 .wp-caption {

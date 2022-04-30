@@ -5,14 +5,16 @@
   &__el {
     margin-bottom: 10px;
     counter-increment: row-counter;
-    padding: 0 15px 25px 20%;
+    padding: 0 15px 25px 80px;
     position: relative;
     background: $color__gray--light;
+    cursor: pointer;
+    width: 100%;
 
     &:before {
       padding-top: 25px;
       content: counter(row-counter);
-      width: 20%;
+      width: 80px;
       height: 100%;
       position: absolute;
       left: 0;
@@ -26,46 +28,35 @@
     }
   }
 
+  &__text {
+    padding-left: 20px;
+    height: 0;
+    overflow: hidden;
+    transition: height 0.3s ease;
+
+    &__inner {
+      padding-top: 15px;
+    }
+  }
+
   span {
     padding-left: 20px;
     display: block;
   }
 
   &__title {
+    padding-left: 20px;
     padding-top: 20px;
     color: $color__text;
-    margin-bottom: 10px;
+    margin: 0;
   }
 
   @include media(lg) {
-    justify-content: space-between;
-    &__el {
-      width: 45%;
-      width: calc(50% - 20px);
-      padding-left: 10%;
-      margin-bottom: 40px;
-      padding-right: 30px;
-
-      &:before {
-        font-size: 40px;
-        padding-top: 30px;
-      }
-    }
     &__title {
-      margin-bottom: 12px;
       padding-top: 22px;
     }
-    span {
+    &__text, &__title {
       padding-left: 30px;
-    }
-  }
-
-  @include media(xl) {
-    justify-content: space-between;
-    &__el {
-      &:before {
-        padding-top: 35px;
-      }
     }
   }
 }

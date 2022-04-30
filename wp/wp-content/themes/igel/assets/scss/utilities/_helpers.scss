@@ -1,3 +1,8 @@
+
+.mb-0 {
+  margin-bottom: 0;
+}
+
 .-mt-35 {
   margin-top: 35px;
 }
@@ -19,5 +24,88 @@
 .-mt-45\@lg {
   @include media(lg) {
     margin-top: 45px;
+  }
+}
+
+@media only screen and (min-width: 1024px) {
+  .-hidden\@xl {
+    display: none;
+  }
+}
+
+
+
+.overlay-image {
+  width: 80px !important;
+  height: auto !important;
+  position: absolute;
+  bottom: 20px;
+}
+
+.overlay-image.-left {
+  left: 20px;
+  padding: 8px;
+  background: rgba(255, 255, 255, 0.6);
+  display: flex;
+  border-radius: 10px;
+}
+
+.overlay-image.-left img {
+  position: relative;
+}
+
+.overlay-image.-right {
+  right: 20px;
+}
+
+@media only screen and (min-width: 768px) {
+  .overlay-image {
+    width: 90px !important;
+  }
+}
+
+@media only screen and (min-width: 1024px) {
+  .overlay-image {
+    width: 110px !important;
+  }
+}
+
+[data-zoom-url] {
+  cursor: pointer;
+}
+
+@media only screen and (min-width: 1024px) {
+  .c-new-builds__el__image-wrap .overlay-image {
+    width: 90px !important;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .mobile-short-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 8;
+    /* number of lines to show */
+    line-clamp: 8;
+    -webkit-box-orient: vertical;
+  }
+}
+
+.-only-desktop, .-only-desktop-flex {
+  display: none;
+}
+
+@media only screen and (min-width: 768px) {
+  .-only-mobile {
+    display: none;
+  }
+
+  .-only-desktop {
+    display: block;
+  }
+
+  .-only-desktop-flex {
+    display: flex;
   }
 }

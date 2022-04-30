@@ -1,0 +1,17 @@
+.c-button-title .button {
+  display: none;
+}
+
+@media only screen and (min-width: 1024px) {
+  .c-button-title {
+    margin-bottom: 45px;
+  }
+
+  .c-button-title h2 {
+    margin: 0 !important;
+  }
+
+  .c-button-title .button {
+    display: flex;
+  }
+}

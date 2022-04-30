@@ -7,6 +7,13 @@
     align-items: flex-start;
   }
 
+  &__search-wrap {
+    margin-top: 40px;
+    padding: 10px;
+    border: 1px solid #E0E0E0;
+  }
+
+
   &__step {
     &__title {
       border-bottom: 1px solid rgba($color__border, .4);
@@ -176,6 +183,12 @@
   }
 
   @include media(xl) {
+
+
+    &__search-wrap {
+      padding: 20px;
+    }
+
     &__input {
 
       &--radio {

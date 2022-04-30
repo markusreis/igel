@@ -59,6 +59,11 @@ header {
       transform: translateY(-10px);
       transition: transform .5s ease, opacity .5s ease;
 
+      span {
+        font-weight: 300;
+        margin-bottom: -3px;
+      }
+
       &:hover {
         color: $color__main;
       }
@@ -186,10 +191,17 @@ header {
             padding: 0 13px;
             opacity: 1;
             transform: none;
-            font-weight: 600;
+            font-weight: 900;
             border-top: 5px solid transparent;
             border-bottom: 5px solid transparent;
             transition: border-bottom-color .15s ease;
+            flex-direction: column;
+            justify-content: center;
+
+            br {
+              display: none;
+            }
+
 
             &:hover {
               border-bottom: 5px solid $color__main--light;

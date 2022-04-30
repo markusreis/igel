@@ -23,6 +23,10 @@
       margin-bottom: 15px;
       border-bottom: 1px solid $color__border;
 
+      img {
+        width: 100%;
+      }
+
       &:last-of-type {
         border-bottom: none;
         margin-bottom: 0;
@@ -42,6 +46,7 @@
 
       &--passive {
         opacity: 0;
+        pointer-events: none;
         position: absolute;
       }
     }

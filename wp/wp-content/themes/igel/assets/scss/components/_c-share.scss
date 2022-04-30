@@ -1,0 +1,47 @@
+.c-share {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.c-share__title {
+  width: 100%;
+  color: #7B8579;
+  font-weight: 600;
+  font-size: 12px;
+}
+
+.c-share__el {
+  font-size: 11px;
+  margin-right: 5px;
+  background: #2B975D;
+  color: white;
+  padding: 1px 8px;
+  display: flex;
+  align-items: center;
+}
+
+.c-share__el:hover {
+  filter: brightness(1.15);
+  color: white;
+}
+
+.c-share__el i {
+  margin-right: 5px;
+  font-size: 12px;
+}
+
+.c-share__el:last-of-type {
+  margin-right: 0;
+}
+
+.c-share__el--facebook {
+  background: #2084ee;
+}
+
+.c-share__el--twitter {
+  background: #2ea1f2;
+}
+
+.c-share__el--whatsapp {
+  background: #53b63f;
+}

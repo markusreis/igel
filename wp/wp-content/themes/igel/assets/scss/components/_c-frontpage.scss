@@ -4,12 +4,22 @@
     margin-top: 0 !important;
   }
 
+  .c-hero--img {
+    .text-pretitle {
+      margin-top: 0 !important;
+    }
+
+    &:before {
+      padding-top: 22% !important;
+    }
+  }
+
   @include media(md) {
     .c-hero--img {
-      max-height: none;
+      max-height: 680px;
 
       &:before {
-        padding-top: 21%;
+        padding-top: 22% !important;
       }
     }
   }
@@ -23,17 +33,6 @@
 
       .button {
         display: none;
-      }
-
-      @include media(xl) {
-        margin-bottom: 45px;
-
-        h2 {
-          margin: 0 !important;
-        }
-        .button {
-          display: flex;
-        }
       }
     }
 
@@ -82,6 +81,13 @@
       @include media(lg) {
         display: block;
       }
+    }
+  }
+
+
+  @include media(xl) {
+    .c-hero--img:before {
+      padding-top: 33% !important;
     }
   }
 }

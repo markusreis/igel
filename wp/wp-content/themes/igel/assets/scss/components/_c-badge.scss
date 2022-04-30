@@ -1,0 +1,59 @@
+.c-badge {
+  position: absolute;
+  z-index: 3;
+  color: white;
+  width: 170px;
+  height: 170px;
+  top: -10px;
+  left: -10px;
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity 0.75s linear;
+}
+
+.c-badge__inner {
+  position: absolute;
+  display: block;
+  width: 222px;
+  padding: 15px 0;
+  background: linear-gradient(90deg, #2B975D, #1b7243);
+  color: #fff;
+  font: 700 18px/1 "Lato", sans-serif;
+  text-transform: uppercase;
+  text-align: center;
+  right: 0;
+  top: 32px;
+  transform: rotate(-45deg);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 4px 5px rgba(0, 0, 0, 0.2);
+}
+
+.c-badge__inner:before, .c-badge__inner:after {
+  position: absolute;
+  z-index: -1;
+  content: "";
+  display: block;
+  border-top-color: transparent !important;
+  border-left-color: transparent !important;
+}
+
+.c-badge__inner:before {
+  border: 5px solid #1C7947;
+  bottom: 0;
+  left: 0;
+  transform: rotate(45deg);
+  transform-origin: bottom left;
+}
+
+.c-badge__inner:after {
+  border: 5px solid #2a3628;
+  bottom: 0;
+  right: 0;
+  transform-origin: bottom left;
+  transform: translateX(-4px) rotate(45deg);
+}
+
+.c-badge__top {
+  text-align: center;
+  font-size: 15px;
+}
