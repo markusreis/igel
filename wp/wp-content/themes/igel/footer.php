@@ -43,7 +43,7 @@
                 <div class="site-footer__social-links">
                     <?php echo array_reduce($data['social_media_links'], function ($all, $el) {
                         return $all .= '<a href="' . $el['link'] . '" target="_blank" rel="nofollow" class="ig ig-' . $el['icon'] . '"><span class="u-sr-only">' . ucfirst($el['icon']) . '</span></a>';
-                    }, ''); ?>
+                    },                      ''); ?>
                 </div>
             </div>
             <div class="col-12 col-6@md col-3@xl site-footer__company-col">

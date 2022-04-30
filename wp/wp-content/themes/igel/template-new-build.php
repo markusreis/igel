@@ -24,15 +24,36 @@ if (!empty($projects)):
             <div class="c-new-build-highlight">
 
                 <div class="c-new-build-highlight__image-wrap">
+
                     <?php
+                    if (get_field('show_wdf', $project) !== true) :
+                        ?>
+                        <img src="<?php echo get_stylesheet_directory_uri() . '/assets/img/wdf-schleife.png'; ?>"
+                             alt="Wohn dich frei Schleife" class="c-new-build-highlight__badge">
+
+                    <?php
+                    endif;
+
                     if (!empty($gallery = get_field('gallery', $project))) :
                         $id = $gallery[0]['ID'];
                         ?>
                         <img alt="<?php echo $project->post_title; ?> Thumbnail"
                              src="<?php echo wp_get_attachment_image_url($id) ?>"
+                             class="c-new-build-highlight__thumbnail"
                              srcset="<?php echo wp_get_attachment_image_srcset($id) ?>"/>
                     <?php
                     endif;
+                    ?>
+
+                    <?php
+                    $klimaAktiv  = get_field('show_klimaaktiv', $project);
+                    $logoOverlay = get_field('logo_overlay', $project);
+                    if ($klimaAktiv) {
+                        echo '<span class="overlay-image -left"><img class="" src="' . get_stylesheet_directory_uri() . '/assets/img/klimaaktiv.png' . '" alt="Klimaaktiv Logo"></span>';
+                    }
+                    if (!empty($logoOverlay)) {
+                        echo '<img class="overlay-image -right" src="' . $logoOverlay . '" alt="Neubauprojekt Logo">';
+                    }
                     ?>
 
                 </div>
@@ -98,18 +119,35 @@ endif;
 
                 <div class="c-new-builds">
                     <?php
-                    $projects = [$project, $project, $project, $project, $project, $project];
                     foreach ($projects as $project):
                         ?>
                         <div class="c-new-builds__el">
                             <div class="c-new-builds__el__image-wrap">
                                 <?php
+                                if (get_field('show_wdf', $project) !== true) :
+                                    ?>
+                                    <img src="<?php echo get_stylesheet_directory_uri() . '/assets/img/wdf-schleife.png'; ?>"
+                                         alt="Wohn dich frei Schleife" class="c-new-builds__el__badge">
+                                <?php
+                                endif;
                                 if (!empty($gallery = get_field('gallery', $project))) :
                                     ?>
-                                    <img alt="<?php echo $project->post_title; ?> Thumbnail"
+                                    <img class="c-new-builds__el__thumbnail"
+                                         alt="<?php echo $project->post_title; ?> Thumbnail"
                                          src="<?php echo $gallery[0]['sizes']['newbuildthumb']; ?>"/>
                                 <?php
                                 endif;
+                                ?>
+
+                                <?php
+                                $klimaAktiv  = get_field('show_klimaaktiv', $project);
+                                $logoOverlay = get_field('logo_overlay', $project);
+                                if ($klimaAktiv) {
+                                    echo '<span class="overlay-image -left"><img src="' . get_stylesheet_directory_uri() . '/assets/img/klimaaktiv.png' . '" alt="Klimaaktiv Logo"></span>';
+                                }
+                                if (!empty($logoOverlay)) {
+                                    echo '<img class="overlay-image -right" src="' . $logoOverlay . '" alt="Neubauprojekt Logo">';
+                                }
                                 ?>
                             </div>
                             <a href="<?php echo get_permalink($project); ?>" class="c-new-builds__el__button button">

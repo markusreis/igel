@@ -9,7 +9,6 @@
  * @package ThemeReplace
  */
 
-
 ?>
 <!doctype html>
 <html <?php language_attributes(); ?><?php echo is_front_page() ? ' data-page="Homepage"' : ''; ?>>
@@ -29,7 +28,11 @@
     <meta name="msapplication-TileColor" content="#da532c">
     <meta name="theme-color" content="#ffffff">
 
-    <title>IGEL - Work in progress</title>
+    <title>IGEL Immobilien | Immobilien aus Kärnten</title>
+
+    <script id="Cookiebot" src="https://consent.cookiebot.com/uc.js" data-cbid="f7adb9a9-4f21-4965-9876-c5d04f635735"
+            data-blockingmode="auto" type="text/javascript"></script>
+
     <?php
     wp_head();
     ?>
@@ -69,7 +72,9 @@
                 )
             );
             ?>
-            <a class="nav__contact-link" href="#"><i class="ig ig-phone"></i></a>
+            <a class="nav__contact-link" href="tel:<?php echo get_field('default_phone', 'options'); ?>">
+                <i class="ig ig-phone"></i>
+            </a>
         </nav>
     </div>
 

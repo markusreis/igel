@@ -5,86 +5,88 @@ if (function_exists('acf_add_local_field_group')):
                                   'key'                   => 'group_60a137d1e6cf1',
                                   'title'                 => 'Inhalt',
                                   'fields'                => array(
-                                      array(
-                                          'key'               => 'field_60a137d7921b0',
-                                          'label'             => 'Services - Erste Sektion',
-                                          'name'              => 'services_one',
-                                          'type'              => 'group',
-                                          'instructions'      => '',
-                                          'required'          => 0,
-                                          'conditional_logic' => 0,
-                                          'wrapper'           => array(
-                                              'width' => '',
-                                              'class' => '',
-                                              'id'    => '',
-                                          ),
-                                          'layout'            => 'block',
-                                          'sub_fields'        => array_merge(
-                                              getTitleFields('field_60a125c943127', 'field_612fafc943427'),
-                                              [
-
-                                                  array(
-                                                      'key'               => 'field_60a155b2f1f38',
-                                                      'label'             => 'Service-Punkte',
-                                                      'name'              => 'service_points',
-                                                      'type'              => 'repeater',
-                                                      'instructions'      => '',
-                                                      'required'          => 0,
-                                                      'conditional_logic' => 0,
-                                                      'wrapper'           => array(
-                                                          'width' => '',
-                                                          'class' => '',
-                                                          'id'    => '',
-                                                      ),
-                                                      'collapsed'         => '',
-                                                      'min'               => 0,
-                                                      'max'               => 0,
-                                                      'layout'            => 'table',
-                                                      'button_label'      => '',
-                                                      'sub_fields'        => array(
-                                                          array(
-                                                              'key'               => 'field_60a155c0f1f39',
-                                                              'label'             => 'Titel',
-                                                              'name'              => 'title',
-                                                              'type'              => 'text',
-                                                              'instructions'      => '',
-                                                              'required'          => 0,
-                                                              'conditional_logic' => 0,
-                                                              'wrapper'           => array(
-                                                                  'width' => '30',
-                                                                  'class' => '',
-                                                                  'id'    => '',
-                                                              ),
-                                                              'default_value'     => '',
-                                                              'placeholder'       => '',
-                                                              'prepend'           => '',
-                                                              'append'            => '',
-                                                              'maxlength'         => '',
-                                                          ),
-                                                          array(
-                                                              'key'               => 'field_60a155c7f1f3a',
-                                                              'label'             => 'Text',
-                                                              'name'              => 'text',
-                                                              'type'              => 'textarea',
-                                                              'instructions'      => '',
-                                                              'required'          => 0,
-                                                              'conditional_logic' => 0,
-                                                              'wrapper'           => array(
-                                                                  'width' => '70',
-                                                                  'class' => '',
-                                                                  'id'    => '',
-                                                              ),
-                                                              'default_value'     => '',
-                                                              'placeholder'       => '',
-                                                              'maxlength'         => '',
-                                                              'rows'              => 3,
-                                                              'new_lines'         => '',
-                                                          ),
-                                                      ),
-                                                  ),
-                                              ]
-                                          ),
-                                      ),
+                                      /**
+                                       * array(
+                                       * 'key'               => 'field_60a137d7921b0',
+                                       * 'label'             => 'Services - Erste Sektion',
+                                       * 'name'              => 'services_one',
+                                       * 'type'              => 'group',
+                                       * 'instructions'      => '',
+                                       * 'required'          => 0,
+                                       * 'conditional_logic' => 0,
+                                       * 'wrapper'           => array(
+                                       * 'width' => '',
+                                       * 'class' => '',
+                                       * 'id'    => '',
+                                       * ),
+                                       * 'layout'            => 'block',
+                                       * 'sub_fields'        => array_merge(
+                                       * getTitleFields('field_60a125c943127', 'field_612fafc943427'),
+                                       * [
+                                       *
+                                       * array(
+                                       * 'key'               => 'field_60a155b2f1f38',
+                                       * 'label'             => 'Service-Punkte',
+                                       * 'name'              => 'service_points',
+                                       * 'type'              => 'repeater',
+                                       * 'instructions'      => '',
+                                       * 'required'          => 0,
+                                       * 'conditional_logic' => 0,
+                                       * 'wrapper'           => array(
+                                       * 'width' => '',
+                                       * 'class' => '',
+                                       * 'id'    => '',
+                                       * ),
+                                       * 'collapsed'         => '',
+                                       * 'min'               => 0,
+                                       * 'max'               => 0,
+                                       * 'layout'            => 'table',
+                                       * 'button_label'      => '',
+                                       * 'sub_fields'        => array(
+                                       * array(
+                                       * 'key'               => 'field_60a155c0f1f39',
+                                       * 'label'             => 'Titel',
+                                       * 'name'              => 'title',
+                                       * 'type'              => 'text',
+                                       * 'instructions'      => '',
+                                       * 'required'          => 0,
+                                       * 'conditional_logic' => 0,
+                                       * 'wrapper'           => array(
+                                       * 'width' => '30',
+                                       * 'class' => '',
+                                       * 'id'    => '',
+                                       * ),
+                                       * 'default_value'     => '',
+                                       * 'placeholder'       => '',
+                                       * 'prepend'           => '',
+                                       * 'append'            => '',
+                                       * 'maxlength'         => '',
+                                       * ),
+                                       * array(
+                                       * 'key'               => 'field_60a155c7f1f3a',
+                                       * 'label'             => 'Text',
+                                       * 'name'              => 'text',
+                                       * 'type'              => 'textarea',
+                                       * 'instructions'      => '',
+                                       * 'required'          => 0,
+                                       * 'conditional_logic' => 0,
+                                       * 'wrapper'           => array(
+                                       * 'width' => '70',
+                                       * 'class' => '',
+                                       * 'id'    => '',
+                                       * ),
+                                       * 'default_value'     => '',
+                                       * 'placeholder'       => '',
+                                       * 'maxlength'         => '',
+                                       * 'rows'              => 3,
+                                       * 'new_lines'         => '',
+                                       * ),
+                                       * ),
+                                       * ),
+                                       * ]
+                                       * ),
+                                       * ),
+                                       */
                                       array(
                                           'key'               => 'field_60a13122321b0',
                                           'label'             => 'Suchanfragen - Sektion',
@@ -158,7 +160,7 @@ if (function_exists('acf_add_local_field_group')):
                                                       'collapsed'         => '',
                                                       'min'               => 0,
                                                       'max'               => 0,
-                                                      'layout'            => 'table',
+                                                      'layout'            => 'block',
                                                       'button_label'      => '',
                                                       'sub_fields'        => array(
                                                           array(
@@ -170,7 +172,7 @@ if (function_exists('acf_add_local_field_group')):
                                                               'required'          => 0,
                                                               'conditional_logic' => 0,
                                                               'wrapper'           => array(
-                                                                  'width' => '30',
+                                                                  'width' => '100',
                                                                   'class' => '',
                                                                   'id'    => '',
                                                               ),
@@ -184,12 +186,12 @@ if (function_exists('acf_add_local_field_group')):
                                                               'key'               => 'field_60a54432f1f3a',
                                                               'label'             => 'Text',
                                                               'name'              => 'text',
-                                                              'type'              => 'textarea',
+                                                              'type'              => 'wysiwyg',
                                                               'instructions'      => '',
                                                               'required'          => 0,
                                                               'conditional_logic' => 0,
                                                               'wrapper'           => array(
-                                                                  'width' => '70',
+                                                                  'width' => '100',
                                                                   'class' => '',
                                                                   'id'    => '',
                                                               ),
@@ -204,6 +206,7 @@ if (function_exists('acf_add_local_field_group')):
                                               ]
                                           ),
                                       ),
+                                      /*
                                       array(
                                           'key'               => 'field_60a33333321b0',
                                           'label'             => 'Kontaktformular',
@@ -220,6 +223,8 @@ if (function_exists('acf_add_local_field_group')):
                                           'layout'            => 'block',
                                           'sub_fields'        => getTitleFields('field_60aaaaa413127', 'field_612f231332427')
                                       ),
+                                      */
+                                      /*
                                       array(
                                           'key'               => 'field_6999ff31231b0',
                                           'label'             => 'Alleinvermittlungsauftrag',
@@ -350,6 +355,7 @@ if (function_exists('acf_add_local_field_group')):
                                               ]
                                           ),
                                       ),
+                                      */
                                   ),
                                   'location'              => array(
                                       array(

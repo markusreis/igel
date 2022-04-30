@@ -5,6 +5,7 @@
  */
 
 use Igel\Admin\Sync;
+use Igel\Cache\DatabaseCache;
 use Igel\Services\RealtyPostService;
 
 if (have_posts()) the_post();
@@ -13,13 +14,17 @@ $regions  = igel()->justImmo()->data()->get('regions');
 $zipCodes = igel()->justImmo()->data()->get('zipCodes');
 $types    = igel()->justImmo()->data()->get('types');
 
+$zipCodesData = [];
+foreach ($zipCodes as $zipCode) {
+    $zipCodesData[$zipCode['zipCode']] = $zipCode['place'];
+}
 foreach ($types as $pk => $type) {
     $types[$pk] = $type['name'];
 }
 
 $old     = isset($_GET) && !empty($_GET) ? $_GET : [];
 $options = [
-    'region'  => $regions,
+    'region'  => $zipCodesData,
     'type'    => $types,
     'buyrent' => [
         'miete' => 'Miete',
@@ -131,7 +136,8 @@ endif;
 
         <?php
         $hasAnyFilters = false;
-        $offers        = igel()->justImmo()->query();
+        DatabaseCache::clear();
+        $offers = igel()->justImmo()->query();
 
         foreach ($options as $key => $value) {
             if (isset($_GET[$key]) && !empty($_GET[$key]) && $_GET[$key] !== 'all') {
@@ -142,11 +148,7 @@ endif;
                 switch ($key) {
 
                     case 'region':
-                        // TODO Does not work
-                        $value    = (int)$value;
-                        $zipCodes = array_filter($zipCodes, function ($code) use ($value) {
-                            return $code['regionId'] === $value;
-                        });
+                        $offers->filterByZipCode($value);
                         break;
                     case 'type':
                         $offers->filterByRealtyTypeId($value);
@@ -180,6 +182,7 @@ endif;
             $offers = $offers->setLimit(999999)->find();
         }
 
+
         $realtyIds = array_reduce((array)$offers, function ($all, $single) {
             $all[] = $single->getId();
             return $all;
@@ -187,16 +190,16 @@ endif;
 
         if (!empty($realtyIds)) {
 
+
             global $wpdb;
             $args              = array_merge([RealtyPostService::REMOTE_ID_KEY], $realtyIds);
-            $preparedStatement = $wpdb->prepare("SELECT p.ID, m.meta_value FROM " . $wpdb->prefix . "posts AS p INNER JOIN " . $wpdb->prefix . "postmeta AS m ON p.ID = m.post_id WHERE m.meta_key = %s AND m.meta_value IN (" . implode(', ', array_fill(0, count($offers), '%d')) . ")", $args);
+            $preparedStatement = $wpdb->prepare("SELECT p.ID, m.meta_value FROM " . $wpdb->prefix . "posts AS p INNER JOIN " . $wpdb->prefix . "postmeta AS m ON p.ID = m.post_id WHERE p.post_status='publish' AND m.meta_key = %s AND m.meta_value IN (" . implode(', ', array_fill(0, count($offers), '%d')) . ")", $args);
             $posts             = $wpdb->get_results($preparedStatement);
 
             if (count($offers) !== count($posts)) {
                 Sync::getInstance()->run(true);
-
                 $args              = array_merge([RealtyPostService::REMOTE_ID_KEY], $realtyIds);
-                $preparedStatement = $wpdb->prepare("SELECT p.ID, m.meta_value FROM " . $wpdb->prefix . "posts AS p INNER JOIN " . $wpdb->prefix . "postmeta AS m ON p.ID = m.post_id WHERE m.meta_key = %s AND m.meta_value IN (" . implode(', ', array_fill(0, count($offers), '%d')) . ")", $args);
+                $preparedStatement = $wpdb->prepare("SELECT p.ID, m.meta_value FROM " . $wpdb->prefix . "posts AS p INNER JOIN " . $wpdb->prefix . "postmeta AS m ON p.ID = m.post_id WHERE p.post_status='publish' AND m.meta_key = %s AND m.meta_value IN (" . implode(', ', array_fill(0, count($offers), '%d')) . ")", $args);
                 $posts             = $wpdb->get_results($preparedStatement);
             }
 
@@ -206,24 +209,42 @@ endif;
             }
 
             foreach ($offers as $offer):
-                /** @var Justimmo\Model\Realty $offer */
 
-                // TODO: MAKE BADGE
+                if (!isset($postLookup[$offer->getId()])) {
+                    continue;
+                }
+
+                /** @var Justimmo\Model\Realty $offer */
+                $created     = $offer->getCreatedAt('U');
+                $twoWeeksAgo = (new DateTime())->modify('-2 week')->format('U');
+
                 $badgeText = $offer->getStatus() !== 'aktiv' ? $offer->getStatus() : '';
+                $badgeText = empty($badgeText) && ($created > $twoWeeksAgo || isset($offer->getCategories()[21820])) ? 'Neu' : $badgeText;
                 ?>
                 <a href="<?php echo get_permalink($postLookup[$offer->getId()]); ?>"
                    class="c-immo-list__el">
                     <div class="c-immo-list__el__inner">
                         <div class="c-immo-list__el__image-wrap">
+                            <div class="c-immo-list__el__image-wrap-inner">
+                                <?php
+                                $mainImage = $offer->getPictures('TITELBILD');
+                                if (!empty($mainImage)) {
+                                    $mainImage = array_shift($mainImage);
+                                    /** @var \Justimmo\Model\Attachment $mainImage */
+                                    echo '<img class="c-immo-list__el__thumbnail" src="' . $mainImage->getUrl('medium') . '" alt="' . esc_html($offer->getTitle()) . ' Thumbnail"/>';
+                                }
+                                if (!empty($badgeText)) {
+                                    echo '<div class="c-immo-list__el__badge">' . $badgeText . '</div>';
+                                }
+                                ?>
+                            </div>
                             <?php
-                            $mainImage = $offer->getPictures('TITELBILD');
-                            if (!empty($mainImage)) {
-                                $mainImage = array_shift($mainImage);
-                                /** @var \Justimmo\Model\Attachment $mainImage */
-                                echo '<img src="' . $mainImage->getUrl('medium') . '" alt="' . esc_html($offer->getTitle()) . ' Thumbnail"/>';
+
+                            if (isset($offer->getCategories()[21829])) {
+                                echo '<span class="overlay-image -left"><img src="' . get_stylesheet_directory_uri() . '/assets/img/klimaaktiv.png' . '" alt="Klimaaktiv Logo"></span>';
                             }
-                            if (!empty($badgeText)) {
-                                echo '<div class="c-immo-list__el__badge">' . $badgeText . '</div>';
+                            if (isset($offer->getCategories()[21817])) {
+                                echo '<img src="http://igel-immobilien.at.docker/wp-content/themes/igel/assets/img/wdf-schleife.png" alt="Wohn dich frei Schleife" class="c-immo-list__el__wdf" style="opacity: 1;">';
                             }
                             ?>
                         </div>
@@ -264,6 +285,45 @@ endif;
             <?php
         }
         ?>
+
+    </section>
+
+    <div class="content">
+        <?php echo do_shortcode('[divider]'); ?>
+    </div>
+
+    <section class="content">
+
+        <?php
+        wp_reset_query();
+        $data = get_field('listings');
+        ?>
+
+        <div class="c-button-title">
+            <div class="c-button-title__title">
+                <?php igTitle($data['section_title'], $data['pretext']); ?>
+            </div>
+        </div>
+
+        <div>
+            <?php echo $data['text']; ?>
+
+            <div class="c-evaluation__search-wrap">
+                <form class="c-evaluation" data-config="searchRequest">
+                    <div class="c-evaluation__steps">
+                        <div class="c-evaluation__step c-evaluation__step--initial" data-active="true">
+                            <div class="input-wrap">
+                                <input type="text" data-field="initial" placeholder=" ">
+                                <label for="bewerten-adresse">In welcher Region suchen Sie?</label>
+                            </div>
+                            <button type="submit" data-action="next">
+                                Suchauftrag erstellen<i class="button--after ig ig-arrow"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
 
     </section>
 

@@ -2,6 +2,68 @@
 if (function_exists('acf_add_local_field_group')):
 
     acf_add_local_field_group(array(
+                                  'key'                   => 'group_60332dc263462',
+                                  'title'                 => 'Globale Einstellungen',
+                                  'fields'                => array(
+                                      array(
+                                          'key'               => 'field_622441214f57b',
+                                          'label'             => 'E-Mail empfänger für Kontaktformulare',
+                                          'name'              => 'default_recipient',
+                                          'type'              => 'text',
+                                          'instructions'      => '',
+                                          'required'          => 0,
+                                          'conditional_logic' => 0,
+                                          'wrapper'           => array(
+                                              'width' => '',
+                                              'class' => '',
+                                              'id'    => '',
+                                          ),
+                                          'default_value'     => '',
+                                          'placeholder'       => '',
+                                          'prepend'           => '',
+                                          'append'            => '',
+                                          'maxlength'         => '',
+                                      ),
+                                      array(
+                                          'key'               => 'field_991821214f57b',
+                                          'label'             => 'Telefonnummer für Icon oben rechts',
+                                          'name'              => 'default_phone',
+                                          'type'              => 'text',
+                                          'instructions'      => '',
+                                          'required'          => 0,
+                                          'conditional_logic' => 0,
+                                          'wrapper'           => array(
+                                              'width' => '',
+                                              'class' => '',
+                                              'id'    => '',
+                                          ),
+                                          'default_value'     => '',
+                                          'placeholder'       => '',
+                                          'prepend'           => '',
+                                          'append'            => '',
+                                          'maxlength'         => '',
+                                      ),
+                                  ),
+                                  'location'              => array(
+                                      array(
+                                          array(
+                                              'param'    => 'options_page',
+                                              'operator' => '==',
+                                              'value'    => 'acf-options-theme-settings',
+                                          ),
+                                      ),
+                                  ),
+                                  'menu_order'            => 0,
+                                  'position'              => 'normal',
+                                  'style'                 => 'default',
+                                  'label_placement'       => 'top',
+                                  'instruction_placement' => 'label',
+                                  'hide_on_screen'        => '',
+                                  'active'                => true,
+                                  'description'           => '',
+                              ));
+
+    acf_add_local_field_group(array(
                                   'key'                   => 'group_60ab8dc263462',
                                   'title'                 => 'Footer-Einstellungen',
                                   'fields'                => array(
@@ -83,7 +145,7 @@ if (function_exists('acf_add_local_field_group')):
                                                           'required'          => 0,
                                                           'conditional_logic' => 0,
                                                           'wrapper'           => array(
-                                                              'width' => '25',
+                                                              'width' => '20',
                                                               'class' => '',
                                                               'id'    => '',
                                                           ),
@@ -161,7 +223,7 @@ if (function_exists('acf_add_local_field_group')):
                                           'required'          => 0,
                                           'conditional_logic' => 0,
                                           'wrapper'           => array(
-                                              'width' => '25',
+                                              'width' => '20',
                                               'class' => '',
                                               'id'    => '',
                                           ),
@@ -183,7 +245,7 @@ if (function_exists('acf_add_local_field_group')):
                                           'required'          => 0,
                                           'conditional_logic' => 0,
                                           'wrapper'           => array(
-                                              'width' => '25',
+                                              'width' => '20',
                                               'class' => '',
                                               'id'    => '',
                                           ),
@@ -205,7 +267,7 @@ if (function_exists('acf_add_local_field_group')):
                                           'required'          => 0,
                                           'conditional_logic' => 0,
                                           'wrapper'           => array(
-                                              'width' => '25',
+                                              'width' => '20',
                                               'class' => '',
                                               'id'    => '',
                                           ),
@@ -227,7 +289,29 @@ if (function_exists('acf_add_local_field_group')):
                                           'required'          => 0,
                                           'conditional_logic' => 0,
                                           'wrapper'           => array(
-                                              'width' => '25',
+                                              'width' => '20',
+                                              'class' => '',
+                                              'id'    => '',
+                                          ),
+                                          'post_type'         => array(
+                                              0 => 'page',
+                                          ),
+                                          'taxonomy'          => '',
+                                          'allow_null'        => 0,
+                                          'multiple'          => 0,
+                                          'return_format'     => 'object',
+                                          'ui'                => 1,
+                                      ),
+                                      array(
+                                          'key'               => 'field_60f99182f59bb',
+                                          'label'             => 'Kontakt',
+                                          'name'              => 'contact',
+                                          'type'              => 'post_object',
+                                          'instructions'      => '',
+                                          'required'          => 0,
+                                          'conditional_logic' => 0,
+                                          'wrapper'           => array(
+                                              'width' => '20',
                                               'class' => '',
                                               'id'    => '',
                                           ),

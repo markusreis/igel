@@ -24,11 +24,22 @@ get_header();
         <img src="<?php echo get_stylesheet_directory_uri() . '/assets/img/brand-box-white.svg'; ?>"
              alt="IGEL Logo weiß">
     </div>
-    <picture class="c-hero__bg">
+    <picture class="c-hero__bg" data-only="mobile" data-action="open-gallery"
+             data-r="<?php echo $realty->getId(); ?>">
         <img alt="<?php echo get_the_title(); ?> Thumbnail"
              src="<?php echo wp_get_attachment_image_url(get_post_thumbnail_id()); ?>"
              srcset="<?php echo wp_get_attachment_image_srcset(get_post_thumbnail_id()); ?>"/>
     </picture>
+    <div class="c-gallery__icon-toggle -only-mobile" data-action="open-gallery"
+         data-r="<?php echo $realty->getId(); ?>">
+        Galerie (<?php echo count($realty->getAttachments()); ?>)
+        <i class="ig ig-image"></i>
+    </div>
+    <?php
+    if (isset($realty->getCategories()[21829])) {
+        echo '<span class="overlay-image -left"><img src="' . get_stylesheet_directory_uri() . '/assets/img/klimaaktiv.png' . '" alt="Klimaaktiv Logo"></span>';
+    }
+    ?>
     <div class="c-hero__overlay"></div>
 </div>
 
@@ -42,6 +53,7 @@ get_header();
             $priceType = $isRent ? 'Mietpreis ' : 'Kaufpreis';
             $price     = empty($price) ? 'Auf Anfrage' : "$price";
 
+
             $data    = [
                 [
                     'icon'        => 'area',
@@ -51,9 +63,9 @@ get_header();
                 ],
                 [
                     'icon'        => 'area-2',
-                    'value'       => number_format($realty->getFloorArea() ?? $realty->getTotalArea(), 0, ',', '.'),
+                    'value'       => number_format($realty->getSurfaceArea() ?? $realty->getTotalArea(), 0, ',', '.'),
                     'valueSuffix' => 'm<sup>2</sup>',
-                    'name'        => $realty->getFloorArea() ? 'Grundfläche' : 'Gesamtfläche',
+                    'name'        => $realty->getFloorArea() ? 'Grundfläche' : 'Grundfläche',
                 ],
                 [
                     'icon'  => 'house',
@@ -119,7 +131,8 @@ get_header();
             endforeach;
             ?>
         </div>
-        <div class="c-gallery__button button" data-action="open-gallery" data-r="<?php echo $realty->getId(); ?>">
+        <div class="c-gallery__button button -only-desktop-flex" data-action="open-gallery"
+             data-r="<?php echo $realty->getId(); ?>">
             <i class="ig ig-media"></i>
             Bilder (<?php echo count($realty->getAttachments()); ?>)
         </div>
@@ -135,6 +148,7 @@ get_header();
         <div class="content">
 
             <section>
+
                 <?php igTitle($realty->getTitle(), $realty->getZipCode() . ' ' . $realty->getPlace(), 'h1'); ?>
 
                 <?php
@@ -143,6 +157,21 @@ get_header();
                       'Informationen haben werden wir Ihnen diese gerne auf eine persönliche Anfrage zukommen lassen.'
                     : get_the_content();
                 ?>
+                <br/>
+
+                <?php
+                if (!empty($realty->getVideos())) {
+                    foreach ($realty->getVideos() as $video) {
+                        /** @var Justimmo\Model\Attachment $video */
+                        echo '<video src="' . $video->getUrl() . '" style="width:100%;max-width:640px; margin-bottom:15px;" controls></video>';
+                    }
+                }
+                ?>
+
+                <br/>
+
+                <?php echo do_shortcode('[share]'); ?>
+
             </section>
 
             <?php echo do_shortcode('[divider]'); ?>
@@ -150,101 +179,14 @@ get_header();
             <?php
             /** @var Justimmo\Model\Employee $contact */
             $contact = $realty->getContact();
+            $user    = igel()->realtyPosts()->getWpUser($contact);
+
+            echo '<section class="content">';
+            igTitle('Ihr Ansprechpartner', 'Sie haben Interesse?', 'div');
+            render_agents([$user]);
+            render_mini_contact_form($user);
+            echo '</section>';
             ?>
-
-            <section class="content cols-reverse row@lg c-two-cols c-two-cols--agents">
-                <div class="col-12 col-5@lg">
-                    <div class="picture--cover picture--h-full">
-                        <?php
-                        $user = igel()->realtyPosts()->getWpUser($contact);
-                        $img  = get_field('portrait', 'user_' . $user->ID);
-                        if (!empty($img)) {
-                            ?>
-                            <img alt="<?php echo $contact->getFirstName() . ' ' . $contact->getLastName(); ?> Portrait"
-                                 src="<?php echo wp_get_attachment_image_url($img['ID']); ?>"
-                                 srcset="<?php echo wp_get_attachment_image_srcset($img['ID']); ?>"/>
-                            <?php
-                        }
-                        ?>
-                    </div>
-                </div>
-                <div class="col-12 col-1@lg"></div>
-                <div class="col-12 col-6@lg">
-                    <?php igTitle($contact->getFirstName() . ' ' . $contact->getLastName(), 'Ihr Ansprechpartner', 'div'); ?>
-
-                    <?php
-                    if (!empty($contact->getPhone())) :
-                        ?>
-                        <div class="c-icon-text">
-                            <i class="c-icon-text__icon ig ig-phone"></i>
-                            <a class="c-icon-text__value" href="tel:<?php echo $contact->getPhone(); ?>">
-                                <?php echo $contact->getPhone(); ?>
-                            </a>
-                        </div>
-                    <?php
-                    endif;
-                    ?>
-
-                    <div class="c-icon-text">
-                        <i class="c-icon-text__icon ig ig-mail"></i>
-                        <a class="c-icon-text__value" href="mailto:<?php echo $contact->getEmail(); ?>">
-                            <?php echo $contact->getEmail(); ?>
-                        </a>
-                    </div>
-
-                    <div class="c-icon-text">
-                        <i class="c-icon-text__icon ig ig-bill"></i>
-                        <div class="c-icon-text__value">
-                            Provision: <?php echo $realty->getCommission() ?? 'Keine Provision hinterlegt'; ?>
-                        </div>
-                    </div>
-
-                    <form action="" class="c-mini-contact" data-js="contact-form" data-js-contact-form="mini">
-                        <div class="row c-mini-contact__name-row">
-                            <div class="col-12 col-6@md">
-                                <div class="input-wrap">
-                                    <input type="text" id="firstname" placeholder=" " required>
-                                    <label for="firstname">Vorname</label>
-                                </div>
-                            </div>
-                            <div class="col-12 col-6@md">
-                                <div class="input-wrap">
-                                    <input type="text" id="lastname" placeholder=" " required>
-                                    <label for="lastname">Nachname</label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row c-mini-contact__details-row">
-                            <div class="col-12 col-6@md">
-                                <div class="input-wrap">
-                                    <input type="email" id="email" placeholder=" " required>
-                                    <label for="email">E-Mail Adresse</label>
-                                </div>
-                            </div>
-                            <div class="col-12 col-6@md">
-                                <div class="input-wrap">
-                                    <input type="text" id="phone" placeholder=" ">
-                                    <label for="phone">Telefonnummer</label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="c-checkbox">
-                            <input type="checkbox" name="toc" id="toc">
-                            <label for="toc" class="text-small">
-                                Ich stimme der Datenschutzerklärung und einer Kontaktaufnahme durch IGEL Immobilien GmbH
-                                per
-                                E-Mail oder Telefon für Rückfragen oder zu Informationszwecken zu.
-                            </label>
-                        </div>
-
-                        <button type="submit">
-                            Expose anfordern
-                            <i class="button--after ig ig-arrow"></i>
-                        </button>
-                    </form>
-                </div>
-            </section>
         </div>
     </main><!-- #main -->
 </div><!-- #primary -->

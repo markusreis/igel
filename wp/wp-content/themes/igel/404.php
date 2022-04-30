@@ -24,7 +24,10 @@ $data = get_field('about_page_settings');
     <div id="primary" class="content-area">
         <main id="main" class="site-main content">
 
-            Todo: 404 Content
+            Die gesucht Seite existiert leider nicht...
+
+            <a href="<?php echo get_home_url(); ?>" style="display:block;margin:40px 0 0 0;font-weight:bold;">Zurück zur
+                Startseite</a>
 
         </main><!-- #main -->
     </div><!-- #primary -->

@@ -7,9 +7,16 @@
  * @package ThemeReplace
  */
 
+
+use Igel\Admin\Sync;
+use Igel\Cache\DatabaseCache;
+use Igel\Services\RealtyPostService;
+
 get_header();
 
 hero('Sie wollen verkaufen?', 'Wir bewerten Ihre Immobilie. Sofort und kostenlos.');
+
+Sync::getInstance()->run(true);
 
 ?>
 
@@ -22,7 +29,7 @@ hero('Sie wollen verkaufen?', 'Wir bewerten Ihre Immobilie. Sofort und kostenlos
                 <div class="c-evaluation__steps">
                     <div class="c-evaluation__step c-evaluation__step--initial" data-active="true">
                         <div class="input-wrap">
-                            <input type="text" id="bewerten-adresse" placeholder=" ">
+                            <input type="text" data-field="initial" placeholder=" ">
                             <label for="bewerten-adresse">Ihre Adresse...</label>
                         </div>
                         <button type="submit" data-action="next">
@@ -40,6 +47,15 @@ hero('Sie wollen verkaufen?', 'Wir bewerten Ihre Immobilie. Sofort und kostenlos
 
     <div id="primary" class="content-area">
         <main id="main" class="site-main">
+
+            <?php
+            if (!empty(get_the_content())) {
+                echo '<section class="content">';
+                the_content();
+                echo '</section>';
+                echo '<div class="content">' . do_shortcode('[divider]') . '</div>';
+            }
+            ?>
 
             <div class="content">
 
@@ -72,10 +88,17 @@ hero('Sie wollen verkaufen?', 'Wir bewerten Ihre Immobilie. Sofort und kostenlos
                         </div>
                         <div class="col-12 col-1@lg"></div>
                         <div class="col-12 col-6@lg">
-                            <?php igTitle($newbuild->post_title, get_field('post_code', $newbuild->ID) . ' ' . get_field('place', $newbuild->ID)); ?>
                             <?php
-                            echo $newbuild->post_content;
+                            $settings = get_field('newbuild_settings');
+                            $title    = isset($settings['section_title']) && !empty($settings['section_title']) ? $settings['section_title'] : $newbuild->post_title;
+                            $pretitle = isset($settings['pretext']) && !empty($settings['pretext']) ? $settings['pretext'] : get_field('post_code', $newbuild->ID) . ' ' . get_field('place', $newbuild->ID);
+                            igTitle($title, $pretitle);
                             ?>
+                            <span class="mobile-short-text">
+                                <?php
+                                echo $newbuild->post_content;
+                                ?>
+                            </span>
                             <div class="c-highlights -mt-35 -mt-45@lg">
                                 <?php
                                 $details = get_field('overview_facts', $newbuild) ?? [];
@@ -109,9 +132,14 @@ hero('Sie wollen verkaufen?', 'Wir bewerten Ihre Immobilie. Sofort und kostenlos
             ?>
 
             <section class="content">
-                <div class="c-frontpage__button-title row">
-                    <div class="c-frontpage__button-title__title col-12 col-8@xl">
-                        <?php igTitle('Entdecken Sie unser Immobilenangebot', 'Igel verkauft'); ?>
+                <div class="c-button-title row">
+                    <div class="c-button-title__title col-12 col-8@xl">
+                        <?php
+                        $settings = get_field('buy_settings');
+                        $title    = isset($settings['section_title']) && !empty($settings['section_title']) ? $settings['section_title'] : 'Entdecken Sie unser Immobilienangebot';
+                        $pretitle = isset($settings['pretext']) && !empty($settings['pretext']) ? $settings['pretext'] : 'Igel verkauft';
+                        igTitle($title, $pretitle);
+                        ?>
                     </div>
                     <div class="col-12 col-4@xl">
                         <a href="<?php echo igPagelink('realties'); ?>" class="button h-full">
@@ -124,28 +152,69 @@ hero('Sie wollen verkaufen?', 'Wir bewerten Ihre Immobilie. Sofort und kostenlos
                 <div class="c-immo-list">
 
                     <?php
+                    DatabaseCache::clear();
                     $offers = igel()->justImmo()->all();
 
+                    $realtyIds = array_reduce((array)$offers, function ($all, $single) {
+                        $all[] = $single->getId();
+                        return $all;
+                    },                        []);
+                    global $wpdb;
+                    $args              = array_merge([RealtyPostService::REMOTE_ID_KEY], $realtyIds);
+                    $preparedStatement = $wpdb->prepare("SELECT p.ID, m.meta_value FROM " . $wpdb->prefix . "posts AS p INNER JOIN " . $wpdb->prefix . "postmeta AS m ON p.ID = m.post_id WHERE p.post_status='publish' AND m.meta_key = %s AND m.meta_value IN (" . implode(', ', array_fill(0, count($offers), '%d')) . ")", $args);
+                    $posts             = $wpdb->get_results($preparedStatement);
+                    $postLookup        = [];
+                    foreach ($posts as $post) {
+                        $postLookup[$post->meta_value] = $post->ID;
+                    }
+
                     foreach ($offers as $k => $offer):
+
+                        if (!isset($postLookup[$offer->getId()])) {
+                            continue;
+                        }
+
+                        $created     = $offer->getCreatedAt('U');
+                        $twoWeeksAgo = (new DateTime())->modify('-2 week')->format('U');
+
+                        $badgeText = $offer->getStatus() !== 'aktiv' ? $offer->getStatus() : '';
+                        $badgeText = empty($badgeText) && ($created > $twoWeeksAgo || isset($offer->getCategories()[21820])) ? 'Neu' : $badgeText;
+
 
                         if ($k > 2) {
                             break;
                         }
                         /** @var Justimmo\Model\Realty $offer */
 
-                        // TODO: MAKE BADGE
+                        $created     = $offer->getCreatedAt('U');
+                        $twoWeeksAgo = (new DateTime())->modify('-2 week')->format('U');
+
                         $badgeText = $offer->getStatus() !== 'aktiv' ? $offer->getStatus() : '';
+                        $badgeText = empty($badgeText) && ($created > $twoWeeksAgo || isset($offer->getCategories()[21820])) ? 'Neu' : $badgeText;
                         ?>
-                        <a href="<?php echo get_home_url() . '/kaufen/' . sanitize_title($offer->getTitle()); ?>"
+                        <a href="<?php echo get_permalink($postLookup[$offer->getId()]); ?>"
                            class="c-immo-list__el">
                             <div class="c-immo-list__el__inner">
                                 <div class="c-immo-list__el__image-wrap">
+                                    <div class="c-immo-list__el__image-wrap-inner">
+                                        <?php
+                                        $mainImage = $offer->getPictures('TITELBILD');
+                                        if (!empty($mainImage)) {
+                                            $mainImage = array_shift($mainImage);
+                                            /** @var \Justimmo\Model\Attachment $mainImage */
+                                            echo '<img class="c-immo-list__el__thumbnail" src="' . $mainImage->getUrl('medium') . '" alt="' . esc_html($offer->getTitle()) . ' Thumbnail"/>';
+                                        }
+                                        if (!empty($badgeText)) {
+                                            echo '<div class="c-immo-list__el__badge">' . $badgeText . '</div>';
+                                        }
+                                        ?>
+                                    </div>
                                     <?php
-                                    $mainImage = $offer->getPictures('TITELBILD');
-                                    if (!empty($mainImage)) {
-                                        $mainImage = array_shift($mainImage);
-                                        /** @var \Justimmo\Model\Attachment $mainImage */
-                                        echo '<img src="' . $mainImage->getUrl('medium') . '" alt="' . esc_html($offer->getTitle()) . ' Thumbnail"/>';
+                                    if (isset($offer->getCategories()[21829])) {
+                                        echo '<span class="overlay-image -left"><img src="' . get_stylesheet_directory_uri() . '/assets/img/klimaaktiv.png' . '" alt="Klimaaktiv Logo"></span>';
+                                    }
+                                    if (isset($offer->getCategories()[21817])) {
+                                        echo '<img src="http://igel-immobilien.at.docker/wp-content/themes/igel/assets/img/wdf-schleife.png" alt="Wohn dich frei Schleife" class="c-immo-list__el__wdf" style="opacity: 1;">';
                                     }
                                     ?>
                                 </div>
@@ -208,44 +277,89 @@ hero('Sie wollen verkaufen?', 'Wir bewerten Ihre Immobilie. Sofort und kostenlos
                 <?php echo do_shortcode('[divider]'); ?>
             </div>
 
-            <section class="content">
-                <div class="c-frontpage__button-title row">
-                    <div class="c-frontpage__button-title__title col-12 col-8@xl">
-                        <?php igTitle('Unser Serviceangebot', 'Das machen wir für Sie'); ?>
-                    </div>
-                    <div class="col-12 col-4@xl">
-                        <a href="<?php echo igPagelink('employees'); ?>" class="button h-full">
-                            Mehr über uns
-                            <i class="button--after ig ig-arrow"></i>
-                        </a>
-                    </div>
-                </div>
-
-                <?php
-
-                ?>
-                <picture class="c-frontpage__services-image">
-                    <img alt="Services Titelbild"
-                         src="<?php echo wp_get_attachment_thumb_url(get_field('services_image')); ?>"
-                         srcset="<?php echo wp_get_attachment_image_srcset(get_field('services_image')); ?>"/>
-                </picture>
-
-
-                <?php
-                $serivces = get_field('sell', 'options');
-                $data     = array_slice(array_merge(get_field('services_one', $serivces->ID)['service_points'], get_field('services_two', $serivces->ID)['service_points']), 0, 6);
-
-                ob_start();
-                echo '[accordion]';
-                foreach ($data as $row):
-                    echo '[accordion_element title="' . $row['title'] . '"]' . $row['text'] . '[/accordion_element]';
-                endforeach;
-                echo '[/accordion]';
-                echo do_shortcode(ob_get_clean());
-
+            <?php
+            wp_reset_postdata();
+            $data = get_field('hemmadorf_settings');
+            if ($data) :
                 ?>
 
-            </section>
+                <section class="content">
+                    <div class="c-button-title row">
+                        <div class="c-button-title__title col-12 col-8@xl">
+                            <?php igTitle($data['section_title'], $data['pretext']); ?>
+                        </div>
+                        <div class="col-12 col-4@xl">
+                            <a href="https://hemmadorf.at/" target="_blank" class="button h-full">
+                                Zum Hemmadorf
+                                <i class="button--after ig ig-arrow"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <?php
+
+                    ?>
+                    <picture class="c-frontpage__services-image">
+                        <img alt="Services Titelbild"
+                             src="<?php echo wp_get_attachment_thumb_url($data['hemmadorf_image']); ?>"
+                             srcset="<?php echo wp_get_attachment_image_srcset($data['hemmadorf_image']); ?>"/>
+                    </picture>
+
+                    <div>
+                        <?php echo $data['hemmadorf_text']; ?>
+                    </div>
+
+                    <div class="content">
+                        <?php echo do_shortcode('[divider]'); ?>
+                    </div>
+
+
+                </section>
+
+            <?php
+            endif;
+
+            $data = get_field('services');
+            if ($data) :
+                ?>
+                <section class="content">
+                    <div class="c-button-title row">
+                        <div class="c-button-title__title col-12 col-8@xl">
+                            <?php igTitle($data['section_title'], $data['pretext']); ?>
+                        </div>
+                        <div class="col-12 col-4@xl">
+                            <a href="<?php echo igPagelink('employees'); ?>" class="button h-full">
+                                Mehr über uns
+                                <i class="button--after ig ig-arrow"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div>
+                        <?php echo $data['description']; ?>
+                    </div>
+
+                    <div class="c-icon-boxes">
+                        <?php
+                        ob_start();
+                        foreach ($data['points'] as $row):
+                            echo '<div class="c-icon-boxes__box">';
+                            echo '<i class="c-icon-boxes__icon ig ig-' . $row['icon'] . '">';
+                            echo '</i>';
+                            echo '<div class="c-icon-boxes__title">';
+                            echo $row['title'];
+                            echo '</div>';
+                            echo '</div>';
+                        endforeach;
+                        echo do_shortcode(ob_get_clean());
+                        ?>
+                    </div>
+
+                </section>
+
+            <?php
+            endif;
+            ?>
 
             <section class="content--gray">
                 <div class="content">

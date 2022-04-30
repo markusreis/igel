@@ -20,7 +20,17 @@ get_header();
 ?>
 
 <span id="pagename" data-name="NewBuild"></span>
-<div class="c-hero c-hero--img">
+<div class="c-hero c-hero--img c-hero--overflow">
+
+    <?php
+    if (get_field('hide_wdf') !== true):
+        ?>
+        <img src="<?php echo get_stylesheet_directory_uri() . '/assets/img/wdf-schleife.png'; ?>"
+             alt="Wohn dich frei Schleife" class="c-new-build-highlight__badge">
+    <?php
+    endif;
+    ?>
+
     <?php
     $gallery = get_field('gallery');
     if (!empty($gallery)):
@@ -32,11 +42,22 @@ get_header();
         <?php
         $id = $gallery[0]['ID'];
         ?>
-        <picture class="c-hero__bg">
+        <picture class="c-hero__bg" data-action="open-gallery" data-only="mobile" data-p="<?php echo get_the_ID(); ?>">
             <img alt="<?php echo get_the_title(); ?> Thumbnail"
                  src="<?php echo wp_get_attachment_image_url($id) ?>"
                  srcset="<?php echo wp_get_attachment_image_srcset($id) ?>"/>
         </picture>
+
+        <?php
+        $klimaAktiv  = get_field('show_klimaaktiv');
+        $logoOverlay = get_field('logo_overlay');
+        if ($klimaAktiv) {
+            echo '<span class="overlay-image -left"><img src="' . get_stylesheet_directory_uri() . '/assets/img/klimaaktiv.png' . '" alt="Klimaaktiv Logo"></span>';
+        }
+        if (!empty($logoOverlay)) {
+            echo '<img class="overlay-image -right" src="' . $logoOverlay . '" alt="Neubauprojekt Logo">';
+        }
+        ?>
     <?php
     endif;
     ?>
@@ -80,7 +101,7 @@ endif;
 <div id="primary" class="content-area">
     <main id="main" class="site-main -mt-0@lg">
 
-        <section class="content">
+        <section class="content" style="<?php echo empty($tabs) ? 'margin-top:45px' : ''; ?>">
             <?php
             igTitle(null, get_field('post_code') . ' ' . get_field('place'), 'h1');
             ?>
@@ -90,6 +111,9 @@ endif;
                     <?php
                     the_content();
                     ?>
+
+                    <br/>
+                    <?php echo do_shortcode('[share]'); ?>
                 </div>
 
                 <?php
@@ -106,23 +130,26 @@ endif;
                                     break;
 
                                 case 'list':
-                                    echo '<ul>';
+                                    echo '<ul class="c-tabs__list">';
                                     foreach ($tab['rows'] as $row) {
-                                        if (empty($row['picture'])) {
-                                            echo '<li class="c-tabs__list__el "><strong>' . $row['title'] . '</strong>' . $row['text'] . '</li>';
+                                        if (empty($row['picture']) && empty($row['youtube_link'])) {
+                                            echo '<li class="c-tabs__list__el "> ' . (isset($row['pretitle']) && !empty($row['pretitle']) ? '<span style="display:block;color:#7b8679;margin-bottom:5px;">' . $row['pretitle'] . '</span>' : '') . '
+                                               ' . (!empty($row['title']) ? '<strong style="display:block; margin-bottom:15px;font-size:18px;">' . $row['title'] . '</strong>' : '') . $row['text'] . '</li>';
                                         } else {
                                             echo '<li class="c-tabs__list__el cols row@lg">
                                             <div class="col-7@lg">
-                                                <strong>' . $row['title'] . '</strong>' . $row['text'] . '
+                                            ' . (isset($row['pretitle']) && !empty($row['pretitle']) ? '<span style="display:block;color:#7b8679;margin-bottom:5px;">' . $row['pretitle'] . '</span>' : '') . '
+                                               ' . (!empty($row['title']) ? '<strong style="display:block; margin-bottom:15px;font-size:18px;">' . $row['title'] . '</strong>' : '') . $row['text'] . '
                                             </div>
                                             <div class="col-1@xl"></div>
                                             <div class="col-5@lg col-4@xl">
-                                                <picture>
+                                                ' . (!empty($row['youtube_link']) ? '<iframe style="width:100%;height: 100%;min-width:100px;min-height: 100px;" src="' . $row['youtube_link'] . '" frameborder="0"></iframe>' : '')
+                                                 . (empty($row['youtube_link']) ? '<picture>
                                                     <img alt="Immobilien Neubau Bild"
                                                          src="' . wp_get_attachment_image_url($row['picture']['ID']) . '"
                                                          srcset="' . wp_get_attachment_image_srcset($row['picture']['ID']) . '"/>
-                                                </picture>
-                                            </div>
+                                                </picture>' : '')
+                                                 . '</div>
                                             </li>';
                                         }
                                     }
@@ -141,108 +168,33 @@ endif;
             </div>
         </section>
 
+
         <?php
-        $user = get_field('ansprechpartner');
+        $users = get_field('contact_persons');
 
-        if (!empty($user)):
+        if (!empty($users)):
+
             ?>
-
             <div class="content">
                 <?php echo do_shortcode('[divider]'); ?>
             </div>
-            <section class="content cols-reverse row@lg c-two-cols c-two-cols--agents">
-                <div class="col-12 col-5@lg">
-                    <div class="picture--cover picture--h-full">
-                        <?php
-                        $img = get_field('portrait', 'user_' . $user['ID']);
-                        if (!empty($img)) {
-                            ?>
-                            <img alt="<?php echo $user['display_name']; ?> Portrait"
-                                 src="<?php echo wp_get_attachment_image_url($img['ID']); ?>"
-                                 srcset="<?php echo wp_get_attachment_image_srcset($img['ID']); ?>"/>
-                            <?php
-                        }
-                        ?>
-                    </div>
-                </div>
-                <div class="col-12 col-1@lg"></div>
-                <div class="col-12 col-6@lg">
-                    <?php igTitle($user['display_name'], 'Ihr Ansprechpartner', 'div'); ?>
+            <?php
 
-                    <?php
-                    if (!empty($phone = get_user_meta($user['ID'], 'phone')) && !empty($phone[0])) :
-                        ?>
-                        <div class="c-icon-text">
-                            <i class="c-icon-text__icon ig ig-phone"></i>
-                            <a class="c-icon-text__value" href="tel:<?php echo $phone[0]; ?>">
-                                <?php echo $phone[0]; ?>
-                            </a>
-                        </div>
-                    <?php
-                    endif;
-                    ?>
-
-                    <div class="c-icon-text">
-                        <i class="c-icon-text__icon ig ig-mail"></i>
-                        <a class="c-icon-text__value" href="mailto:<?php echo $user['user_email']; ?>">
-                            <?php echo $user['user_email']; ?>
-                        </a>
-                    </div>
-
-                    <div class="c-icon-text">
-                        <i class="c-icon-text__icon ig ig-bill"></i>
-                        <div class="c-icon-text__value">
-                            Provision: <?php echo get_field('provision'); ?>
-                        </div>
-                    </div>
-
-                    <form action="" class="c-mini-contact" data-js="contact-form" data-js-contact-form="mini">
-                        <div class="row c-mini-contact__name-row">
-                            <div class="col-12 col-6@md">
-                                <div class="input-wrap">
-                                    <input type="text" id="firstname" placeholder=" " required>
-                                    <label for="firstname">Vorname</label>
-                                </div>
-                            </div>
-                            <div class="col-12 col-6@md">
-                                <div class="input-wrap">
-                                    <input type="text" id="lastname" placeholder=" " required>
-                                    <label for="lastname">Nachname</label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row c-mini-contact__details-row">
-                            <div class="col-12 col-6@md">
-                                <div class="input-wrap">
-                                    <input type="email" id="email" placeholder=" " required>
-                                    <label for="email">E-Mail Adresse</label>
-                                </div>
-                            </div>
-                            <div class="col-12 col-6@md">
-                                <div class="input-wrap">
-                                    <input type="text" id="phone" placeholder=" ">
-                                    <label for="phone">Telefonnummer</label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="c-checkbox">
-                            <input type="checkbox" name="toc" id="toc">
-                            <label for="toc" class="text-small">
-                                Ich stimme der Datenschutzerklärung und einer Kontaktaufnahme durch IGEL Immobilien GmbH
-                                per
-                                E-Mail oder Telefon für Rückfragen oder zu Informationszwecken zu.
-                            </label>
-                        </div>
-
-                        <button type="submit">
-                            Expose anfordern
-                            <i class="button--after ig ig-arrow"></i>
-                        </button>
-                    </form>
-                </div>
-            </section>
-        <?php endif; ?>
+            if (count($users) === -1) {
+                $user = array_shift($users);
+                render_ansprechpartner($user['ansprechpartner'], $user['provision']);
+            } else {
+                echo '<section class="content">';
+                igTitle(count($users) === 1 ? 'Ihr Ansprechpartner' : 'Ihre Ansprechpartner', 'Sie haben Interesse?', 'div');
+                $users = array_map(function ($user) {
+                    return get_user_by('id', $user['ansprechpartner']['ID']);
+                }, $users);
+                render_agents($users);
+                render_mini_contact_form(array_shift($users));
+                echo '</section>';
+            }
+        endif;
+        ?>
     </main><!-- #main -->
 </div><!-- #primary -->
 

@@ -51,9 +51,12 @@ function theme_load_custom_scripts()
 }
 
 add_action('wp_head', function () {
+    $contactPage    = get_field('contact', 'options');
+    $contactPageUrl = empty($contactPage) ? '' : get_permalink($contactPage);
     echo '<script>';
     echo 'var igelData = {
-        apiBase: "' . rtrim(get_home_url(), '/') . '/wp-json/igel/"
+        apiBase: "' . rtrim(get_home_url(), '/') . '/wp-json/igel/",
+        contactUrl: "' . $contactPageUrl . '"
     };';
     echo '</script>';
 });
@@ -100,6 +103,12 @@ if (function_exists('acf_add_options_page')) {
     acf_add_options_page(
         array(
             'menu_title' => 'Theme Settings',
+            'capability' => 'manage_options',
+        )
+    );
+    acf_add_options_page(
+        array(
+            'menu_title' => 'Suchaufträge',
             'capability' => 'manage_options',
         )
     );
@@ -216,7 +225,7 @@ if (!function_exists('igTitle')) {
 }
 if (!function_exists('igPagelink')) {
     /**
-     * @param $type 'realties' or 'newbuilds' or 'employees'
+     * @param $type 'realties' or 'newbuilds' or 'employees' or 'sell'
      * @return false|string|WP_Error
      */
     function igPagelink($type)
@@ -322,6 +331,10 @@ add_action('rest_api_init', function () {
         'methods'  => 'POST',
         'callback' => 'igel_contact_form'
     ));
+    register_rest_route('igel', '/inserat', array(
+        'methods'  => 'POST',
+        'callback' => 'igel_inserat_form'
+    ));
     register_rest_route('igel', '/realty-gallery', array(
         'methods'  => 'GET',
         'callback' => 'igel_get_realty_gallery'
@@ -336,6 +349,7 @@ function igel_get_realty_gallery(\WP_REST_Request $request)
     ) {
         return [];
     }
+
     if (!empty($post)) {
         return array_map(function ($media) use ($post) {
             return '<picture data-img="' . $media['ID'] . '"><img alt="' . esc_html($post->post_title) . '" src="' . wp_get_attachment_image_url($media['ID']) . '" srcset="' . wp_get_attachment_image_srcset($media['ID']) . '"/></picture>';
@@ -357,10 +371,54 @@ function igel_contact_form(\WP_REST_Request $request)
         }
     }
     try {
+        $headers = array('Content-Type: text/html; charset=UTF-8');
+
         $res = wp_mail(
-            array(get_option('admin_email')),
+            array(get_field('default_recipient', 'options')),
             'Homepage: Kontaktformular',
-            $data['contact-name'] . ' (Email: ' . $data['contact-mail'] . ' / Telefon: ' . $data['contact-phone'] . ') schrieb: ' . $data['contact-message']
+            '<strong>' . $data['contact-name'] . '</strong> (<strong>Email</strong>: ' . $data['contact-mail'] . ', <strong>Telefon</strong>: ' . $data['contact-phone'] . ') schrieb: <br/><br/>' . $data['contact-message'],
+            $headers
+        );
+        return $res;
+    } catch (Exception$e) {
+        header("HTTP/1.1 500 Server Error");
+        exit();
+    }
+}
+
+function igel_inserat_form(\WP_REST_Request $request)
+{
+    $data = $request->get_params();
+
+    foreach (['firstname', 'lastname', 'email', 'phone', 'toc'] as $param) {
+        if (!isset($data[$param]) || empty($data[$param])) {
+            header("HTTP/1.1 400 Bad Request");
+            exit();
+        }
+    }
+    try {
+        $headers = array('Content-Type: text/html; charset=UTF-8');
+
+        if ($data['agent'] && ($user = get_user_by('id', $data['agent']))) {
+            $recipient = $user->user_email;
+        } else {
+            $recipient = get_field('default_recipient', 'options');
+        }
+
+        if (strpos($data['url'], 'neubauprojekte') !== false) {
+            $recipient = 'klagenfurt@igel-immobilien.at';
+        }
+
+        $content = 'Ein Kunde hat Interesse an folgendem Inserat: ' . $data['url'] . '<br/><br/>';
+        $content .= '<strong>Name:</strong> ' . $data['firstname'] . ' ' . $data['lastname'] . '<br/>';
+        $content .= '<strong>E-Mail:</strong> ' . $data['email'] . '<br/>';
+        $content .= '<strong>Telefon:</strong> ' . $data['phone'] . '<br/>';
+
+        $res = wp_mail(
+            array($recipient),
+            'Homepage: Interesse an Inserat',
+            $content,
+            $headers
         );
         return $res;
     } catch (Exception$e) {
@@ -377,16 +435,27 @@ function igel_eval_form(\WP_REST_Request $request)
 
         $content = '';
         foreach ($data as $row) {
-            $content .= '<strong>' . $row['title'] . '</strong>: ' . $row['value'];
-            $content .= '<br/>';
+
+            switch ($row['type']) {
+                case 'headline':
+                    $content .= '<div style="font-size:22px;font-weight:bold;">' . $row['title'] . '</div>';
+                    break;
+                case 'sectionTitle':
+                    $content .= '<div style="font-size:18px;font-weight:bold;margin-top:25px;margin-bottom:10px;">' . $row['title'] . '</div>';
+                    break;
+                case 'fieldValue':
+                    $content .= '<strong>' . $row['title'] . '</strong>: ' . $row['value'] . '<br/>';
+                    break;
+            }
         }
 
-        return $content;
+        $headers = array('Content-Type: text/html; charset=UTF-8');
 
         $res = wp_mail(
-            array(get_option('admin_email')),
-            'Homepage: Immobilien-Bewertung Formular',
-            $content
+            array(get_field('default_recipient', 'options')),
+            'Homepage Kontaktformular',
+            $content,
+            $headers
         );
         return $res;
     } catch (Exception$e) {
@@ -408,10 +477,14 @@ function hero($titleFallback = '', $pretitleFallback = '', $hasBox = true)
 
         <?php if (!$hasBg) : ?>
 
-            <div class="c-hero__brand">
-                <img src="<?php echo get_stylesheet_directory_uri() . '/assets/img/brand-box-white.svg'; ?>"
-                     alt="IGEL Logo weiß">
+            <div class="c-hero__igel">
+                <img src="<?php echo get_stylesheet_directory_uri() . '/assets/img/igel-shape-white.png'; ?>"
+                     alt="Igel weiß">
             </div>
+            <!--<div class="c-hero__brand">
+                <img src="echo get_stylesheet_directory_uri() . '/assets/img/igel-shape-white.png'; ?>"
+                     alt="Igel weiß">
+            </div>-->
 
         <?php else : ?>
             <?php
