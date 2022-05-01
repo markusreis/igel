@@ -12,6 +12,10 @@ export const initBarba = (app) => {
 
             afterEnter() {
                 setTimeout(() => app.loadCurrentPage(), 50)
+
+                if (Cookiebot?.consent?.statistics) {
+                    gtag('config', 'G-HCNNW15GYB', {'page_path': location.pathname});
+                }
             },
 
             beforeEnter(data) {

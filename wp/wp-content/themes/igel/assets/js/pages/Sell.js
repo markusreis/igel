@@ -9,9 +9,6 @@ export class Sell extends Page {
     }
 
     create() {
-        setTimeout(() => {
-            initEvaluation()
-        }, 300)
 
         document.querySelector('.c-services').addEventListener('click', e => {
             const target = selfOrClosest(e.target, 'c-services__el')

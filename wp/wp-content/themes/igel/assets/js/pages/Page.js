@@ -1,6 +1,7 @@
 import {gsap} from "gsap";
 import {initContactForms} from "../handlers/contact";
 import {initAccordion} from "../handlers/accordion";
+import {initEvaluation} from "../modules/Evaluation";
 
 export class Page {
     constructor(props) {
@@ -12,6 +13,7 @@ export class Page {
         setTimeout(() => {
             initContactForms(this.app)
             initAccordion()
+            initEvaluation()
         }, 300)
 
         const tl = gsap.timeline()

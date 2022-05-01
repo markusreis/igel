@@ -25,19 +25,7 @@ Sync::getInstance()->run(true);
 
     <div class="c-hero__box-wrap">
         <div class="c-hero__box">
-            <form class="c-evaluation" data-config="evaluationRequest">
-                <div class="c-evaluation__steps">
-                    <div class="c-evaluation__step c-evaluation__step--initial" data-active="true">
-                        <div class="input-wrap">
-                            <input type="text" data-field="initial" placeholder=" ">
-                            <label for="bewerten-adresse">Ihre Adresse...</label>
-                        </div>
-                        <button type="submit" data-action="next">
-                            Jetzt bewerten<i class="button--after ig ig-arrow"></i>
-                        </button>
-                    </div>
-                </div>
-            </form>
+            <?php echo do_shortcode('[evaluation_form config="evaluationRequest"]'); ?>
 
             <div class="c-hero__box__overlay-wrap">
                 <div class="c-hero__box__overlay"></div>

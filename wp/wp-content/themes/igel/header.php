@@ -36,6 +36,37 @@
     <?php
     wp_head();
     ?>
+
+    <script>
+        (function (w, d, s, l, i) {
+            w[l] = w[l] || [];
+            w[l].push({
+                'gtm.start':
+                    new Date().getTime(), event: 'gtm.js'
+            });
+            var f = d.getElementsByTagName(s)[0],
+                j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : '';
+            j.async = true;
+            j.src =
+                'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+            f.parentNode.insertBefore(j, f);
+        })(window, document, 'script', 'dataLayer', 'GTM-MX6TCX7');
+
+        function gtag() {
+            dataLayer.push(arguments)
+        }
+    </script>
+
+
+    <script type="text/javascript">
+
+        window.addEventListener('CookiebotOnAccept', function (e) {
+            if (Cookiebot.consent.statistics) {
+                gtag('config', 'G-HCNNW15GYB');
+            }
+        }, false);
+
+    </script>
 </head>
 
 <body <?php body_class(); ?> data-barba="wrapper">
@@ -43,6 +74,13 @@
 <div id="preload" style="position: fixed;width: 100vw;height:100vh;top: 0;left: 0;background:white;z-index:999;"></div>
 
 <header class="header">
+
+    <!-- Google Tag Manager (noscript) -->
+    <noscript>
+        <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MX6TCX7"
+                height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    </noscript>
+    <!-- End Google Tag Manager (noscript) -->
 
     <div class="content header__content">
         <a href="<?php echo get_home_url(); ?>" class="header__brand">

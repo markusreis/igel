@@ -10,9 +10,9 @@ use Igel\Services\RealtyPostService;
 
 if (have_posts()) the_post();
 
-$regions  = igel()->justImmo()->data()->get('regions');
+$regions = igel()->justImmo()->data()->get('regions');
 $zipCodes = igel()->justImmo()->data()->get('zipCodes');
-$types    = igel()->justImmo()->data()->get('types');
+$types = igel()->justImmo()->data()->get('types');
 
 $zipCodesData = [];
 foreach ($zipCodes as $zipCode) {
@@ -22,15 +22,15 @@ foreach ($types as $pk => $type) {
     $types[$pk] = $type['name'];
 }
 
-$old     = isset($_GET) && !empty($_GET) ? $_GET : [];
+$old = isset($_GET) && !empty($_GET) ? $_GET : [];
 $options = [
-    'region'  => $zipCodesData,
-    'type'    => $types,
+    'region' => $zipCodesData,
+    'type' => $types,
     'buyrent' => [
         'miete' => 'Miete',
-        'kauf'  => 'Kauf',
+        'kauf' => 'Kauf',
     ],
-    'rooms'   => [
+    'rooms' => [
         '1' => '1+',
         '2' => '2+',
         '3' => '3+',
@@ -42,8 +42,8 @@ $options = [
 
 function printOptions($key, $options, $old)
 {
-    $value    = 'all';
-    $name     = 'Alle';
+    $value = 'all';
+    $name = 'Alle';
     $selected = isset($old[$key]) && $old[$key] . '' === $value . '';
     echo '<option value="' . $value . '"' . ($selected ? ' selected' : '') . '>' . $name . '</option>';
 
@@ -142,7 +142,7 @@ endif;
         foreach ($options as $key => $value) {
             if (isset($_GET[$key]) && !empty($_GET[$key]) && $_GET[$key] !== 'all') {
 
-                $value         = $_GET[$key];
+                $value = $_GET[$key];
                 $hasAnyFilters = true;
 
                 switch ($key) {
@@ -186,21 +186,21 @@ endif;
         $realtyIds = array_reduce((array)$offers, function ($all, $single) {
             $all[] = $single->getId();
             return $all;
-        },                        []);
+        }, []);
 
         if (!empty($realtyIds)) {
 
 
             global $wpdb;
-            $args              = array_merge([RealtyPostService::REMOTE_ID_KEY], $realtyIds);
+            $args = array_merge([RealtyPostService::REMOTE_ID_KEY], $realtyIds);
             $preparedStatement = $wpdb->prepare("SELECT p.ID, m.meta_value FROM " . $wpdb->prefix . "posts AS p INNER JOIN " . $wpdb->prefix . "postmeta AS m ON p.ID = m.post_id WHERE p.post_status='publish' AND m.meta_key = %s AND m.meta_value IN (" . implode(', ', array_fill(0, count($offers), '%d')) . ")", $args);
-            $posts             = $wpdb->get_results($preparedStatement);
+            $posts = $wpdb->get_results($preparedStatement);
 
             if (count($offers) !== count($posts)) {
                 Sync::getInstance()->run(true);
-                $args              = array_merge([RealtyPostService::REMOTE_ID_KEY], $realtyIds);
+                $args = array_merge([RealtyPostService::REMOTE_ID_KEY], $realtyIds);
                 $preparedStatement = $wpdb->prepare("SELECT p.ID, m.meta_value FROM " . $wpdb->prefix . "posts AS p INNER JOIN " . $wpdb->prefix . "postmeta AS m ON p.ID = m.post_id WHERE p.post_status='publish' AND m.meta_key = %s AND m.meta_value IN (" . implode(', ', array_fill(0, count($offers), '%d')) . ")", $args);
-                $posts             = $wpdb->get_results($preparedStatement);
+                $posts = $wpdb->get_results($preparedStatement);
             }
 
             $postLookup = [];
@@ -215,7 +215,7 @@ endif;
                 }
 
                 /** @var Justimmo\Model\Realty $offer */
-                $created     = $offer->getCreatedAt('U');
+                $created = $offer->getCreatedAt('U');
                 $twoWeeksAgo = (new DateTime())->modify('-2 week')->format('U');
 
                 $badgeText = $offer->getStatus() !== 'aktiv' ? $offer->getStatus() : '';
@@ -251,7 +251,7 @@ endif;
                         <div class="c-immo-list__el__price text-small">
                             <?php
                             $isRent = !$offer->getMarketingType()['KAUF'];
-                            $price  = ig_price(!$isRent ? $offer->getPurchasePrice() : $offer->getTotalRent());
+                            $price = ig_price(!$isRent ? $offer->getPurchasePrice() : $offer->getTotalRent());
                             echo $isRent ? 'Zu vermieten: ' : 'Zu verkaufen: ';
                             echo empty($price) ? 'Preis auf Anfrage' : "$price";
                             ?>
@@ -262,9 +262,9 @@ endif;
                         <ul class="c-immo-list__el__details text-small">
                             <?php
                             $data = [
-                                ''                         => $offer->getZipCode() . ' ' . $offer->getPlace(),
+                                '' => $offer->getZipCode() . ' ' . $offer->getPlace(),
                                 'm<sup>2</sup> Wohnfläche' => $offer->getLivingArea(),
-                                'Zimmer'                   => $offer->getRoomCount(),
+                                'Zimmer' => $offer->getRoomCount(),
                             ];
                             foreach ($data as $name => $value) {
                                 if (!empty($value)) {
@@ -309,19 +309,7 @@ endif;
             <?php echo $data['text']; ?>
 
             <div class="c-evaluation__search-wrap">
-                <form class="c-evaluation" data-config="searchRequest">
-                    <div class="c-evaluation__steps">
-                        <div class="c-evaluation__step c-evaluation__step--initial" data-active="true">
-                            <div class="input-wrap">
-                                <input type="text" data-field="initial" placeholder=" ">
-                                <label for="bewerten-adresse">In welcher Region suchen Sie?</label>
-                            </div>
-                            <button type="submit" data-action="next">
-                                Suchauftrag erstellen<i class="button--after ig ig-arrow"></i>
-                            </button>
-                        </div>
-                    </div>
-                </form>
+                <?php echo do_shortcode('[evaluation_form config="searchRequest"]'); ?>
             </div>
         </div>
 

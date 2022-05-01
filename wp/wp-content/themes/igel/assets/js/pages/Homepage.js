@@ -7,9 +7,4 @@ export class Homepage extends Page {
         super(props)
     }
 
-    create() {
-        initEvaluation()
-        return super.create()
-    }
-
 }
