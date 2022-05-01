@@ -462,7 +462,7 @@ img.aligncenter {
   justify-content: center;
   padding: 15px;
 }
-.header__brand__inner img {
+.header__brand__brand__img {
   width: 100%;
 }
 @media only screen and (min-width: 480px) {
@@ -473,7 +473,7 @@ img.aligncenter {
     width: 175px;
     padding: 20px;
   }
-  .header img {
+  .header__brand__img {
     width: 135px;
   }
 }
@@ -485,7 +485,7 @@ img.aligncenter {
     width: 235px;
     padding: 30px;
   }
-  .header img {
+  .header__brand__img {
     width: 180px;
   }
 }
@@ -497,7 +497,7 @@ img.aligncenter {
     width: 280px;
     padding: 40px;
   }
-  .header img {
+  .header__brand__img {
     width: 220px;
   }
 }
@@ -510,7 +510,7 @@ img.aligncenter {
     box-shadow: 0 15px 25px rgba(0, 0, 0, 0.25);
     width: 360px;
   }
-  .header img {
+  .header__brand__img {
     width: 255px;
   }
 }

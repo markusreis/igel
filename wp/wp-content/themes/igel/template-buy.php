@@ -208,7 +208,22 @@ endif;
                 $postLookup[$post->meta_value] = $post->ID;
             }
 
-            foreach ($offers as $offer):
+            $forSale = [];
+            $sold = [];
+
+            foreach ($offers as $offer) {
+                if (!isset($postLookup[$offer->getId()])) {
+                    continue;
+                }
+
+                if ($offer->getStatus() === 'vermittelt') {
+                    $sold[] = $offer;
+                } else {
+                    $forSale[] = $offer;
+                }
+            }
+
+            foreach ($forSale as $offer):
 
                 if (!isset($postLookup[$offer->getId()])) {
                     continue;
@@ -291,6 +306,94 @@ endif;
     <div class="content">
         <?php echo do_shortcode('[divider]'); ?>
     </div>
+
+<?php
+if (isset($sold) && !empty($sold)) :
+    ?>
+    <section class="content">
+        <?php
+        igTitle('Unsere Referenzimmobilien', 'Ein Blick in die Vergangenheit');
+        ?>
+
+        <div class="c-immo-list">
+            <?php
+            foreach ($sold as $offer):
+
+                if (!isset($postLookup[$offer->getId()])) {
+                    continue;
+                }
+
+                /** @var Justimmo\Model\Realty $offer */
+                $created = $offer->getCreatedAt('U');
+                $twoWeeksAgo = (new DateTime())->modify('-2 week')->format('U');
+
+                $badgeText = $offer->getStatus() !== 'aktiv' ? $offer->getStatus() : '';
+                $badgeText = empty($badgeText) && ($created > $twoWeeksAgo || isset($offer->getCategories()[21820])) ? 'Neu' : $badgeText;
+                ?>
+                <a href="<?php echo get_permalink($postLookup[$offer->getId()]); ?>"
+                   class="c-immo-list__el">
+                    <div class="c-immo-list__el__inner">
+                        <div class="c-immo-list__el__image-wrap">
+                            <div class="c-immo-list__el__image-wrap-inner">
+                                <?php
+                                $mainImage = $offer->getPictures('TITELBILD');
+                                if (!empty($mainImage)) {
+                                    $mainImage = array_shift($mainImage);
+                                    /** @var \Justimmo\Model\Attachment $mainImage */
+                                    echo '<img class="c-immo-list__el__thumbnail" src="' . $mainImage->getUrl('medium') . '" alt="' . esc_html($offer->getTitle()) . ' Thumbnail"/>';
+                                }
+                                if (!empty($badgeText)) {
+                                    echo '<div class="c-immo-list__el__badge">' . $badgeText . '</div>';
+                                }
+                                ?>
+                            </div>
+                            <?php
+
+                            if (isset($offer->getCategories()[21829])) {
+                                echo '<span class="overlay-image -left"><img src="' . get_stylesheet_directory_uri() . '/assets/img/klimaaktiv.png' . '" alt="Klimaaktiv Logo"></span>';
+                            }
+                            if (isset($offer->getCategories()[21817])) {
+                                echo '<img src="http://igel-immobilien.at.docker/wp-content/themes/igel/assets/img/wdf-schleife.png" alt="Wohn dich frei Schleife" class="c-immo-list__el__wdf" style="opacity: 1;">';
+                            }
+                            ?>
+                        </div>
+                        <div class="c-immo-list__el__price text-small">
+                            <?php
+                            $isRent = !$offer->getMarketingType()['KAUF'];
+                            $price = ig_price(!$isRent ? $offer->getPurchasePrice() : $offer->getTotalRent());
+                            echo $isRent ? 'Zu vermieten: ' : 'Zu verkaufen: ';
+                            echo empty($price) ? 'Preis auf Anfrage' : "$price";
+                            ?>
+                        </div>
+                        <div class="c-immo-list__el__title text-big">
+                            <?php echo $offer->getTitle(); ?>
+                        </div>
+                        <ul class="c-immo-list__el__details text-small">
+                            <?php
+                            $data = [
+                                '' => $offer->getZipCode() . ' ' . $offer->getPlace(),
+                                'm<sup>2</sup> Wohnfläche' => $offer->getLivingArea(),
+                                'Zimmer' => $offer->getRoomCount(),
+                            ];
+                            foreach ($data as $name => $value) {
+                                if (!empty($value)) {
+                                    echo "<li>$value $name</li>";
+                                }
+                            }
+                            ?>
+                        </ul>
+                    </div>
+                </a>
+            <?php
+            endforeach;
+            ?>
+        </div>
+
+        <?php echo do_shortcode('[divider]'); ?>
+    </section>
+<?php
+endif;
+?>
 
     <section class="content">
 

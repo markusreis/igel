@@ -7,6 +7,7 @@ const flat = 'M 100 0 L 0 0 Q 20 0 50 0 Q 80 0 100 0 '
 
 export const initBarba = (app) => {
     barba.init({
+        debug: true,
         transitions: [{
             name: 'default-transition',
 
