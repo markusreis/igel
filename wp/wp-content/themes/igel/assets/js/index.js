@@ -6,6 +6,7 @@ import {Agents, Buy, Homepage, NewBuild, NewBuilds, Realty, Sell} from './pages/
 import {initPartnerToggle} from "./handlers/partnertoggle";
 import {Page} from "./pages/Page";
 import {getCumulativeElementOffset, selfOrClosestData} from "./utils/dom";
+import barba from '@barba/core';
 
 (function () {
 
@@ -20,7 +21,21 @@ import {getCumulativeElementOffset, selfOrClosestData} from "./utils/dom";
 
             initBarba(this)
 
-            document.documentElement.classList.add('-preloaded')
+            if (!window.isMobile) {
+                const phoneIcon = document.getElementById('nav-contact')
+                phoneIcon.addEventListener('click', e => {
+                        e.preventDefault()
+                        barba.go(phoneIcon.dataset.url, phoneIcon, e)
+                    }
+                )
+            }
+
+            document
+                .documentElement
+                .classList
+                .add(
+                    '-preloaded'
+                )
         }
 
         createPages() {
@@ -83,4 +98,5 @@ import {getCumulativeElementOffset, selfOrClosestData} from "./utils/dom";
             console.log(p)
         }).then(() => new App())
     })
-})()
+})
+()

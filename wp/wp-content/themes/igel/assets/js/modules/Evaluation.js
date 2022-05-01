@@ -10,17 +10,20 @@ export class Evaluation {
     constructor(wrapper) {
         this._dom = {
             wrapper: wrapper,
-            steps  : wrapper.querySelector('.c-evaluation__steps')
+            steps: wrapper.querySelector('.c-evaluation__steps')
         }
 
         this._state = {
-            branch    : null, // 'house', 'apartment', 'property'
-            step      : -1,
-            formValues: {}
+            branch: null, // 'house', 'apartment', 'property'
+            step: -1,
+            formValues: {},
+            initalError: wrapper.dataset.config === 'evaluationRequest'
+                ? 'Bitte geben Sie Ihre Adresse an'
+                : 'Bitte geben Sie eine Region an'
         }
 
         this._conf = {
-            steps: evaluationSteps
+            steps: evaluationSteps[wrapper.dataset.config]
         }
 
         this._initListeners()
@@ -45,14 +48,14 @@ export class Evaluation {
 
     get valid() {
         if (this._state.step === -1) {
-            if (document.getElementById('bewerten-adresse').value !== '') {
+            if (this._dom.wrapper.querySelector('[data-field="initial"]').value !== '') {
                 return true
             }
             window.showToast({
-                                 msg    : 'Bitte geben Sie Ihre Adresse an',
-                                 type   : 'error',
-                                 timeout: 3000
-                             })
+                msg: this._state.initalError,
+                type: 'error',
+                timeout: 3000
+            })
         } else {
             if (this.step.valid) {
                 return true
@@ -60,10 +63,10 @@ export class Evaluation {
             this.step.fields.forEach(f => {
                 if (!f.valid) {
                     window.showToast({
-                                         msg    : f._onError,
-                                         type   : 'error',
-                                         timeout: 3000
-                                     })
+                        msg: f._onError,
+                        type: 'error',
+                        timeout: 3000
+                    })
                 }
             })
         }
@@ -92,13 +95,27 @@ export class Evaluation {
     finalize() {
         const node = window.showToast({msg: 'Nachricht wird gesendet', type: 'loading'})
 
-        const fields = []
+        const fields = [
+            {
+                'type': 'headline',
+                'title': this._dom.wrapper.dataset.config === 'evalRequest'
+                    ? 'Neue "Immobilie bewerten" Anfrage'
+                    : 'Neue "Suchauftrag" Anfage',
+            }
+        ]
         this.steps.forEach((s, i) => {
+
+            fields.push({
+                title: s._title,
+                type: 'sectionTitle'
+            })
+
             s.fields.forEach(f => {
                 fields.push({
-                                title: !!f._label ? f._label : s._title,
-                                value: f.valueName
-                            })
+                    title: !!f._label ? f._label : s._title,
+                    value: f.valueName,
+                    type: 'fieldValue'
+                })
             })
         })
 
@@ -107,8 +124,8 @@ export class Evaluation {
         setTimeout(() => {
 
             fetch(url, {
-                method : 'POST',
-                body   : JSON.stringify(fields),
+                method: 'POST',
+                body: JSON.stringify(fields),
                 headers: {
                     "Content-Type": "application/json"
                 }
@@ -118,18 +135,18 @@ export class Evaluation {
                     if (response.status !== 200) {
 
                         window.showToast({
-                                             msg    : 'Wir bitten um Entschulding. Etwas ist schief gelaufen. Bitte kontaktieren Sie uns persönlich.',
-                                             type   : 'error',
-                                             timeout: 5000
-                                         })
+                            msg: 'Wir bitten um Entschulding. Etwas ist schief gelaufen. Bitte kontaktieren Sie uns persönlich.',
+                            type: 'error',
+                            timeout: 5000
+                        })
                     } else {
                         response.json()
 
                         window.showToast({
-                                             msg    : 'Vielen Dank! Wir haben Ihre Anfrage erhalten und werden uns schnellstmöglich bei Ihnen melden.',
-                                             type   : 'success',
-                                             timeout: 5000,
-                                         })
+                            msg: 'Vielen Dank! Wir haben Ihre Anfrage erhalten und werden uns schnellstmöglich bei Ihnen melden.',
+                            type: 'success',
+                            timeout: 5000,
+                        })
 
                         setTimeout(() => {
                             this.step = -1
@@ -178,10 +195,10 @@ export class Evaluation {
         gsap.to(this._dom.steps, {height: node.clientHeight, duration: durationPer})
         gsap.to(current, {opacity: 0, x: prevStep < newStep ? -offset : offset, duration: durationPer})
         gsap.fromTo(node, {opacity: 0, x: prevStep > newStep ? -offset : offset}, {
-            opacity : 1,
-            x       : 0,
+            opacity: 1,
+            x: 0,
             duration: durationPer,
-            delay   : durationPer / 3
+            delay: durationPer / 3
         })
 
         current.dataset.active = "false"

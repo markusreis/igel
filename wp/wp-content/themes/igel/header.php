@@ -66,13 +66,15 @@
             wp_nav_menu(
                 array(
                     'container_class' => 'nav__container',
-                    'menu_class'      => false,
-                    'menu_id'         => false,
-                    'theme_location'  => 'main',
+                    'menu_class' => false,
+                    'menu_id' => false,
+                    'theme_location' => 'main',
                 )
             );
             ?>
-            <a class="nav__contact-link" href="tel:<?php echo get_field('default_phone', 'options'); ?>">
+            <a class="nav__contact-link" href="tel:<?php echo get_field('default_phone', 'options'); ?>"
+               data-url="<?php echo get_permalink(get_field('contact', 'options')); ?>"
+               id="nav-contact">
                 <i class="ig ig-phone"></i>
             </a>
         </nav>

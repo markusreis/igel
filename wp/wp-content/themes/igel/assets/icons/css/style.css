@@ -5,280 +5,300 @@ Generated using nucleoapp.com
 
 -------------------------------- */
 @font-face {
-    font-family: 'IgelIcon';
-    src: url('../fonts/IgelIcon.eot');
-    src: url('../fonts/IgelIcon.eot') format('embedded-opentype'), url('../fonts/IgelIcon.woff2') format('woff2'), url('../fonts/IgelIcon.woff') format('woff'), url('../fonts/IgelIcon.ttf') format('truetype'), url('../fonts/IgelIcon.svg') format('svg');
-    font-weight: normal;
-    font-style: normal;
+  font-family: 'IgelIcon';
+  src: url('../fonts/IgelIcon.eot');
+  src: url('../fonts/IgelIcon.eot') format('embedded-opentype'), url('../fonts/IgelIcon.woff2') format('woff2'), url('../fonts/IgelIcon.woff') format('woff'), url('../fonts/IgelIcon.ttf') format('truetype'), url('../fonts/IgelIcon.svg') format('svg');
+  font-weight: normal;
+  font-style: normal;
 }
-
 /*------------------------
 	base class definition
 -------------------------*/
 .ig {
-    display: inline-block;
-    font: normal normal normal 1em/1 'IgelIcon';
-    speak: none;
-    text-transform: none;
-    /* Better Font Rendering */
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font: normal normal normal 1em/1 'IgelIcon';
+  speak: none;
+  text-transform: none;
+  /* Better Font Rendering */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
-
 /*------------------------
   change icon size
 -------------------------*/
 /* relative units */
 .ig-sm {
-    font-size: 0.8em;
+  font-size: 0.8em;
 }
-
 .ig-lg {
-    font-size: 1.2em;
+  font-size: 1.2em;
 }
-
 /* absolute units */
 .ig-16 {
-    font-size: 16px;
+  font-size: 16px;
 }
-
 .ig-32 {
-    font-size: 32px;
+  font-size: 32px;
 }
-
 /*----------------------------------
   add a square/circle background
 -----------------------------------*/
 .ig-bg-square,
 .ig-bg-circle {
-    padding: 0.35em;
-    background-color: #eee;
+  padding: 0.35em;
+  background-color: #eee;
 }
-
 .ig-bg-circle {
-    border-radius: 50%;
+  border-radius: 50%;
 }
-
 /*------------------------------------
   use icons as list item markers
 -------------------------------------*/
 .ig-ul {
-    padding-left: 0;
-    list-style-type: none;
+  padding-left: 0;
+  list-style-type: none;
 }
-
 .ig-ul > li {
-    display: flex;
-    align-items: flex-start;
-    line-height: 1.4;
+  display: flex;
+  align-items: flex-start;
+  line-height: 1.4;
 }
-
 .ig-ul > li > .ig {
-    margin-right: 0.4em;
-    line-height: inherit;
+  margin-right: 0.4em;
+  line-height: inherit;
 }
-
 /*------------------------
   spinning icons
 -------------------------*/
 .ig-is-spinning {
-    -webkit-animation: ig-spin 2s infinite linear;
-    -moz-animation: ig-spin 2s infinite linear;
-    animation: ig-spin 2s infinite linear;
+  -webkit-animation: ig-spin 2s infinite linear;
+  -moz-animation: ig-spin 2s infinite linear;
+  animation: ig-spin 2s infinite linear;
 }
-
 @-webkit-keyframes ig-spin {
-    0% {
-        -webkit-transform: rotate(0deg);
-    }
-    100% {
-        -webkit-transform: rotate(360deg);
-    }
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
 }
-
 @-moz-keyframes ig-spin {
-    0% {
-        -moz-transform: rotate(0deg);
-    }
-    100% {
-        -moz-transform: rotate(360deg);
-    }
+  0% {
+    -moz-transform: rotate(0deg);
+  }
+  100% {
+    -moz-transform: rotate(360deg);
+  }
 }
-
 @keyframes ig-spin {
-    0% {
-        -webkit-transform: rotate(0deg);
-        -moz-transform: rotate(0deg);
-        -ms-transform: rotate(0deg);
-        -o-transform: rotate(0deg);
-        transform: rotate(0deg);
-    }
-    100% {
-        -webkit-transform: rotate(360deg);
-        -moz-transform: rotate(360deg);
-        -ms-transform: rotate(360deg);
-        -o-transform: rotate(360deg);
-        transform: rotate(360deg);
-    }
+  0% {
+    -webkit-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -ms-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    -moz-transform: rotate(360deg);
+    -ms-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
 }
-
 /*------------------------
   rotated/flipped icons
 -------------------------*/
 .ig-rotate-90 {
-    filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=1);
-    -webkit-transform: rotate(90deg);
-    -moz-transform: rotate(90deg);
-    -ms-transform: rotate(90deg);
-    -o-transform: rotate(90deg);
-    transform: rotate(90deg);
+  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=1);
+  -webkit-transform: rotate(90deg);
+  -moz-transform: rotate(90deg);
+  -ms-transform: rotate(90deg);
+  -o-transform: rotate(90deg);
+  transform: rotate(90deg);
 }
-
 .ig-rotate-180 {
-    filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=2);
-    -webkit-transform: rotate(180deg);
-    -moz-transform: rotate(180deg);
-    -ms-transform: rotate(180deg);
-    -o-transform: rotate(180deg);
-    transform: rotate(180deg);
+  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=2);
+  -webkit-transform: rotate(180deg);
+  -moz-transform: rotate(180deg);
+  -ms-transform: rotate(180deg);
+  -o-transform: rotate(180deg);
+  transform: rotate(180deg);
 }
-
 .ig-rotate-270 {
-    filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
-    -webkit-transform: rotate(270deg);
-    -moz-transform: rotate(270deg);
-    -ms-transform: rotate(270deg);
-    -o-transform: rotate(270deg);
-    transform: rotate(270deg);
+  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+  -webkit-transform: rotate(270deg);
+  -moz-transform: rotate(270deg);
+  -ms-transform: rotate(270deg);
+  -o-transform: rotate(270deg);
+  transform: rotate(270deg);
 }
-
 .ig-flip-y {
-    filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=0);
-    -webkit-transform: scale(-1, 1);
-    -moz-transform: scale(-1, 1);
-    -ms-transform: scale(-1, 1);
-    -o-transform: scale(-1, 1);
-    transform: scale(-1, 1);
+  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=0);
+  -webkit-transform: scale(-1, 1);
+  -moz-transform: scale(-1, 1);
+  -ms-transform: scale(-1, 1);
+  -o-transform: scale(-1, 1);
+  transform: scale(-1, 1);
 }
-
 .ig-flip-x {
-    filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=2);
-    -webkit-transform: scale(1, -1);
-    -moz-transform: scale(1, -1);
-    -ms-transform: scale(1, -1);
-    -o-transform: scale(1, -1);
-    transform: scale(1, -1);
+  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=2);
+  -webkit-transform: scale(1, -1);
+  -moz-transform: scale(1, -1);
+  -ms-transform: scale(1, -1);
+  -o-transform: scale(1, -1);
+  transform: scale(1, -1);
 }
-
 /*------------------------
 	icons
 -------------------------*/
 
 .ig-area-2::before {
-    content: "\ea02";
+  content: "\ea02";
 }
 
 .ig-caret::before {
-    content: "\ea03";
+  content: "\ea03";
 }
 
 .ig-check::before {
-    content: "\ea04";
+  content: "\ea04";
 }
 
 .ig-error::before {
-    content: "\ea05";
+  content: "\ea05";
 }
 
 .ig-facebook::before {
-    content: "\ea06";
+  content: "\ea06";
 }
 
 .ig-handshake::before {
-    content: "\ea07";
+  content: "\ea07";
 }
 
 .ig-house::before {
-    content: "\ea08";
+  content: "\ea08";
 }
 
 .ig-houses::before {
-    content: "\ea09";
+  content: "\ea09";
 }
 
 .ig-mail::before {
-    content: "\ea0a";
+  content: "\ea0a";
 }
 
 .ig-people::before {
-    content: "\ea0b";
+  content: "\ea0b";
 }
 
 .ig-phone::before {
-    content: "\ea0c";
+  content: "\ea0c";
 }
 
 .ig-plus::before {
-    content: "\ea0d";
+  content: "\ea0d";
 }
 
 .ig-search::before {
-    content: "\ea0e";
+  content: "\ea0e";
 }
 
 .ig-time::before {
-    content: "\ea0f";
+  content: "\ea0f";
 }
 
 .ig-arrow::before {
-    content: "\ea10";
+  content: "\ea10";
 }
 
 .ig-area::before {
-    content: "\ea11";
+  content: "\ea11";
 }
 
 .ig-bill::before {
-    content: "\ea12";
+  content: "\ea12";
 }
 
 .ig-instagram::before {
-    content: "\ea13";
+  content: "\ea13";
 }
 
 .ig-linkedin::before {
-    content: "\ea14";
+  content: "\ea14";
 }
 
 .ig-caret-right::before {
-    content: "\ea15";
+  content: "\ea15";
 }
 
 .ig-info::before {
-    content: "\ea16";
+  content: "\ea16";
 }
 
 .ig-reload::before {
-    content: "\ea17";
+  content: "\ea17";
 }
 
 .ig-bed::before {
-    content: "\ea18";
+  content: "\ea18";
 }
 
 .ig-area-3::before {
-    content: "\ea19";
+  content: "\ea19";
 }
 
 .ig-car::before {
-    content: "\ea1a";
+  content: "\ea1a";
 }
 
 .ig-media::before {
-    content: "\ea1b";
+  content: "\ea1b";
 }
 
 .ig-image::before {
-    content: "\ea1c";
+  content: "\ea1c";
+}
+
+.ig-brand-tribenet::before {
+  content: "\ea1d";
+}
+
+.ig-listening::before {
+  content: "\ea1e";
+}
+
+.ig-live-support::before {
+  content: "\ea1f";
+}
+
+.ig-data::before {
+  content: "\ea20";
+}
+
+.ig-handshake-deal::before {
+  content: "\ea21";
+}
+
+.ig-photobucket::before {
+  content: "\ea22";
+}
+
+.ig-holding-hands::before {
+  content: "\ea23";
+}
+
+.ig-twitter::before {
+  content: "\ea24";
+}
+
+.ig-link-72::before {
+  content: "\ea25";
+}
+
+.ig-facebook-2::before {
+  content: "\ea26";
 }
 

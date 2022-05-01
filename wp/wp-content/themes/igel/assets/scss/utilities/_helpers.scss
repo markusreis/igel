@@ -34,7 +34,6 @@
 }
 
 
-
 .overlay-image {
   width: 80px !important;
   height: auto !important;
@@ -98,7 +97,7 @@
 
 @media only screen and (min-width: 768px) {
   .-only-mobile {
-    display: none;
+    display: none !important;
   }
 
   .-only-desktop {

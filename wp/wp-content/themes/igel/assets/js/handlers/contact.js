@@ -5,29 +5,30 @@ export const initContactForms = () => {
 class ContactForm {
     constructor(wrapper) {
         this._dom = {
-            form  : wrapper,
+            form: wrapper,
             inputs: Array.from(wrapper.querySelectorAll('input')),
         }
 
         this._regexDefinitions = {
-            email   : new RegExp(/(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/),
-            tel     : new RegExp(/[0-9\(\)\-\+ \/]{4,}/),
+            email: new RegExp(/(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/),
+            tel: new RegExp(/[0-9\(\)\-\+ \/]{4,}/),
             checkbox: new RegExp(/on/),
-            text    : new RegExp(/(.{1,})/),
+            text: new RegExp(/(.{1,})/),
             textarea: new RegExp(/(.{30,})/),
+            hidden: new RegExp(/.*/),
         }
 
         this._errorNoticeDefinitions = {
-            email   : 'Bitte geben Sie eine gültige E-Mail Adresse an',
-            tel     : 'Bitte geben Sie eine gültige Telefonnummer an',
-            text    : 'Das Feld darf nicht leer sein',
+            email: 'Bitte geben Sie eine gültige E-Mail Adresse an',
+            tel: 'Bitte geben Sie eine gültige Telefonnummer an',
+            text: 'Das Feld darf nicht leer sein',
             checkbox: 'Bitte bestätigen Sie die Checkbox',
             textarea: 'Die Nachricht sollte mindestens 30 Zeichen enthalten',
         }
 
         this._state = {
-            disableErrors   : false,
-            loading         : false,
+            disableErrors: false,
+            loading: false,
             isDefaultContact: this._dom.form.dataset.jsContactForm === 'default'
         }
 
@@ -58,10 +59,10 @@ class ContactForm {
                         node.hide()
                         setTimeout(() => {
                             window.showToast({
-                                                 msg    : 'Vielen Dank für Ihre Anfrage. Die Nachricht wurde erfolgreich übermittelt.',
-                                                 type   : 'success',
-                                                 timeout: 4000
-                                             })
+                                msg: 'Vielen Dank für Ihre Anfrage. Die Nachricht wurde erfolgreich übermittelt.',
+                                type: 'success',
+                                timeout: 4000
+                            })
                         }, 200)
                         setTimeout(() => {
                             this._state.loading = false
@@ -73,10 +74,10 @@ class ContactForm {
                                 this._state.loading = false
                                 node.hide()
                                 window.showToast({
-                                                     msg    : 'Etwas ist schief gelaufen. Bitte schicken Sie uns eine E-Mail.',
-                                                     type   : 'error',
-                                                     timeout: 4000
-                                                 })
+                                    msg: 'Etwas ist schief gelaufen. Bitte schicken Sie uns eine E-Mail.',
+                                    type: 'error',
+                                    timeout: 4000
+                                })
                             }, 200)
                         })
                 }, 300)
@@ -91,7 +92,7 @@ class ContactForm {
 
         return fetch(url, {
             method: 'POST',
-            body  : formData,
+            body: formData,
         })
             .then(response => {
                 if (response.status !== 200) {
@@ -155,13 +156,13 @@ class ContactForm {
             case 'INPUT':
                 return {
                     isValid: this._regexDefinitions[input.getAttribute('type')].test(input.value),
-                    key    : input.getAttribute('type')
+                    key: input.getAttribute('type')
                 };
 
             case 'TEXTAREA':
                 return {
                     isValid: this._regexDefinitions['textarea'].test(input.value),
-                    key    : 'textarea'
+                    key: 'textarea'
                 };
 
             default:

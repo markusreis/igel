@@ -51,7 +51,7 @@ function theme_load_custom_scripts()
 }
 
 add_action('wp_head', function () {
-    $contactPage    = get_field('contact', 'options');
+    $contactPage = get_field('contact', 'options');
     $contactPageUrl = empty($contactPage) ? '' : get_permalink($contactPage);
     echo '<script>';
     echo 'var igelData = {
@@ -89,9 +89,9 @@ function register_menus()
 {
     register_nav_menus(
         array(
-            'main'           => 'Haupt-Navigation',
+            'main' => 'Haupt-Navigation',
             'footer_company' => 'Footer: Unternehmen',
-            'footer_legal'   => 'Footer: Rechtliches',
+            'footer_legal' => 'Footer: Rechtliches',
         ));
 }
 
@@ -250,8 +250,8 @@ function my_custom_styles($init_array)
     $style_formats = array(
         // These are the custom styles
         array(
-            'title'   => 'Pretitle',
-            'block'   => 'div',
+            'title' => 'Pretitle',
+            'block' => 'div',
             'classes' => 'red-button',
             'wrapper' => true,
         ),
@@ -272,42 +272,42 @@ function getTitleFields($a, $b)
     return [
 
         array(
-            'key'               => $b,
-            'label'             => 'Pretext',
-            'name'              => 'pretext',
-            'type'              => 'text',
-            'instructions'      => '',
-            'required'          => 0,
+            'key' => $b,
+            'label' => 'Pretext',
+            'name' => 'pretext',
+            'type' => 'text',
+            'instructions' => '',
+            'required' => 0,
             'conditional_logic' => 0,
-            'wrapper'           => array(
+            'wrapper' => array(
                 'width' => '',
                 'class' => '',
-                'id'    => '',
+                'id' => '',
             ),
-            'default_value'     => '',
-            'placeholder'       => '',
-            'prepend'           => '',
-            'append'            => '',
-            'maxlength'         => '',
+            'default_value' => '',
+            'placeholder' => '',
+            'prepend' => '',
+            'append' => '',
+            'maxlength' => '',
         ),
         array(
-            'key'               => $a,
-            'label'             => 'Titel',
-            'name'              => 'section_title',
-            'type'              => 'text',
-            'instructions'      => '',
-            'required'          => 0,
+            'key' => $a,
+            'label' => 'Titel',
+            'name' => 'section_title',
+            'type' => 'text',
+            'instructions' => '',
+            'required' => 0,
             'conditional_logic' => 0,
-            'wrapper'           => array(
+            'wrapper' => array(
                 'width' => '',
                 'class' => '',
-                'id'    => '',
+                'id' => '',
             ),
-            'default_value'     => '',
-            'placeholder'       => '',
-            'prepend'           => '',
-            'append'            => '',
-            'maxlength'         => '',
+            'default_value' => '',
+            'placeholder' => '',
+            'prepend' => '',
+            'append' => '',
+            'maxlength' => '',
         ),
     ];
 }
@@ -324,19 +324,19 @@ add_filter('user_contactmethods', function ($methods) {
 
 add_action('rest_api_init', function () {
     register_rest_route('igel', '/eval', array(
-        'methods'  => 'POST',
+        'methods' => 'POST',
         'callback' => 'igel_eval_form'
     ));
     register_rest_route('igel', '/contact', array(
-        'methods'  => 'POST',
+        'methods' => 'POST',
         'callback' => 'igel_contact_form'
     ));
     register_rest_route('igel', '/inserat', array(
-        'methods'  => 'POST',
+        'methods' => 'POST',
         'callback' => 'igel_inserat_form'
     ));
     register_rest_route('igel', '/realty-gallery', array(
-        'methods'  => 'GET',
+        'methods' => 'GET',
         'callback' => 'igel_get_realty_gallery'
     ));
 });
@@ -434,8 +434,8 @@ function igel_eval_form(\WP_REST_Request $request)
     try {
 
         $content = '';
-        foreach ($data as $row) {
 
+        foreach ($data as $row) {
             switch ($row['type']) {
                 case 'headline':
                     $content .= '<div style="font-size:22px;font-weight:bold;">' . $row['title'] . '</div>';
@@ -469,8 +469,8 @@ function hero($titleFallback = '', $pretitleFallback = '', $hasBox = true)
 {
 
     $heroBgDesktop = get_field('hero_bg_desktop');
-    $heroBgMobile  = get_field('hero_bg_mobile');
-    $hasBg         = !empty($heroBgDesktop) && !empty($heroBgMobile);
+    $heroBgMobile = get_field('hero_bg_mobile');
+    $hasBg = !empty($heroBgDesktop) && !empty($heroBgMobile);
 
     ?>
     <div class="c-hero <?php echo $hasBg ? 'c-hero--img' : 'c-hero--green'; ?> <?php echo !$hasBox ? 'c-hero--simple' : 'c-hero--with-box'; ?>">
@@ -489,9 +489,9 @@ function hero($titleFallback = '', $pretitleFallback = '', $hasBox = true)
         <?php else : ?>
             <?php
             $srcArr = [
-                '300w'  => $heroBgMobile['sizes']['medium'],
-                '400w'  => isset($heroBgMobile['sizes']['newbuildthumb']) ? $heroBgMobile['sizes']['newbuildthumb'] : null,
-                '768w'  => $heroBgMobile['sizes']['medium_large'],
+                '300w' => $heroBgMobile['sizes']['medium'],
+                '400w' => isset($heroBgMobile['sizes']['newbuildthumb']) ? $heroBgMobile['sizes']['newbuildthumb'] : null,
+                '768w' => $heroBgMobile['sizes']['medium_large'],
                 '1024w' => $heroBgDesktop['sizes']['large'],
                 '1536w' => $heroBgDesktop['sizes']['1536x1536'],
                 '2000w' => $heroBgDesktop['url'],

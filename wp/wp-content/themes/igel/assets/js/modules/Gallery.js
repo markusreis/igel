@@ -4,28 +4,32 @@ export const initGallery = () => {
     new Gallery(document.querySelector('.c-gallery__modal'))
 }
 
+// Currently only ONE GALLERY PER PAGE possible!!!
 export class Gallery {
 
     constructor(wrapper) {
 
         const modal = this.renderWrapper();
+
         this._dom = {
-            modal     : modal,
-            toggle    : document.querySelector('[data-action="open-gallery"]'),
+            modal: modal,
+            toggles: document.querySelectorAll('[data-action="open-gallery"]'),
             modalInner: modal.querySelector('.c-gallery__modal__inner'),
-            previews  : modal.querySelector('.c-gallery__modal__previews'),
+            previews: modal.querySelector('.c-gallery__modal__previews'),
+            totalNumber: modal.querySelector('#total-nodes'),
+            currentNumber: modal.querySelector('#current-node'),
         }
 
         this._state = {
-            realty     : !!this._dom.toggle.dataset.r ? parseInt(this._dom.toggle.dataset.r) : false,
-            post       : !!this._dom.toggle.dataset.p ? parseInt(this._dom.toggle.dataset.p) : false,
-            loaded     : false,
-            loading    : false,
+            realty: !!this._dom.toggles[0].dataset.r ? parseInt(this._dom.toggles[0].dataset.r) : false,
+            post: !!this._dom.toggles[0].dataset.p ? parseInt(this._dom.toggles[0].dataset.p) : false,
+            loaded: false,
+            loading: false,
             blockScroll: false,
-            gallery    : [],
-            active     : false,
+            gallery: [],
+            active: false,
             activeIndex: 0,
-            total      : 0
+            total: 0
         }
 
         this._dom.modal.removeAttribute('r')
@@ -34,7 +38,7 @@ export class Gallery {
     }
 
     _initListener() {
-        this._dom.toggle.addEventListener('click', this.toggle.bind(this))
+        this._dom.toggles.forEach(e => e.addEventListener('click', this.toggle.bind(this)))
     }
 
     init() {
@@ -109,6 +113,8 @@ export class Gallery {
         this._dom.previews.querySelector('[data-active="true"]').dataset.active = false
         this._dom.previews.children[i].dataset.active = true
         this._state.activeIndex = i
+
+        this._dom.currentNumber.innerText = i + 1
 
         const img = this._dom.previews.children[i].firstChild.cloneNode(true)
         img.style.opacity = 0
@@ -193,6 +199,8 @@ export class Gallery {
             this._state.loaded = true
             this._state.loading = false
 
+            this._dom.totalNumber.innerText = this._state.gallery.length
+
             this._state.total = this._state.gallery.length
             this._state.gallery.forEach((g, i) => {
                 const node = toNode(g)
@@ -217,6 +225,7 @@ export class Gallery {
             <div class="c-gallery__modal__buttons" data-action="close">
                 <div class="button" data-action="close" id="modal-close">
                     ZURÜCK
+                    <span class="c-gallery__modal__counter">(<span id="current-node">1</span> / <span id="total-nodes">2</span>)</span>
                 </div>
                 <div class="c-gallery__modal__arrow-buttons">
                     <div class="button" data-action="prev">

@@ -25,7 +25,7 @@ Sync::getInstance()->run(true);
 
     <div class="c-hero__box-wrap">
         <div class="c-hero__box">
-            <form class="c-evaluation">
+            <form class="c-evaluation" data-config="evaluationRequest">
                 <div class="c-evaluation__steps">
                     <div class="c-evaluation__step c-evaluation__step--initial" data-active="true">
                         <div class="input-wrap">
@@ -90,7 +90,7 @@ Sync::getInstance()->run(true);
                         <div class="col-12 col-6@lg">
                             <?php
                             $settings = get_field('newbuild_settings');
-                            $title    = isset($settings['section_title']) && !empty($settings['section_title']) ? $settings['section_title'] : $newbuild->post_title;
+                            $title = isset($settings['section_title']) && !empty($settings['section_title']) ? $settings['section_title'] : $newbuild->post_title;
                             $pretitle = isset($settings['pretext']) && !empty($settings['pretext']) ? $settings['pretext'] : get_field('post_code', $newbuild->ID) . ' ' . get_field('place', $newbuild->ID);
                             igTitle($title, $pretitle);
                             ?>
@@ -136,7 +136,7 @@ Sync::getInstance()->run(true);
                     <div class="c-button-title__title col-12 col-8@xl">
                         <?php
                         $settings = get_field('buy_settings');
-                        $title    = isset($settings['section_title']) && !empty($settings['section_title']) ? $settings['section_title'] : 'Entdecken Sie unser Immobilienangebot';
+                        $title = isset($settings['section_title']) && !empty($settings['section_title']) ? $settings['section_title'] : 'Entdecken Sie unser Immobilienangebot';
                         $pretitle = isset($settings['pretext']) && !empty($settings['pretext']) ? $settings['pretext'] : 'Igel verkauft';
                         igTitle($title, $pretitle);
                         ?>
@@ -158,12 +158,12 @@ Sync::getInstance()->run(true);
                     $realtyIds = array_reduce((array)$offers, function ($all, $single) {
                         $all[] = $single->getId();
                         return $all;
-                    },                        []);
+                    }, []);
                     global $wpdb;
-                    $args              = array_merge([RealtyPostService::REMOTE_ID_KEY], $realtyIds);
+                    $args = array_merge([RealtyPostService::REMOTE_ID_KEY], $realtyIds);
                     $preparedStatement = $wpdb->prepare("SELECT p.ID, m.meta_value FROM " . $wpdb->prefix . "posts AS p INNER JOIN " . $wpdb->prefix . "postmeta AS m ON p.ID = m.post_id WHERE p.post_status='publish' AND m.meta_key = %s AND m.meta_value IN (" . implode(', ', array_fill(0, count($offers), '%d')) . ")", $args);
-                    $posts             = $wpdb->get_results($preparedStatement);
-                    $postLookup        = [];
+                    $posts = $wpdb->get_results($preparedStatement);
+                    $postLookup = [];
                     foreach ($posts as $post) {
                         $postLookup[$post->meta_value] = $post->ID;
                     }
@@ -174,7 +174,7 @@ Sync::getInstance()->run(true);
                             continue;
                         }
 
-                        $created     = $offer->getCreatedAt('U');
+                        $created = $offer->getCreatedAt('U');
                         $twoWeeksAgo = (new DateTime())->modify('-2 week')->format('U');
 
                         $badgeText = $offer->getStatus() !== 'aktiv' ? $offer->getStatus() : '';
@@ -186,7 +186,7 @@ Sync::getInstance()->run(true);
                         }
                         /** @var Justimmo\Model\Realty $offer */
 
-                        $created     = $offer->getCreatedAt('U');
+                        $created = $offer->getCreatedAt('U');
                         $twoWeeksAgo = (new DateTime())->modify('-2 week')->format('U');
 
                         $badgeText = $offer->getStatus() !== 'aktiv' ? $offer->getStatus() : '';
@@ -221,7 +221,7 @@ Sync::getInstance()->run(true);
                                 <div class="c-immo-list__el__price text-small">
                                     <?php
                                     $isRent = !$offer->getMarketingType()['KAUF'];
-                                    $price  = ig_price(!$isRent ? $offer->getPurchasePrice() : $offer->getTotalRent());
+                                    $price = ig_price(!$isRent ? $offer->getPurchasePrice() : $offer->getTotalRent());
                                     echo $isRent ? 'Zu vermieten: ' : 'Zu verkaufen: ';
                                     echo empty($price) ? 'Preis auf Anfrage' : "$price";
                                     ?>
@@ -232,9 +232,9 @@ Sync::getInstance()->run(true);
                                 <ul class="c-immo-list__el__details text-small">
                                     <?php
                                     $data = [
-                                        ''                         => $offer->getZipCode() . ' ' . $offer->getPlace(),
+                                        '' => $offer->getZipCode() . ' ' . $offer->getPlace(),
                                         'm<sup>2</sup> Wohnfläche' => $offer->getLivingArea(),
-                                        'Zimmer'                   => $offer->getRoomCount(),
+                                        'Zimmer' => $offer->getRoomCount(),
                                     ];
                                     foreach ($data as $name => $value) {
                                         if (!empty($value)) {

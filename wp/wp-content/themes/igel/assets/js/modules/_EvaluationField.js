@@ -2,7 +2,7 @@ import {toNode} from "../utils/dom";
 
 export class EvaluationField {
 
-    constructor({type, options, label, name, onError, regex = null, defaultValue = ''}) {
+    constructor({type, options, label, name, onError, required = false, regex = null, defaultValue = ''}) {
         this._type = type
         this._options = options
         this._label = label
@@ -10,6 +10,7 @@ export class EvaluationField {
         this._name = name
         this._regex = regex
         this._onError = onError
+        this._required = required // for checkboxes only
 
         this._step = null
 
@@ -50,7 +51,7 @@ export class EvaluationField {
                 return this.value !== null
 
             case 'checkbox':
-                return this._inputs[0].checked
+                return !this._required || this._inputs[0].checked
 
             case 'text':
             case 'number':

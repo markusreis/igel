@@ -1213,7 +1213,7 @@ ul:not([class]) li:last-of-type {
 
 @media only screen and (min-width: 768px) {
   .-only-mobile {
-    display: none;
+    display: none !important;
   }
 
   .-only-desktop {
@@ -1847,6 +1847,12 @@ body {
   cursor: pointer;
   width: 100%;
 }
+.c-services__el[data-expanded=true] {
+  cursor: default;
+}
+.c-services__el[data-expanded=true] .c-services__title {
+  cursor: pointer;
+}
 .c-services__el:before {
   padding-top: 25px;
   content: counter(row-counter);
@@ -2148,6 +2154,12 @@ body {
   margin-bottom: 30px;
   flex: 0 0 100%;
   cursor: pointer;
+}
+.c-immo-list__el__thumbnail {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 .c-immo-list__el__badge {
   position: absolute;

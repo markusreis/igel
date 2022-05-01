@@ -17,6 +17,13 @@
     flex: 0 0 100%;
     cursor: pointer;
 
+    &__thumbnail {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
     &__badge {
       position: absolute;
       background: rgba($color__main, 1);
