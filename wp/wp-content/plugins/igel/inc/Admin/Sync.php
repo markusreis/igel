@@ -17,9 +17,9 @@ class Sync
 {
     use Singleton;
 
-    const DOWNLOAD_LIST_REALTY_NAME          = 'igel_downloads_realty';
+    const DOWNLOAD_LIST_REALTY_NAME = 'igel_downloads_realty';
     const DOWNLOAD_LIST_CONTACT_PERSONS_NAME = 'igel_downloads_contacts';
-    const LAST_SYNC_TIMESTAMP_OPTION         = 'igel_last_sync';
+    const LAST_SYNC_TIMESTAMP_OPTION = 'igel_last_sync';
 
     /**
      * @var RealtyPostService $posts
@@ -55,7 +55,7 @@ class Sync
     public function downloadSingleFileFromList()
     {
         $realtyList = get_option(self::DOWNLOAD_LIST_REALTY_NAME);
-        $userList   = get_option(self::DOWNLOAD_LIST_CONTACT_PERSONS_NAME);
+        $userList = get_option(self::DOWNLOAD_LIST_CONTACT_PERSONS_NAME);
 
         try {
             if (!empty($realtyList)) {
@@ -73,18 +73,18 @@ class Sync
 
         return [
             'realtyToDownload' => $realtyList,
-            'userToDownload'   => $userList,
+            'userToDownload' => $userList,
         ];
     }
 
     public function run($complete = false)
     {
         DatabaseCache::clear();
-        $allRealties  = igel()->justImmo()->all();
+        $allRealties = igel()->justImmo()->all();
         $allEmployees = igel()->justImmo()->employeeQuery()->setLimit(999)->find();
         $contactsDone = [];
 
-        $allPosts      = get_posts(['post_type' => 'realty', 'numberposts' => -1]);
+        $allPosts = get_posts(['post_type' => 'realty', 'numberposts' => -1]);
         $existingPosts = [];
 
         foreach ($allEmployees as $k => $employee) {
@@ -106,15 +106,18 @@ class Sync
         }
 
         $downloadList = $this->generateDownloadList($allRealties, $allEmployees);
+        $donwloaded = ['users' => 0, 'realties' => 0];
 
         if ($complete) {
             foreach ($downloadList['realtyToDownload'] as $k => $r) {
                 $this->downloadAttachment($r);
                 unset($downloadList['realtyToDownload'][$k]);
+                $donwloaded['realties']++;
             }
             foreach ($downloadList['userToDownload'] as $k => $c) {
                 $this->downloadAttachment($c);
                 unset($downloadList['userToDownload'][$k]);
+                $donwloaded['users']++;
             }
 
             update_option(self::DOWNLOAD_LIST_REALTY_NAME, $downloadList['realtyToDownload']);
@@ -129,7 +132,7 @@ class Sync
             }
         }
 
-        return $downloadList;
+        return $donwloaded;
     }
 
     public function refillCache()
@@ -141,7 +144,7 @@ class Sync
     public function generateDownloadList(ListPager $allRealties, ListPager $allUsers)
     {
         $realtyToDownload = [];
-        $userToDownload   = [];
+        $userToDownload = [];
 
         foreach ($allRealties as $realty) {
             /** @var Realty $realty */
@@ -158,7 +161,7 @@ class Sync
 
         return [
             'realtyToDownload' => $realtyToDownload,
-            'userToDownload'   => $userToDownload,
+            'userToDownload' => $userToDownload,
         ];
     }
 
@@ -166,20 +169,20 @@ class Sync
     {
         $existing = get_posts(
             [
-                'post_type'   => 'attachment',
-                'meta_key'    => $remoteKeyMetaName,
-                'meta_value'  => get_class($model) === Employee::class ? $this->posts->getUniqueUserMail($model) : $model->getId(),
+                'post_type' => 'attachment',
+                'meta_key' => $remoteKeyMetaName,
+                'meta_value' => get_class($model) === Employee::class ? $this->posts->getUniqueUserMail($model) : $model->getId(),
                 'numberposts' => -1
             ]
         );
 
         $existing = array_map(function (\WP_Post $post) {
-            $post->remote_url      = get_post_meta($post->ID, 'ig_remote_url', true);
+            $post->remote_url = get_post_meta($post->ID, 'ig_remote_url', true);
             $post->remote_url_hash = get_post_meta($post->ID, 'ig_remote_url_hash', true);
             return $post;
         }, $existing);
 
-        $missing     = $model->getAttachments();
+        $missing = $model->getAttachments();
         $superfluous = $existing;
 
         foreach ($superfluous as $superfluousKey => $post) {
@@ -198,14 +201,14 @@ class Sync
             $attachmentSize = $this->getAvailableAttachmentSize($attachment, $attachmentSize);
 
             $out = [
-                'title'              => $mediaTitle,
-                'remoteKeyMetaName'  => $remoteKeyMetaName,
-                'localKeyMetaName'   => $localKeyMetaName,
+                'title' => $mediaTitle,
+                'remoteKeyMetaName' => $remoteKeyMetaName,
+                'localKeyMetaName' => $localKeyMetaName,
                 'remoteKeyMetaValue' => get_class($model) === Employee::class ? $this->posts->getUniqueUserMail($model) : $model->getId(),
-                'group'              => $attachment->getGroup(),
+                'group' => $attachment->getGroup(),
                 'ig_remote_url_hash' => $this->hashUrl($attachment->getUrl($attachmentSize)),
-                'ig_remote_url'      => $attachment->getUrl($attachmentSize),
-                'localKeyMetaValue'  => $model instanceof Realty ? $this->posts->getPost($model)->ID : ($this->posts->getWpUser($model)->ID ?? null)
+                'ig_remote_url' => $attachment->getUrl($attachmentSize),
+                'localKeyMetaValue' => $model instanceof Realty ? $this->posts->getPost($model)->ID : ($this->posts->getWpUser($model)->ID ?? null)
             ];
 
             return $out;
@@ -232,10 +235,10 @@ class Sync
 
     public function hashUrl($url)
     {
-        $parts    = explode('/', $url);   // ....../fullhd/KASJDKASDJ.jpg
-        $last     = array_pop($parts);    // => KASLDKASDK.jpg
-        $last     = explode('.', $last);  // remove mime type
-        $last     = array_shift($last);   // => KSLADKASD
+        $parts = explode('/', $url);   // ....../fullhd/KASJDKASDJ.jpg
+        $last = array_pop($parts);    // => KASLDKASDK.jpg
+        $last = explode('.', $last);  // remove mime type
+        $last = array_shift($last);   // => KSLADKASD
         $fileSize = array_pop($parts);    // => fullhd
         return sha1($fileSize . $last);
     }
@@ -257,7 +260,7 @@ class Sync
             }
 
             if ($details['remoteKeyMetaName'] === 'ig_remote_user_id') {
-                $portrait  = get_field('portrait', 'user_' . $details['localKeyMetaValue']);
+                $portrait = get_field('portrait', 'user_' . $details['localKeyMetaValue']);
                 $landscape = get_field('landscape', 'user_' . $details['localKeyMetaValue']);
                 if (empty($portrait)) {
                     update_field('portrait', $attachmentId, 'user_' . $details['localKeyMetaValue']);
@@ -275,13 +278,13 @@ class Sync
     {
         $file = wp_remote_get($url);
 
-        $type   = wp_remote_retrieve_header($file, 'content-type');
+        $type = wp_remote_retrieve_header($file, 'content-type');
         $mirror = wp_upload_bits(basename($url), '', wp_remote_retrieve_body($file));
 
         if (isset($mirror['file'])) {
 
             $attachment = [
-                'post_title'     => $ttitle,
+                'post_title' => $ttitle,
                 'post_mime_type' => $type,
             ];
 
@@ -293,7 +296,7 @@ class Sync
 
                     require_once(ABSPATH . "wp-admin" . '/includes/image.php');
                     $attachment_data = wp_generate_attachment_metadata($attachment_id,
-                                                                       $mirror['file']);
+                        $mirror['file']);
                     wp_update_attachment_metadata($attachment_id, $attachment_data);
                 }
 

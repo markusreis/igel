@@ -14,7 +14,14 @@ export const initBarba = (app) => {
                 setTimeout(() => app.loadCurrentPage(), 50)
 
                 if (Cookiebot?.consent?.statistics) {
-                    gtag('config', 'G-HCNNW15GYB', {'page_path': location.pathname});
+                    setTimeout(() => {
+                        gtag('event', 'page_view', {
+                            page_title: document.querySelector('title').innerText,
+                            page_location: window.location.href,
+                            page_path: location.pathname,
+                            send_to: 'G-HCNNW15GYB'
+                        })
+                    }, 500)
                 }
             },
 

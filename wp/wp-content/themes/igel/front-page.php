@@ -16,8 +16,6 @@ get_header();
 
 hero('Sie wollen verkaufen?', 'Wir bewerten Ihre Immobilie. Sofort und kostenlos.');
 
-Sync::getInstance()->run(true);
-
 ?>
 
     <span id="pagename" data-name="Homepage"></span>

@@ -12,6 +12,7 @@
 //--V-------------------------------------------------------------------------------
 
 # Inline Styles
+use Igel\Admin\Sync;
 use Igel\Services\RealtyPostService;
 use Justimmo\Model\Realty;
 
@@ -339,7 +340,18 @@ add_action('rest_api_init', function () {
         'methods' => 'GET',
         'callback' => 'igel_get_realty_gallery'
     ));
+    register_rest_route('igel', '/sync-justimmo', array(
+        'methods' => 'GET',
+        'callback' => 'sync_justimmo_api'
+    ));
 });
+
+function sync_justimmo_api()
+{
+    $downloaded = Sync::getInstance()->run(true);
+    echo json_encode($downloaded);
+    exit();
+}
 
 function igel_get_realty_gallery(\WP_REST_Request $request)
 {

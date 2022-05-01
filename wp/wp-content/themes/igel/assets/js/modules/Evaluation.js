@@ -84,6 +84,13 @@ export class Evaluation {
         if (this.valid) {
             if (this._state.step < this.steps.length) {
                 this.step = this._state.step + 1
+                if (Cookiebot?.consent?.statistics) {
+
+                    dataLayer.push({'stepName': this.step.title});
+                    dataLayer.push({'stepNumber': this._state.step + 1});
+
+                    gtag('event', this._dom.wrapper.dataset.config);
+                }
             }
         }
     }
@@ -147,6 +154,8 @@ export class Evaluation {
                             type: 'success',
                             timeout: 5000,
                         })
+
+                        gtag('event', `${this._dom.wrapper.dataset.config}Success`);
 
                         setTimeout(() => {
                             this.step = -1

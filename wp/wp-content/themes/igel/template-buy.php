@@ -197,10 +197,10 @@ endif;
             $posts = $wpdb->get_results($preparedStatement);
 
             if (count($offers) !== count($posts)) {
-                Sync::getInstance()->run(true);
-                $args = array_merge([RealtyPostService::REMOTE_ID_KEY], $realtyIds);
-                $preparedStatement = $wpdb->prepare("SELECT p.ID, m.meta_value FROM " . $wpdb->prefix . "posts AS p INNER JOIN " . $wpdb->prefix . "postmeta AS m ON p.ID = m.post_id WHERE p.post_status='publish' AND m.meta_key = %s AND m.meta_value IN (" . implode(', ', array_fill(0, count($offers), '%d')) . ")", $args);
-                $posts = $wpdb->get_results($preparedStatement);
+                //Sync::getInstance()->run(true);
+                //$args = array_merge([RealtyPostService::REMOTE_ID_KEY], $realtyIds);
+                //$preparedStatement = $wpdb->prepare("SELECT p.ID, m.meta_value FROM " . $wpdb->prefix . "posts AS p INNER JOIN " . $wpdb->prefix . "postmeta AS m ON p.ID = m.post_id WHERE p.post_status='publish' AND m.meta_key = %s AND m.meta_value IN (" . implode(', ', array_fill(0, count($offers), '%d')) . ")", $args);
+                //$posts = $wpdb->get_results($preparedStatement);
             }
 
             $postLookup = [];
