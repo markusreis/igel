@@ -23,8 +23,10 @@ hero('Sie wollen verkaufen?', 'Wir bewerten Ihre Immobilie. Sofort und kostenlos
 
     <div class="c-hero__box-wrap">
         <div class="c-hero__box">
-            <?php echo do_shortcode('[evaluation_form config="evaluationRequest"]'); ?>
 
+            <a class="button" style="width:100%;" href="<?php echo get_permalink(get_field('evaluation_page')); ?>">
+                <?php echo get_field('evaluation_button_text'); ?><i class="button--after ig ig-arrow"></i>
+            </a>
             <div class="c-hero__box__overlay-wrap">
                 <div class="c-hero__box__overlay"></div>
             </div>
@@ -154,9 +156,10 @@ hero('Sie wollen verkaufen?', 'Wir bewerten Ihre Immobilie. Sofort und kostenlos
                         $postLookup[$post->meta_value] = $post->ID;
                     }
 
+                    $printed = 0;
                     foreach ($offers as $k => $offer):
 
-                        if (!isset($postLookup[$offer->getId()])) {
+                        if (!isset($postLookup[$offer->getId()]) || $offer->getStatus() === 'vermittelt') {
                             continue;
                         }
 
@@ -167,9 +170,10 @@ hero('Sie wollen verkaufen?', 'Wir bewerten Ihre Immobilie. Sofort und kostenlos
                         $badgeText = empty($badgeText) && ($created > $twoWeeksAgo || isset($offer->getCategories()[21820])) ? 'Neu' : $badgeText;
 
 
-                        if ($k > 2) {
+                        if ($printed > 2) {
                             break;
                         }
+                        $printed++;
                         /** @var Justimmo\Model\Realty $offer */
 
                         $created = $offer->getCreatedAt('U');
