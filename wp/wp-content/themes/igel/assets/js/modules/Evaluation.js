@@ -27,6 +27,9 @@ export class Evaluation {
         }
 
         this._initListeners()
+
+        this._dom.wrapper.querySelector('input').value = '-'
+        this._dom.wrapper.querySelector('button').click()
     }
 
 
@@ -84,11 +87,10 @@ export class Evaluation {
         if (this.valid) {
             if (this._state.step < this.steps.length) {
                 this.step = this._state.step + 1
-                if (Cookiebot?.consent?.statistics) {
 
+                if (Cookiebot?.consent?.statistics && this._state.step > 0) {
                     dataLayer.push({'stepName': this.step.title});
-                    dataLayer.push({'stepNumber': this._state.step + 1});
-
+                    dataLayer.push({'stepNumber': this._state.step});
                     gtag('event', this._dom.wrapper.dataset.config);
                 }
             }
@@ -96,7 +98,7 @@ export class Evaluation {
     }
 
     prevStep() {
-        this.step = Math.max(-1, this._state.step - 1)
+        this.step = Math.max(0, this._state.step - 1)
     }
 
     finalize() {
@@ -110,6 +112,7 @@ export class Evaluation {
                     : 'Neue "Suchauftrag" Anfage',
             }
         ]
+
         this.steps.forEach((s, i) => {
 
             fields.push({

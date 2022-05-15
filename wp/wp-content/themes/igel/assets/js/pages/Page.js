@@ -13,8 +13,12 @@ export class Page {
         setTimeout(() => {
             initContactForms(this.app)
             initAccordion()
-            initEvaluation()
+            initEvaluation();
         }, 300)
+
+        setTimeout(() => {
+            [...document.querySelectorAll('.c-new-builds__el__badge'), ...document.querySelectorAll('.c-new-build-highlight__badge')].forEach(e => e.style.opacity = 1)
+        }, 1200)
 
         const tl = gsap.timeline()
 
@@ -114,6 +118,9 @@ export class Page {
     }
 
     leave() {
+
+        [...document.querySelectorAll('.c-new-builds__el__badge'), ...document.querySelectorAll('.c-new-build-highlight__badge')].forEach(e => e.style.opacity = 1)
+
 
         const tl = gsap.timeline()
         const heroOverlay = document.querySelector('.c-hero__overlay')
