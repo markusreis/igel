@@ -58,10 +58,10 @@ class RealtyPostService
         if (!isset(self::$posts[$realty->getId()])) {
             $posts = get_posts(
                 array(
-                    'post_type'   => 'realty',
+                    'post_type' => 'realty',
                     'numberposts' => -1,
-                    'meta_key'    => self::REMOTE_ID_KEY,
-                    'meta_value'  => $realty->getId(),
+                    'meta_key' => self::REMOTE_ID_KEY,
+                    'meta_value' => $realty->getId(),
                 ));
 
             if (count($posts) > 2) {
@@ -83,7 +83,7 @@ class RealtyPostService
     public function update(Realty $realty)
     {
         $wpPost = $this->getPost($realty);
-        $id     = wp_update_post(array_merge($this->getPostArgs($realty), ['ID' => $wpPost->ID]));
+        $id = wp_update_post(array_merge($this->getPostArgs($realty), ['ID' => $wpPost->ID]));
 
         if (is_wp_error($id)) {
             throw new Exception('Error creating Post for ' . $realty->getId()); // todo: Notification
@@ -124,9 +124,9 @@ class RealtyPostService
     protected function getPostArgs(Realty $realty)
     {
         return [
-            'post_type'    => 'realty',
-            'post_status'  => 'publish',
-            'post_title'   => $realty->getTitle(),
+            'post_type' => 'realty',
+            'post_status' => 'publish',
+            'post_title' => $realty->getTitle(),
             'post_content' => $realty->getDescription(),
         ];
     }
@@ -147,7 +147,7 @@ class RealtyPostService
 
         $meta = [
             'ig_meta_description' => empty($realty->getTeaser()) ? shorten_excerpt($realty->getDescription(), 120) : $realty->getTeaser(),
-            self::REMOTE_ID_KEY   => $realty->getId(),
+            self::REMOTE_ID_KEY => $realty->getId(),
         ];
 
         foreach ($meta as $key => $value) {
@@ -167,9 +167,9 @@ class RealtyPostService
         return get_posts(
             [
                 'numberposts' => -1,
-                'post_type'   => 'attachment',
-                'meta_key'    => 'ig_for_realty_remote',
-                'meta_value'  => $realty->getId()
+                'post_type' => 'attachment',
+                'meta_key' => 'ig_for_realty_remote',
+                'meta_value' => $realty->getId()
             ]
         );
     }
@@ -182,12 +182,20 @@ class RealtyPostService
     {
         $users = get_users(
             array(
-                'meta_key'    => 'remote_user_id',
-                'meta_value'  => $employee->getId(),
-                'number'      => 1,
+                'meta_key' => 'remote_user_id',
+                'meta_value' => $employee->getId(),
+                'number' => 1,
                 'count_total' => false
             )
         );
+
+        if (empty($users)) {
+            $user = get_user_by('email', $this->getUniqueUserMail($employee));
+            if ($user instanceof \WP_User) {
+                return $user;
+            }
+        }
+
         return empty($users) ? null : $users[0];
     }
 
@@ -195,11 +203,11 @@ class RealtyPostService
     {
         $id = wp_insert_user(
             [
-                'user_login'   => sanitize_title($employee->getFirstName() . $employee->getLastName()),
-                'user_pass'    => $this->generateRandomString(),
-                'user_email'   => $this->getUniqueUserMail($employee),
-                'first_name'   => $employee->getFirstName(),
-                'last_name'    => $employee->getLastName(),
+                'user_login' => sanitize_title($employee->getFirstName() . $employee->getLastName()),
+                'user_pass' => $this->generateRandomString(),
+                'user_email' => $this->getUniqueUserMail($employee),
+                'first_name' => $employee->getFirstName(),
+                'last_name' => $employee->getLastName(),
                 'display_name' => $employee->getFirstName() . ' ' . $employee->getLastName(),
             ]
         );
@@ -220,13 +228,14 @@ class RealtyPostService
     public function updateWpUser(Employee $employee)
     {
         $user = $this->getWpUser($employee);
-        $id   = wp_update_user(
+
+        $id = wp_update_user(
             [
-                'ID'           => $user->ID,
-                'user_login'   => sanitize_title($employee->getFirstName() . $employee->getLastName()),
-                'user_email'   => $this->getUniqueUserMail($employee),
-                'first_name'   => $employee->getFirstName(),
-                'last_name'    => $employee->getLastName(),
+                'ID' => $user->ID,
+                'user_login' => sanitize_title($employee->getFirstName() . $employee->getLastName()),
+                'user_email' => $this->getUniqueUserMail($employee),
+                'first_name' => $employee->getFirstName(),
+                'last_name' => $employee->getLastName(),
                 'display_name' => $employee->getFirstName() . ' ' . $employee->getLastName(),
             ]
         );
@@ -255,9 +264,9 @@ class RealtyPostService
 
     public function generateRandomString($length = 32)
     {
-        $characters       = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!"§$%&/()=?!"§$%&/()=?!"§$%&/()=?';
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!"§$%&/()=?!"§$%&/()=?!"§$%&/()=?';
         $charactersLength = strlen($characters);
-        $randomString     = '';
+        $randomString = '';
         for ($i = 0; $i < $length; $i++) {
             $randomString .= $characters[rand(0, $charactersLength - 1)];
         }
