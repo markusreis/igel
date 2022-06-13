@@ -349,7 +349,7 @@ add_action('rest_api_init', function () {
 function sync_justimmo_api()
 {
     $downloaded = Sync::getInstance()->run(true);
-    echo json_encode($downloaded);
+    echo 'Done';
     exit();
 }
 

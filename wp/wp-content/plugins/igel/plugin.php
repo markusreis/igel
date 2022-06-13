@@ -24,6 +24,8 @@ if (!defined('WPINC')) {
 
 const IGEL_API_TOKEN = 'as80du!$iasduiAS/882812223';
 define('IGEL_BASE_URI', plugin_dir_url(__FILE__));
+define('IGEL_BASE_DIR', __DIR__);
+
 
 require('vendor/autoload.php');
 
@@ -94,11 +96,11 @@ require_once "helper/helper.php";
 
 add_action('rest_api_init', function () {
     register_rest_route('igel/admin/sync', 'prepare', array(
-        'methods'  => 'GET',
+        'methods' => 'GET',
         'callback' => [Sync::class, 'apiPrepareSync'],
     ));
     register_rest_route('igel/admin/sync', 'download-media', array(
-        'methods'  => 'GET',
+        'methods' => 'GET',
         'callback' => [Sync::class, 'downloadFileFromList'],
     ));
 });

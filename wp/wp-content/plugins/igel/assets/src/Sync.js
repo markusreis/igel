@@ -7,27 +7,27 @@ export class Sync {
         }
 
         this._dom = {
-            button     : syncButton,
+            button: syncButton,
             progressBar: document.getElementById('sync-progress'),
             immoCounter: document.getElementById('sync-immo-counter'),
             userCounter: document.getElementById('sync-user-counter'),
-            lastUpdate : document.getElementById('sync-last-update'),
+            lastUpdate: document.getElementById('sync-last-update'),
         }
 
         this._state = {
-            loading   : false,
+            loading: false,
             toDownload: {
-                immo       : parseInt(this._dom.immoCounter.innerText),
-                user       : parseInt(this._dom.userCounter.innerText),
-                total      : parseInt(this._dom.immoCounter.innerText) + parseInt(this._dom.userCounter.innerText),
+                immo: parseInt(this._dom.immoCounter.innerText),
+                user: parseInt(this._dom.userCounter.innerText),
+                total: parseInt(this._dom.immoCounter.innerText) + parseInt(this._dom.userCounter.innerText),
                 didDownload: 0,
             }
         }
 
         this._config = {
             buttonDefaultText: this._dom.button.innerText,
-            token            : igelAdminData.token,
-            apiBase          : igelAdminData.baseUrl
+            token: igelAdminData.token,
+            apiBase: igelAdminData.baseUrl
         }
 
         this._dom.button.addEventListener('click', e => this.run())
@@ -143,6 +143,7 @@ export class Sync {
             setTimeout(() => {
                 this._dom.progressBar.style.display = 'block'
                 this._dom.progressBar.style.widht = '0%'
+                this._state.loading = false
             }, 200)
         }, 1000)
     }

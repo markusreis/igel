@@ -13,10 +13,10 @@ class Init
         add_action('admin_enqueue_scripts', function () {
             wp_register_script('igel_admin_main', IGEL_BASE_URI . 'assets/dist/igel-master.bundle.min.js');
             wp_localize_script('igel_admin_main', 'igelAdminData', [
-                'token'   => IGEL_API_TOKEN,
+                'token' => IGEL_API_TOKEN,
                 'baseUrl' => rtrim(get_home_url(), '/') . '/wp-json/igel/admin/'
             ]);
-            wp_enqueue_script('igel_admin_main');
+            wp_enqueue_script('igel_admin_main', '', [], filemtime(IGEL_BASE_DIR . '/assets/dist/igel-master.bundle.min.js'));
         });
     }
 

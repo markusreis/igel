@@ -106,22 +106,29 @@ class Sync
         }
 
         $downloadList = $this->generateDownloadList($allRealties, $allEmployees);
-        $donwloaded = ['users' => 0, 'realties' => 0];
 
         if ($complete) {
             foreach ($downloadList['realtyToDownload'] as $k => $r) {
                 $this->downloadAttachment($r);
                 unset($downloadList['realtyToDownload'][$k]);
-                $donwloaded['realties']++;
             }
             foreach ($downloadList['userToDownload'] as $k => $c) {
                 $this->downloadAttachment($c);
                 unset($downloadList['userToDownload'][$k]);
-                $donwloaded['users']++;
             }
 
             update_option(self::DOWNLOAD_LIST_REALTY_NAME, $downloadList['realtyToDownload']);
             update_option(self::DOWNLOAD_LIST_CONTACT_PERSONS_NAME, $downloadList['userToDownload']);
+        } else if (!empty($downloadList['realtyToDownload']) || !empty($downloadList['userToDownload'])) {
+
+            $key = empty($downloadList['realtyToDownload'])
+                ? 'realtyToDownload'
+                : 'userToDownload';
+
+            $toDownload = array_shift($downloadList[$key]);
+
+            $this->downloadAttachment($toDownload);
+
         }
 
         update_option(self::LAST_SYNC_TIMESTAMP_OPTION, time());
@@ -132,7 +139,7 @@ class Sync
             }
         }
 
-        return $donwloaded;
+        return $downloadList;
     }
 
     public function refillCache()
