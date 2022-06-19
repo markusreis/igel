@@ -258,7 +258,7 @@ class RealtyPostService
         // As klagenfurt@igel.at is used a few times, but emails must be random, we might have to create a non existing
         // email for the user
         return (strpos($e, 'villach') !== false || strpos($e, 'klagenfurt') !== false)
-            ? sanitize_title($employee->getFirstName() . $employee->getLastName()) . '@igel-immobilien.at'
+            ? sanitize_title($employee->getFirstName()) . '.' . sanitize_title($employee->getLastName()) . '@igel-immobilien.at'
             : $employee->getEmail();
     }
 
