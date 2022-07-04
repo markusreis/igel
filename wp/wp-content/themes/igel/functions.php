@@ -541,3 +541,18 @@ function hero($titleFallback = '', $pretitleFallback = '', $hasBox = true)
     </div>
     <?php
 }
+
+function getLocalMedia(\Justimmo\Model\Attachment $attachment)
+{
+    $size = (Sync::getInstance())->getAvailableAttachmentSize($attachment, 'fullhd');
+    $hash = (Sync::getInstance())->hashUrl($attachment->getUrl($size));
+
+    $post = get_posts([
+        'numberposts' => 1,
+        'post_type' => 'attachment',
+        'meta_key' => 'ig_remote_url_hash',
+        'meta_value' => $hash
+    ]);
+
+    return empty($post) ? null : array_shift($post);
+}

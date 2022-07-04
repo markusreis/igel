@@ -245,8 +245,9 @@ endif;
                                 $mainImage = $offer->getPictures('TITELBILD');
                                 if (!empty($mainImage)) {
                                     $mainImage = array_shift($mainImage);
-                                    /** @var \Justimmo\Model\Attachment $mainImage */
-                                    echo '<img class="c-immo-list__el__thumbnail" src="' . $mainImage->getUrl('medium') . '" alt="' . esc_html($offer->getTitle()) . ' Thumbnail"/>';
+                                    $localMedia = getLocalMedia($mainImage);
+                                    $src = empty($localMedia) ? $mainImage->getUrl('medium') : wp_get_attachment_image_url($localMedia->ID, 'medium_large');
+                                    echo '<img class="c-immo-list__el__thumbnail" src="' . $src . '" alt="' . esc_html($offer->getTitle()) . ' Thumbnail"/>';
                                 }
                                 if (!empty($badgeText)) {
                                     echo '<div class="c-immo-list__el__badge">' . $badgeText . '</div>';

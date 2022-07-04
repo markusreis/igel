@@ -2,9 +2,11 @@
 
 namespace Igel\Services;
 
+use Igel\Admin\Sync;
 use Igel\Traits\Singleton;
 use Justimmo\Api\JustimmoApi;
 use Justimmo\Cache\CacheInterface;
+use Justimmo\Model\Attachment;
 use Justimmo\Model\Employee;
 use Justimmo\Model\Query\AbstractQuery;
 use Justimmo\Model\Realty;
@@ -158,12 +160,29 @@ class RealtyPostService
     public function getMediaHtml(Realty $realty)
     {
         return array_map(function ($media) use ($realty) {
-            return '<picture data-img="' . $media->ID . '"><img alt="' . esc_html($realty->getTitle()) . '" src="' . wp_get_attachment_image_url($media->ID) . '" srcset="' . wp_get_attachment_image_srcset($media->ID) . '"/></picture>';
-        }, $this->getMedia($realty));
+            $local = getLocalMedia($media);
+
+            /** @var Attachment $media */
+            $attachmentSize = Sync::getInstance()->getAvailableAttachmentSize($media, 'fullhd');
+            $src = empty($local) ? $media->getUrl($attachmentSize) : wp_get_attachment_image_url($local->ID);
+            $srcset = empty($local) ? '' : wp_get_attachment_image_srcset($local->ID);
+            $id = empty($local) ? 'remote' : $local->ID;
+
+            return '<picture data-img="' . $id . '"><img alt="' . esc_html($realty->getTitle()) . '" src="' . $src . '" ' . (empty($srcset) ? '' : 'srcset="' . $srcset . '"') . '"/></picture>';
+        }, $realty->getAttachments());
     }
 
     public function getMedia(Realty $realty)
     {
+        $attachments = $realty->getAttachments();
+        $posts = [];
+
+        foreach ($attachments as $attachment) {
+            $post = getLocalMedia($attachment);
+            if (!empty($post)) $posts[] = $post;
+        }
+
+        return $posts;
         return get_posts(
             [
                 'numberposts' => -1,

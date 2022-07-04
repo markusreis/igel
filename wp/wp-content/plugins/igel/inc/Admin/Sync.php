@@ -256,6 +256,7 @@ class Sync
     public function downloadAttachment(array $details)
     {
         $attachmentId = $this->download($details['ig_remote_url'], $details['title']);
+        
         if (!empty($attachmentId)) {
             update_post_meta($attachmentId, $details['remoteKeyMetaName'], $details['remoteKeyMetaValue']);
             update_post_meta($attachmentId, $details['localKeyMetaName'], $details['localKeyMetaValue']);

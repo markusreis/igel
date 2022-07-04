@@ -26,9 +26,23 @@ get_header();
     </div>
     <picture class="c-hero__bg" data-only="mobile" data-action="open-gallery"
              data-r="<?php echo $realty->getId(); ?>">
-        <img alt="<?php echo get_the_title(); ?> Thumbnail"
-             src="<?php echo wp_get_attachment_image_url(get_post_thumbnail_id()); ?>"
-             srcset="<?php echo wp_get_attachment_image_srcset(get_post_thumbnail_id()); ?>"/>
+
+        <?php
+        $mainImage = $realty->getPictures('TITELBILD');
+
+        if (!empty($mainImage)) :
+            $mainImage = array_shift($mainImage);
+            $localMedia = getLocalMedia($mainImage);
+            $src = empty($localMedia) ? $mainImage->getUrl('medium') : wp_get_attachment_image_url($localMedia->ID, 'medium');
+            $srcset = empty($localMedia) ? '' : wp_get_attachment_image_srcset($localMedia->ID);
+            ?>
+
+            <img alt="<?php echo get_the_title(); ?> Thumbnail"
+                 src="<?php echo wp_get_attachment_image_url(get_post_thumbnail_id()); ?>"
+                <?php echo empty($srcset) ? '' : 'srcset="' . $srcset . '"'; ?>/>
+        <?php
+        endif;
+        ?>
     </picture>
     <div class="c-gallery__icon-toggle -only-mobile" data-action="open-gallery"
          data-r="<?php echo $realty->getId(); ?>">
@@ -48,64 +62,64 @@ get_header();
         <div class="c-highlights">
             <?php
 
-            $isRent    = !$realty->getMarketingType()['KAUF'];
-            $price     = ig_price(!$isRent ? $realty->getPurchasePrice() : $realty->getTotalRent());
+            $isRent = !$realty->getMarketingType()['KAUF'];
+            $price = ig_price(!$isRent ? $realty->getPurchasePrice() : $realty->getTotalRent());
             $priceType = $isRent ? 'Mietpreis ' : 'Kaufpreis';
-            $price     = empty($price) ? 'Auf Anfrage' : "$price";
+            $price = empty($price) ? 'Auf Anfrage' : "$price";
 
 
-            $data    = [
+            $data = [
                 [
-                    'icon'        => 'area',
-                    'value'       => number_format($realty->getLivingArea(), 0, ',', '.'),
+                    'icon' => 'area',
+                    'value' => number_format($realty->getLivingArea(), 0, ',', '.'),
                     'valueSuffix' => 'm<sup>2</sup>',
-                    'name'        => 'Wohnfläche',
+                    'name' => 'Wohnfläche',
                 ],
                 [
-                    'icon'        => 'area-2',
-                    'value'       => number_format($realty->getSurfaceArea() ?? $realty->getTotalArea(), 0, ',', '.'),
+                    'icon' => 'area-2',
+                    'value' => number_format($realty->getSurfaceArea() ?? $realty->getTotalArea(), 0, ',', '.'),
                     'valueSuffix' => 'm<sup>2</sup>',
-                    'name'        => $realty->getFloorArea() ? 'Grundfläche' : 'Grundfläche',
+                    'name' => $realty->getFloorArea() ? 'Grundfläche' : 'Grundfläche',
                 ],
                 [
-                    'icon'  => 'house',
+                    'icon' => 'house',
                     'value' => $realty->getRoomCount(),
-                    'name'  => 'Zimmer',
+                    'name' => 'Zimmer',
                 ],
                 [
-                    'icon'  => 'bill',
+                    'icon' => 'bill',
                     'value' => $price,
-                    'name'  => $priceType,
+                    'name' => $priceType,
                 ],
                 [
-                    'icon'  => 'time',
+                    'icon' => 'time',
                     'value' => $realty->getYearBuilt(),
-                    'name'  => 'Baujahr',
+                    'name' => 'Baujahr',
                 ],
                 [
-                    'icon'  => 'car',
+                    'icon' => 'car',
                     'value' => $realty->getGarageCount(),
-                    'name'  => 'Garagen',
+                    'name' => 'Garagen',
                 ],
                 [
-                    'icon'  => 'area-3',
+                    'icon' => 'area-3',
                     'value' => $realty->getBalconyCount(),
-                    'name'  => 'Balkons',
+                    'name' => 'Balkons',
                 ],
                 [
-                    'icon'  => 'houses',
+                    'icon' => 'houses',
                     'value' => ucfirst(strtolower($realty->getAge())),
-                    'name'  => 'Gebäudetyp',
+                    'name' => 'Gebäudetyp',
                 ],
                 [
-                    'icon'  => 'time',
+                    'icon' => 'time',
                     'value' => ucfirst(strtolower($realty->getYearBuilt())),
-                    'name'  => 'Baujahr',
+                    'name' => 'Baujahr',
                 ],
                 [
-                    'icon'  => 'time',
+                    'icon' => 'time',
                     'value' => ucfirst(strtolower($realty->getCondition())),
-                    'name'  => 'Zustand',
+                    'name' => 'Zustand',
                 ],
             ];
             $showing = 0;
@@ -154,7 +168,7 @@ get_header();
                 <?php
                 echo empty(get_the_content())
                     ? 'Leider liegt zu diesem Objekt aktuell keine Beschreibung. Wenn Sie Interesse an weiteren ' .
-                      'Informationen haben werden wir Ihnen diese gerne auf eine persönliche Anfrage zukommen lassen.'
+                    'Informationen haben werden wir Ihnen diese gerne auf eine persönliche Anfrage zukommen lassen.'
                     : get_the_content();
                 ?>
                 <br/>
@@ -179,7 +193,7 @@ get_header();
             <?php
             /** @var Justimmo\Model\Employee $contact */
             $contact = $realty->getContact();
-            $user    = igel()->realtyPosts()->getWpUser($contact);
+            $user = igel()->realtyPosts()->getWpUser($contact);
 
             echo '<section class="content">';
             igTitle('Ihr Ansprechpartner', 'Sie haben Interesse?', 'div');

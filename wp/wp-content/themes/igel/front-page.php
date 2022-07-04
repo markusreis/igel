@@ -191,8 +191,10 @@ hero('Sie wollen verkaufen?', 'Wir bewerten Ihre Immobilie. Sofort und kostenlos
                                         $mainImage = $offer->getPictures('TITELBILD');
                                         if (!empty($mainImage)) {
                                             $mainImage = array_shift($mainImage);
+                                            $localMedia = getLocalMedia($mainImage);
+                                            $src = empty($localMedia) ? $mainImage->getUrl('medium') : wp_get_attachment_image_url($localMedia->ID, 'medium_large');
                                             /** @var \Justimmo\Model\Attachment $mainImage */
-                                            echo '<img class="c-immo-list__el__thumbnail" src="' . $mainImage->getUrl('medium') . '" alt="' . esc_html($offer->getTitle()) . ' Thumbnail"/>';
+                                            echo '<img class="c-immo-list__el__thumbnail" src="' . $src . '" alt="' . esc_html($offer->getTitle()) . ' Thumbnail"/>';
                                         }
                                         if (!empty($badgeText)) {
                                             echo '<div class="c-immo-list__el__badge">' . $badgeText . '</div>';
