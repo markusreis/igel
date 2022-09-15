@@ -150,6 +150,8 @@ class RealtyPostService
         $meta = [
             'ig_meta_description' => empty($realty->getTeaser()) ? shorten_excerpt($realty->getDescription(), 120) : $realty->getTeaser(),
             self::REMOTE_ID_KEY => $realty->getId(),
+            '_yoast_wpseo_title' => $realty->getTitle(),
+            '_yoast_wpseo_metadesc' => empty($realty->getTeaser()) ? 'Sie möchten eine Immobilie kaufen? Ob Haus, Wohnung oder Grundstück - Igel Immobilien ist seit über 30 Jahren DER Immobilienspezialist.' : $realty->getTeaser(),
         ];
 
         foreach ($meta as $key => $value) {

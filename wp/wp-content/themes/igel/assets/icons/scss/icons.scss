@@ -1,0 +1,148 @@
+/* --------------------------------
+
+IgelIcon Web Font
+Generated using nucleoapp.com
+
+-------------------------------- */
+$ig-font-path: "../fonts" !default;
+
+@font-face {
+  font-family: 'IgelIcon';
+  src: url('#{$ig-font-path}/IgelIcon.eot');
+  src: url('#{$ig-font-path}/IgelIcon.eot') format('embedded-opentype'),
+    url('#{$ig-font-path}/IgelIcon.woff2') format('woff2'),
+    url('#{$ig-font-path}/IgelIcon.woff') format('woff'),
+    url('#{$ig-font-path}/IgelIcon.ttf') format('truetype'),
+    url('#{$ig-font-path}/IgelIcon.svg') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/*------------------------
+	base class definition
+-------------------------*/
+
+.ig {
+  display: inline-block;
+  font: normal normal normal 1em/1 'IgelIcon';
+  color: inherit;
+  flex-shrink: 0;
+  speak: none;
+  text-transform: none;
+  /* Better Font Rendering */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/*------------------------
+  change icon size
+-------------------------*/
+
+/* relative units */
+.ig-sm {
+  font-size: 0.8em;
+}
+.ig-lg {
+  font-size: 1.2em;
+}
+/* absolute units */
+.ig-16 {
+  font-size: 16px;
+}
+.ig-32 {
+  font-size: 32px;
+}
+
+/*------------------------
+  spinning icons
+-------------------------*/
+
+.ig-is-spinning {
+  animation: ig-spin 1s infinite linear;
+}
+
+@keyframes ig-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/*------------------------
+  rotated/flipped icons
+-------------------------*/
+
+.ig-rotate-90  {
+	transform: rotate(90deg);
+}
+
+.ig-rotate-180 {
+	transform: rotate(180deg);
+}
+
+.ig-rotate-270 {
+	transform: rotate(270deg);
+}
+
+.ig-flip-y {
+	transform: scaleY(-1);
+}
+.ig-flip-x {
+	transform: scaleX(-1);
+}
+
+/*------------------------
+	icons
+-------------------------*/
+$icons: (
+  area-2: 'ea02',
+  caret: 'ea03',
+  check: 'ea04',
+  error: 'ea05',
+  facebook: 'ea06',
+  handshake: 'ea07',
+  house: 'ea08',
+  houses: 'ea09',
+  mail: 'ea0a',
+  people: 'ea0b',
+  phone: 'ea0c',
+  plus: 'ea0d',
+  search: 'ea0e',
+  time: 'ea0f',
+  arrow: 'ea10',
+  area: 'ea11',
+  bill: 'ea12',
+  instagram: 'ea13',
+  linkedin: 'ea14',
+  caret-right: 'ea15',
+  info: 'ea16',
+  reload: 'ea17',
+  bed: 'ea18',
+  area-3: 'ea19',
+  car: 'ea1a',
+  media: 'ea1b',
+  image: 'ea1c',
+  brand-tribenet: 'ea1d',
+  listening: 'ea1e',
+  live-support: 'ea1f',
+  data: 'ea20',
+  handshake-deal: 'ea21',
+  photobucket: 'ea22',
+  holding-hands: 'ea23',
+  twitter: 'ea24',
+  link-72: 'ea25',
+  facebook-2: 'ea26',
+  brand-whatsapp: 'ea27',
+);
+
+@function unicode($str) {
+  @return unquote("\"\\#{$str}\"");
+}
+
+@each $name, $code in $icons {
+  .icon-#{"" +$name}::before {
+    content: unicode($code);
+  }
+}

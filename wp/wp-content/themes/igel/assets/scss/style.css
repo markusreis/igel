@@ -2238,9 +2238,7 @@ body {
 }
 .c-immo-list__el__price {
   width: 100%;
-  padding: 15px 0;
-  border-bottom: 1px solid #E0E0E0;
-  margin-bottom: 15px;
+  padding: 15px 0 0px 0;
   color: #7B8579;
 }
 .c-immo-list__el__title {
@@ -2252,6 +2250,9 @@ body {
   width: 100%;
   color: #7B8579;
   list-style: none;
+  border-bottom: 1px solid #E0E0E0;
+  margin-bottom: 5px;
+  padding-bottom: 25px;
 }
 .c-immo-list__el__details li {
   display: inline-block;
@@ -2276,6 +2277,26 @@ body {
   }
   .c-immo-list__el:nth-of-type(2n) {
     padding-left: 10px;
+  }
+  .c-immo-list__el__price {
+    width: 100%;
+    padding: 15px 0;
+    margin-bottom: 15px;
+    color: #7B8579;
+    border-bottom: 1px solid #E0E0E0;
+  }
+  .c-immo-list__el__title {
+    width: 100%;
+    margin-bottom: 10px;
+    flex-grow: 1;
+  }
+  .c-immo-list__el__details {
+    width: 100%;
+    color: #7B8579;
+    list-style: none;
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
   }
 }
 @media only screen and (min-width: 768px) {

@@ -8,15 +8,18 @@ class DatabaseCache implements CacheInterface
 {
     const CACHE_PREFIX = 'igel_ji_';
 
+    static $cleared = false;
+
     public static function clear()
     {
+        self::$cleared = true;
         global $wpdb;
         $wpdb->query('DELETE FROM ' . $wpdb->prefix . 'options WHERE option_name LIKE "' . self::CACHE_PREFIX . '%"');
     }
 
     public function get($key)
     {
-        return get_option($key);
+        return self::$cleared ? false : get_option($key);
     }
 
     public function set($key, $value)

@@ -1,0 +1,243 @@
+/* --------------------------------
+
+IgelIcon Web Font
+Generated using nucleoapp.com
+
+-------------------------------- */
+@font-face {
+  font-family: "IgelIcon";
+  src: url("../fonts/IgelIcon.eot");
+  src: url("../fonts/IgelIcon.eot") format("embedded-opentype"), url("../fonts/IgelIcon.woff2") format("woff2"), url("../fonts/IgelIcon.woff") format("woff"), url("../fonts/IgelIcon.ttf") format("truetype"), url("../fonts/IgelIcon.svg") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+/*------------------------
+	base class definition
+-------------------------*/
+.ig {
+  display: inline-block;
+  font: normal normal normal 1em/1 "IgelIcon";
+  color: inherit;
+  flex-shrink: 0;
+  speak: none;
+  text-transform: none;
+  /* Better Font Rendering */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/*------------------------
+  change icon size
+-------------------------*/
+/* relative units */
+.ig-sm {
+  font-size: 0.8em;
+}
+
+.ig-lg {
+  font-size: 1.2em;
+}
+
+/* absolute units */
+.ig-16 {
+  font-size: 16px;
+}
+
+.ig-32 {
+  font-size: 32px;
+}
+
+/*------------------------
+  spinning icons
+-------------------------*/
+.ig-is-spinning {
+  animation: ig-spin 1s infinite linear;
+}
+
+@keyframes ig-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+/*------------------------
+  rotated/flipped icons
+-------------------------*/
+.ig-rotate-90 {
+  transform: rotate(90deg);
+}
+
+.ig-rotate-180 {
+  transform: rotate(180deg);
+}
+
+.ig-rotate-270 {
+  transform: rotate(270deg);
+}
+
+.ig-flip-y {
+  transform: scaleY(-1);
+}
+
+.ig-flip-x {
+  transform: scaleX(-1);
+}
+
+/*------------------------
+	icons
+-------------------------*/
+.icon-area-2::before {
+  content: "\ea02";
+}
+
+.icon-caret::before {
+  content: "\ea03";
+}
+
+.icon-check::before {
+  content: "\ea04";
+}
+
+.icon-error::before {
+  content: "\ea05";
+}
+
+.icon-facebook::before {
+  content: "\ea06";
+}
+
+.icon-handshake::before {
+  content: "\ea07";
+}
+
+.icon-house::before {
+  content: "\ea08";
+}
+
+.icon-houses::before {
+  content: "\ea09";
+}
+
+.icon-mail::before {
+  content: "\ea0a";
+}
+
+.icon-people::before {
+  content: "\ea0b";
+}
+
+.icon-phone::before {
+  content: "\ea0c";
+}
+
+.icon-plus::before {
+  content: "\ea0d";
+}
+
+.icon-search::before {
+  content: "\ea0e";
+}
+
+.icon-time::before {
+  content: "\ea0f";
+}
+
+.icon-arrow::before {
+  content: "\ea10";
+}
+
+.icon-area::before {
+  content: "\ea11";
+}
+
+.icon-bill::before {
+  content: "\ea12";
+}
+
+.icon-instagram::before {
+  content: "\ea13";
+}
+
+.icon-linkedin::before {
+  content: "\ea14";
+}
+
+.icon-caret-right::before {
+  content: "\ea15";
+}
+
+.icon-info::before {
+  content: "\ea16";
+}
+
+.icon-reload::before {
+  content: "\ea17";
+}
+
+.icon-bed::before {
+  content: "\ea18";
+}
+
+.icon-area-3::before {
+  content: "\ea19";
+}
+
+.icon-car::before {
+  content: "\ea1a";
+}
+
+.icon-media::before {
+  content: "\ea1b";
+}
+
+.icon-image::before {
+  content: "\ea1c";
+}
+
+.icon-brand-tribenet::before {
+  content: "\ea1d";
+}
+
+.icon-listening::before {
+  content: "\ea1e";
+}
+
+.icon-live-support::before {
+  content: "\ea1f";
+}
+
+.icon-data::before {
+  content: "\ea20";
+}
+
+.icon-handshake-deal::before {
+  content: "\ea21";
+}
+
+.icon-photobucket::before {
+  content: "\ea22";
+}
+
+.icon-holding-hands::before {
+  content: "\ea23";
+}
+
+.icon-twitter::before {
+  content: "\ea24";
+}
+
+.icon-link-72::before {
+  content: "\ea25";
+}
+
+.icon-facebook-2::before {
+  content: "\ea26";
+}
+
+.icon-brand-whatsapp::before {
+  content: "\ea27";
+}
+
+/*# sourceMappingURL=icons.css.map */

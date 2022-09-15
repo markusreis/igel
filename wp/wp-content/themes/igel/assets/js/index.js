@@ -18,6 +18,7 @@ import barba from '@barba/core';
             this.loadCurrentPage()
 
             this._initScrollClickActions()
+            this._initZoomImages()
 
             initBarba(this)
 
@@ -77,6 +78,19 @@ import barba from '@barba/core';
                             behavior: 'smooth'
                         })
                     }
+                }
+            })
+        }
+
+        _initZoomImages() {
+            document.addEventListener('click', e => {
+                const zoomer = e.target.dataset.zoomUrl ? e.target : e.target.closest('[data-zoom-url]')
+                if (zoomer) {
+                    const zoom = document.createElement('div')
+                    zoom.classList.add('c-zoom')
+                    zoom.innerHTML = '<img src="' + zoomer.dataset.zoomUrl + '"/>';
+                    document.body.append(zoom)
+                    zoom.addEventListener('click', () => zoom.remove())
                 }
             })
         }

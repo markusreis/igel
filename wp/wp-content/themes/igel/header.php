@@ -18,6 +18,7 @@
     <link rel="profile" href="https://gmpg.org/xfn/11">
 
     <?php
+
     $faviconBasePath = get_stylesheet_directory_uri() . '/assets/favicon';
     ?>
     <link rel="apple-touch-icon" sizes="180x180" href="<?php echo $faviconBasePath; ?>/apple-touch-icon.png">

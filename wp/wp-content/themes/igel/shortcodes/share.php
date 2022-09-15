@@ -15,10 +15,10 @@ if (!function_exists('share_sc')):
          * @var string $url
          */
         extract(shortcode_atts(
-                    array(
-                        'url' => '',
-                    ), $atts
-                ));
+            array(
+                'url' => '',
+            ), $atts
+        ));
 
         //==|=========================================================================================================
         //   |   Set Values
@@ -45,10 +45,10 @@ if (!function_exists('share_sc')):
                 <i class="ig ig-twitter"></i>
                 Twitter
             </a>
-            <a target="_blank" href="whatsapp://send?text="<?php echo urlencode($url); ?>"
-            class="c-share__el c-share__el--whatsapp">
-            <i class="ig ig-brand-whatsapp"></i>
-            WhatsApp
+            <a target="_blank" href="whatsapp://send?text=<?php echo urlencode($url); ?>"
+               class="c-share__el c-share__el--whatsapp">
+                <i class="ig ig-brand-whatsapp"></i>
+                WhatsApp
             </a>
         </div>
 

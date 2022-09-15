@@ -94,6 +94,8 @@ function register_menus()
             'footer_company' => 'Footer: Unternehmen',
             'footer_legal' => 'Footer: Rechtliches',
         ));
+
+    add_theme_support('post-thumbnails');
 }
 
 add_action('after_setup_theme', 'register_menus');

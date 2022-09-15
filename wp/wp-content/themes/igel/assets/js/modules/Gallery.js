@@ -11,6 +11,10 @@ export class Gallery {
 
         const modal = this.renderWrapper();
 
+        if (window.isMobile) {
+            modal.querySelector('.c-gallery__modal__buttons').style.height = `${window.innerHeight}px`;
+        }
+
         this._dom = {
             modal: modal,
             toggles: document.querySelectorAll('[data-action="open-gallery"]'),

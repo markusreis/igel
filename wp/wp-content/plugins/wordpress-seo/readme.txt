@@ -4,8 +4,8 @@ Donate link: https://yoa.st/1up
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl.html
 Tags: SEO, XML sitemap, Content analysis, Readability, Schema
-Tested up to: 5.9
-Stable tag: 18.6
+Tested up to: 6.0
+Stable tag: 19.6.1
 Requires PHP: 5.6.20
 
 Improve your WordPress SEO: Write better content and have a fully optimized WordPress site using the Yoast SEO plugin.
@@ -36,6 +36,8 @@ Yoast SEO is packed full of features, designed to help visitors and search engin
 * **Faster loading times** for your whole website, due to an innovative way of managing data in WordPress.
 * **[Premium]** E-mail support for our [Yoast SEO Premium](https://yoa.st/1v8) users.
 * **[Premium]** The possibility to expand Yoast SEO with the [News SEO](https://yoa.st/1uv), [Video SEO](https://yoa.st/1uw), [Local SEO](https://yoa.st/1uu) and [WooCommerce SEO](https://yoa.st/3rh) extensions.
+* **[Premium]** **New!** Yoast SEO Premium comes with wide-ranging crawl settings that help you improve how search engines crawl your site.
+* **[Premium]** **New!** Yoast SEO Premium comes with an IndexNow integration to ping search engines like Microsoft Bing whenever you publish or update content.
 
 #### WRITE KILLER CONTENT WITH YOAST SEO
 We know content is king, that's why Yoast SEO is famous for its **state-of-the-art content and SEO analysis**. Yoast SEO gives you:
@@ -53,6 +55,8 @@ We know content is king, that's why Yoast SEO is famous for its **state-of-the-a
 * **[Premium]** Automatic internal linking suggestions: write your article and get automatic suggested posts to link to!
 * **[Premium]** An orphaned content filter to detect posts that have no links pointing towards them!
 * **[Premium]** SEO workouts to make working on your site as easy as ABC. These SEO workflows will get your site into shape in no time!
+* **[Premium]** **New!** Yoast SEO Premium comes with a new word complexity feature that gives you actionable feedback on using difficult words. This feature is in beta and English only for now.
+* **[Premium]** **New!** Yoast SEO Premium comes with a new inclusive language analysis that helps you write inclusive content. This feature is opt-in, in beta and English only for now.
 
 #### KEEP YOUR SITE IN PERFECT SHAPE
 
@@ -110,6 +114,7 @@ Yoast SEO integrates seamlessly into a range of themes and plugins. We work part
 * The [Elementor](https://wordpress.org/plugins/elementor/) website builder.
 * [Zapier](https://zapier.com/apps/yoast-seo/integrations), which helps you automate your publishing flow.
 * [Algolia](https://wordpress.org/plugins/wp-search-with-algolia/) integration to improve the quality of your site search.
+* [WordProof](https://wordproof.com/), which helps you prove ownership by adding timestamps.
 
 ### BUG REPORTS
 
@@ -126,7 +131,7 @@ Want more information on search engine optimization and Yoast SEO? Have a look a
 * Also follow Yoast on [Facebook](https://facebook.com/yoast), [Instagram](https://www.instagram.com/yoast/) & [Twitter](https://twitter.com/yoast).
 
 == Installation ==
-Starting with Yoast SEO consists of just two steps: installing and setting up the plugin. Yoast SEO is designed to work with your site’s specific needs, so don’t forget to go through the Yoast SEO configuration workout as explained in the ‘after activation’ step!
+Starting with Yoast SEO consists of just two steps: installing and setting up the plugin. Yoast SEO is designed to work with your site’s specific needs, so don’t forget to go through the Yoast SEO first-time configuration as explained in the ‘after activation’ step!
 
 ### INSTALL YOAST SEO FROM WITHIN WORDPRESS
 
@@ -143,8 +148,8 @@ Starting with Yoast SEO consists of just two steps: installing and setting up th
 
 ### AFTER ACTIVATION
 
-1. You should see (a notice to start) the Yoast SEO configuration workout;
-1. Go through the configuration workout and set up the plugin for your site;
+1. You should see (a notice to start) the Yoast SEO first-time configuration;
+1. Go through this configuration and set up the plugin for your site;
 1. You’re done!
 
 == Frequently Asked Questions ==
@@ -236,53 +241,59 @@ Your question has most likely been answered on our help center: [yoast.com/help/
 
 == Changelog ==
 
-= 18.6 =
-Release Date: April 19th, 2022
-
-Meet Yoast SEO 18.6: a small Yoast SEO update, fixing a number of bugs, including several bugs related to the Wincher integration. With the Wincher integration, you can track the rankings of your articles in the search results. If you haven’t checked that feature out, please do so! Read more about what's new in Yoast SEO 18.6 in [our release post in English](https://yoa.st/release-19-4-22) or [our release post in Spanish](https://yoa.st/release-19-4-22-spanish)!
-
-Bugfixes:
-
-* Fixes a bug where a version mismatch caused broken styling in WooCommerce select fields when linking products.
-* Fixes a bug where keyphrases could show up multiple times in Wincher table.
-* Fixes a bug where the Wincher connection flow would fail on certain installations.
-* Fixes a bug where the Wincher integration could throw a fatal error on PHP 8.0+.
+= 19.6.1 =
+Release Date: August 31st, 2022
 
 Other:
 
-* Adds a disabled Wincher integration toggle to the Network admin/Multisite `Integrations` tab.
+* Fixes compliance with the wordpress.org plugin guidelines.
 
-= 18.5.1 =
-Release Date: April 5th, 2022
+= 19.6 =
+Release Date: August 23rd, 2022
+
+Yoast SEO 19.6 is out today! In this release, we’ve rolled out some general enhancements. In addition, we’ve improved the performance of Yoast SEO on bigger, more complex sites. Read more about what's new in Yoast SEO 19.6 in [our release post in English](https://yoa.st/release-23-8-22) or [our release post in Spanish](https://yoa.st/release-23-8-22-spanish)!
 
 Bugfixes:
 
-* Fixes a bug where a fatal error would occur on the site health page if WordFence was installed and active.
-* Fixes a bug where a fatal error would occur on PHP 5.6.
+* Fixes a bug in the Classic Editor where clicking on the SEO link inside the publish box would not always scroll the SEO analysis into view.
+* Fixes a bug where an emoji in our replacement variable editors would not be entirely removed when the backspace/delete button is hit.
+* Fixes a bug where a redirect to our installation success page could happen on admin AJAX calls.
 
-= 18.5 =
-Release Date: April 5th, 2022
+Other:
 
-Say hi to Yoast SEO 18.5! You'll find a number of fixes and enhancements. We've also included more improvements to the rebuild of the AIOSEO importer we introduced a few weeks ago. Happy updating! Read more about what's new in Yoast SEO 18.5 in [our release post in English](https://yoa.st/release-5-4-22) or [our release post in Spanish](https://yoa.st/release-5-4-22-spanish)!
+* Adds a "Search engines discouraged" notification in the Yoast SEO dashboard when the "Discourage search engines from indexing this site" WordPress setting is turned on.
+* Removes the Ryte integration and deprecates all the relevant classes. More information about this can be found at [yoa.st/ryte-deprecation](https://yoa.st/ryte-deprecation).
+
+= 19.5.1 =
+Release Date: August 9th, 2022
+
+Bugfixes:
+
+* Fixes a bug where a fatal error would be thrown on the front-end when Yoast SEO 19.5 was used with an older version of Yoast SEO Premium.
+
+= 19.5 =
+Release Date: August 9th, 2022
+
+Yoast SEO 19.5 is out today! This release includes more fixes and enhancements to enjoy. We've also made adjustments to our schema implementation, changing the order in which schema nodes are output. Read more about what's new in Yoast SEO 19.5 in [our release post in English](https://yoa.st/release-9-8-22) or [our release post in Spanish](https://yoa.st/release-9-8-22-spanish)!
+
 
 Enhancements:
 
-* Adds a preliminary validation of All-in-One SEO data before importing it into Yoast SEO.
+* Adds the site logo and name as default values in the first time configuration and search appearance.
+* Changes the order in which Schema nodes are output from `Organization / Person > WebSite > WebPage > Article` to `Article > WebPage > WebSite > Organization / Person`. This fixes validation issues for the Schema validator and puts the most important Schema content first.
 
 Bugfixes:
 
-* Fixes a bug where the URL preview inside the snippet editor would not consistently reflect the permalink in the Block editor.
-* Fixes a bug where the Customize URL would be incorrectly escaped in our health checks. Props to [BronsonQuick](https://github.com/BronsonQuick).
-* Fixes a bug where in certain edge cases a database error would show during clean-up of All-in-One SEO data.
-* Fixes a bug where reusable block content would not be updated in our analysis when changed in the editor.
-* Fixes a bug where an error about incorrect values in the indexables table would be displayed on certain database setups. Props to [junaidbhura](https://github.com/junaidbhura).
-* Fixes a bug where a fatal error would be displayed in the Search Appearance options when using WordPress version 5.8.3 and below with themes without title-tag support.
-* Fixes a bug where sitemap locations would change once the number of entries exceeded that of the first page.
-* Fixes a bug where Yoast modals would close after opening after editing content in Elementor.
+* Fixes a bug where a text starting with a double quotation mark followed by a space(s) broke the analysis.
+* Fixes a bug where text which includes the non-breaking space character (`&nbsp;`) is not highlighted correctly.
+* Fixes a bug where the Algolia integration could not be controlled at network level.
+* Fixes a bug where the score indicator in the classic editor would not update the hovering text when the score changed.
+* Fixes a bug where the score indicators of the overview pages and admin bar where inconsistent. The taxonomy overview and admin bar score indicators now uses red to indicate `Focus keyphrase not set`. The admin bar score indicator now shows blue when set to `noindex`.
 
 Other:
 
-* Sets the minimum required WordPress version to 5.8.
+* Hides the \"Save changes\" button in the \"Integrations\" tab in the \"Yoast SEO  > General\" page.
+* Sets the minimum supported WordPress version to 5.9.
 
 = Earlier versions =
 For the changelog of earlier versions, please refer to [the changelog on yoast.com](https://yoa.st/yoast-seo-changelog).

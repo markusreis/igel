@@ -81,6 +81,7 @@ class Sync
     {
         DatabaseCache::clear();
         $allRealties = igel()->justImmo()->all();
+
         $allEmployees = igel()->justImmo()->employeeQuery()->setLimit(999)->find();
         $contactsDone = [];
 
@@ -127,7 +128,9 @@ class Sync
 
             $toDownload = array_shift($downloadList[$key]);
 
-            $this->downloadAttachment($toDownload);
+            if (!empty($toDownload)) {
+                $this->downloadAttachment($toDownload);
+            }
 
         }
 
@@ -256,7 +259,7 @@ class Sync
     public function downloadAttachment(array $details)
     {
         $attachmentId = $this->download($details['ig_remote_url'], $details['title']);
-        
+
         if (!empty($attachmentId)) {
             update_post_meta($attachmentId, $details['remoteKeyMetaName'], $details['remoteKeyMetaValue']);
             update_post_meta($attachmentId, $details['localKeyMetaName'], $details['localKeyMetaValue']);
