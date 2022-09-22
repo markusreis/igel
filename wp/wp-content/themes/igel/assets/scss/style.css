@@ -6,6 +6,7 @@
  * 2. Prevent adjustments of font size after orientation changes in iOS.
  */
 @import "../icons/css/style.css";
+@import "./../lato/lato.css";
 html {
   line-height: 1.15;
   /* 1 */
