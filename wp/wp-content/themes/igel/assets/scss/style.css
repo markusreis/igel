@@ -1181,11 +1181,17 @@ ul:not([class]) li:last-of-type {
 @media only screen and (min-width: 768px) {
   .overlay-image {
     width: 90px !important;
+    bottom: 65px;
   }
 }
 @media only screen and (min-width: 1024px) {
   .overlay-image {
     width: 110px !important;
+  }
+}
+@media only screen and (min-width: 1630px) {
+  .overlay-image {
+    bottom: 20px;
   }
 }
 [data-zoom-url] {
