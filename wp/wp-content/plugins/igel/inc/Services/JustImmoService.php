@@ -54,10 +54,10 @@ class JustImmoService
 
     private function __construct()
     {
-        $this->api             = new JustimmoApi('api-12962', 'PY-wZtsZ4M', new WpLogger(), new DatabaseCache());
-        $this->realtyMapper    = new RealtyMapper();
-        $this->realtyWrapper   = new RealtyWrapper($this->realtyMapper);
-        $this->employeeMapper  = new EmployeeMapper();
+        $this->api = new JustimmoApi('user', 'password', new WpLogger(), new DatabaseCache());
+        $this->realtyMapper = new RealtyMapper();
+        $this->realtyWrapper = new RealtyWrapper($this->realtyMapper);
+        $this->employeeMapper = new EmployeeMapper();
         $this->employeeWrapper = new EmployeeWrapper($this->employeeMapper);
     }
 
@@ -96,6 +96,8 @@ class JustImmoService
         return $this->query()->setLimit(999999)->find();
     }
 }
+
+
 
 
 

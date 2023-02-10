@@ -57,6 +57,9 @@ class ContactForm {
                     const post = this.sendPost()
                     post.then(result => {
                         node.hide()
+
+                        console.log(result)
+
                         setTimeout(() => {
                             window.showToast({
                                 msg: 'Vielen Dank für Ihre Anfrage. Die Nachricht wurde erfolgreich übermittelt.',
@@ -98,7 +101,7 @@ class ContactForm {
                 if (response.status !== 200) {
                     throw 'Invalid response'
                 }
-                response.json()
+                return response.json()
             });
     }
 

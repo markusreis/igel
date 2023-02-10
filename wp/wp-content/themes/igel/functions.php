@@ -393,6 +393,10 @@ function igel_contact_form(\WP_REST_Request $request)
             '<strong>' . $data['contact-name'] . '</strong> (<strong>Email</strong>: ' . $data['contact-mail'] . ', <strong>Telefon</strong>: ' . $data['contact-phone'] . ') schrieb: <br/><br/>' . $data['contact-message'],
             $headers
         );
+        if (!$res) {
+            header("HTTP/1.1 500 Server Error");
+            exit();
+        }
         return $res;
     } catch (Exception$e) {
         header("HTTP/1.1 500 Server Error");
@@ -434,6 +438,11 @@ function igel_inserat_form(\WP_REST_Request $request)
             $content,
             $headers
         );
+
+        if (!$res) {
+            header("HTTP/1.1 500 Server Error");
+            exit();
+        }
         return $res;
     } catch (Exception$e) {
         header("HTTP/1.1 500 Server Error");
@@ -471,6 +480,10 @@ function igel_eval_form(\WP_REST_Request $request)
             $content,
             $headers
         );
+        if (!$res) {
+            header("HTTP/1.1 500 Server Error");
+            exit();
+        }
         return $res;
     } catch (Exception$e) {
         header("HTTP/1.1 500 Server Error");
@@ -557,4 +570,12 @@ function getLocalMedia(\Justimmo\Model\Attachment $attachment)
     ]);
 
     return empty($post) ? null : array_shift($post);
+}
+
+add_action('wp_mail_failed', 'onMailError', 10, 1);
+function onMailError($wp_error)
+{
+    echo "<pre>";
+    print_r($wp_error);
+    echo "</pre>";
 }
