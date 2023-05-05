@@ -107,7 +107,7 @@ export class Evaluation {
         const fields = [
             {
                 'type': 'headline',
-                'title': this._dom.wrapper.dataset.config === 'evalRequest'
+                'title': this._dom.wrapper.dataset.config === 'evaluationRequest'
                     ? 'Neue "Immobilie bewerten" Anfrage'
                     : 'Neue "Suchauftrag" Anfage',
             }
@@ -161,7 +161,7 @@ export class Evaluation {
                         gtag('event', `${this._dom.wrapper.dataset.config}Success`);
 
                         setTimeout(() => {
-                            this.step = -1
+                            this.step = 0
                             this._dom.wrapper.querySelector('.c-evaluation__step--initial input').value = ''
                         }, 500)
                     }

@@ -4,6 +4,10 @@ export const initContactForms = () => {
 
 class ContactForm {
     constructor(wrapper) {
+
+        if (wrapper.dataset.init === 'y') return;
+        wrapper.dataset.init = 'y'
+
         this._dom = {
             form: wrapper,
             inputs: Array.from(wrapper.querySelectorAll('input')),

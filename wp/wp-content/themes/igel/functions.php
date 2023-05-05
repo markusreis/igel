@@ -385,6 +385,12 @@ function igel_contact_form(\WP_REST_Request $request)
         }
     }
     try {
+
+        $current = get_option('contactForms', []);
+        $data['created_at'] = time();
+        $current[] = json_encode($data);
+        update_option('contactForms', $current);
+
         $headers = array('Content-Type: text/html; charset=UTF-8');
 
         $res = wp_mail(
@@ -427,10 +433,16 @@ function igel_inserat_form(\WP_REST_Request $request)
             $recipient = 'klagenfurt@igel-immobilien.at';
         }
 
+
         $content = 'Ein Kunde hat Interesse an folgendem Inserat: ' . $data['url'] . '<br/><br/>';
         $content .= '<strong>Name:</strong> ' . $data['firstname'] . ' ' . $data['lastname'] . '<br/>';
         $content .= '<strong>E-Mail:</strong> ' . $data['email'] . '<br/>';
         $content .= '<strong>Telefon:</strong> ' . $data['phone'] . '<br/>';
+
+        $current = get_option('inseratForms', []);
+        $store = ['created_at' => time(), 'content' => $content];
+        $current[] = $store;
+        update_option('inseratForms', $current);
 
         $res = wp_mail(
             array($recipient),
@@ -471,6 +483,11 @@ function igel_eval_form(\WP_REST_Request $request)
                     break;
             }
         }
+
+        $current = get_option('evalForms', []);
+        $store = ['created_at' => time(), 'content' => $content];
+        $current[] = $store;
+        update_option('evalForms', $current);
 
         $headers = array('Content-Type: text/html; charset=UTF-8');
 
@@ -578,4 +595,148 @@ function onMailError($wp_error)
     echo "<pre>";
     print_r($wp_error);
     echo "</pre>";
+}
+
+
+add_action('init', function () {
+    if (function_exists('add_menu_page')) {
+        add_menu_page(
+            'Formulare',
+            'Formulare',
+            'edit_posts',
+            'igel-sent-forms',
+            'adminRenderContactForms',
+            'dashicons-awards',
+            7
+        );
+    }
+
+
+    if (is_admin() && isset($_GET['deleteforms']) && $_GET['deleteforms'] === '1') {
+        update_option('contactForms', []);
+        update_option('inseratForms', []);
+        update_option('evalForms', []);
+
+        header('Location: /wp-admin/admin.php?page=igel-sent-forms', 301);
+        exit();
+    }
+});
+
+function adminRenderContactForms()
+{
+    $contactForms = get_option('contactForms', []);
+    $evalForms = get_option('evalForms', []);
+    $inseratForms = get_option('inseratForms', []);
+
+    $forms = [
+        [
+            'title' => 'Kontaktformulare',
+            'data' => $contactForms,
+            'expands' => false,
+            'heads' => [
+                'contact-name' => 'Name',
+                'contact-mail' => 'E-Mail',
+                'contact-phone' => 'Telefon',
+                'contact-message' => 'Nachricht',
+            ]
+        ],
+        [
+            'title' => 'Interesse an Inseraten',
+            'data' => $inseratForms,
+            'expands' => true,
+            'heads' => [
+                'content' => 'Inhalt',
+            ]
+        ],
+        [
+            'title' => 'Immobilie bewerten / Suchaufträge',
+            'data' => $evalForms,
+            'expands' => true,
+            'heads' => [
+                'content' => 'Inhalt',
+            ]
+        ],
+    ];
+    ?>
+    <style>
+        .igel-table .-expands {
+            height: 22px;
+            overflow: hidden;
+        }
+
+        .igel-table tr:hover {
+            background: #fff;
+        }
+
+        .igel-table tr:hover .-expands {
+            height: auto;
+            overflow: visible;
+        }
+
+        .igel-table td, .igel-table th {
+            padding: 5px;
+            vertical-align: top;
+        }
+
+        .igel-table td * {
+            vertical-align: top;
+            font-size: 14px !important;
+        }
+
+    </style>
+    <div class="igel-table" style="padding: 20px">
+        <h1 style="margin-bottom: 15px;">Ausgefüllte Formulare</h1>
+
+        <a id="resetformdata" style="display: block;margin-bottom: 60px;"
+           href="<?php echo $_SERVER['REQUEST_URI']; ?>&deleteforms=1">
+            Daten Zurücksetzen
+        </a>
+
+        <?php
+        foreach ($forms as $form) {
+            ?>
+            <h3><?php echo $form['title']; ?></h3>
+            <table style="text-align: left">
+                <thead>
+                <tr>
+                    <th>Zeitpunkt</th>
+                    <?php
+                    foreach ($form['heads'] as $key => $title) {
+                        echo '<th>' . $title . '</th>';
+                    }
+                    ?>
+                </tr>
+                </thead>
+                <tbody>
+                <?php
+                foreach ($form['data'] as $row) {
+                    $row = is_array($row) ? $row : (array)json_decode($row);
+                    echo '<tr>';
+                    echo '<td style="white-space: nowrap">' . (new DateTime())->setTimestamp($row['created_at'])->format('d.m.y, g:i');
+                    foreach ($form['heads'] as $key => $title) {
+                        echo '<td><div class="' . ($form['expands'] ? '-expands' : '') . '">' . $row[$key] . '</div></td>';
+                    }
+                    echo '</tr>';
+                }
+                ?>
+                </tbody>
+            </table>
+            <hr style="margin: 30px 0;">
+            <?php
+        }
+        ?>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var button = document.getElementById('resetformdata');
+            if (button) {
+                button.addEventListener('click', function (e) {
+                    if (!confirm('Alle Formular-Einträge löschen?')) {
+                        e.preventDefault()
+                    }
+                })
+            }
+        })
+    </script>
+    <?php
 }
