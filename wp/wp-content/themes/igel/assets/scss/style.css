@@ -1019,6 +1019,9 @@ button i, .button i {
     transform: translateX(7px);
   }
 }
+.c-checkbox {
+  position: relative;
+}
 .c-checkbox label {
   display: block;
   position: relative;
@@ -1060,7 +1063,11 @@ button i, .button i {
   text-decoration: none;
 }
 .c-checkbox input {
-  display: none;
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  top: 75%;
+  left: 25px;
 }
 .c-checkbox input:checked + label:after {
   opacity: 1;

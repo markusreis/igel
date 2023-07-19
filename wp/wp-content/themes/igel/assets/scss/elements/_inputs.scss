@@ -213,6 +213,7 @@ button, .button {
 
 
 .c-checkbox {
+  position: relative;
 
   label {
     display: block;
@@ -260,7 +261,11 @@ button, .button {
   }
 
   input {
-    display: none;
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    top: 75%;
+    left: 25px;
 
     &:checked {
       & + label {

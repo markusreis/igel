@@ -36,9 +36,12 @@ if (!function_exists('render_mini_contact_form')) {
             </div>
 
             <div class="c-checkbox">
-                <input type="checkbox" name="toc" id="toc">
+                <input type="checkbox" name="toc" id="toc" required>
                 <label for="toc" class="text-small">
-                    Ich stimme der Datenschutzerklärung und einer Kontaktaufnahme durch IGEL Immobilien
+                    Ich stimme der <a onclick="event.stopPropagation();"
+                                      href="https://www.igel-immobilien.at/datenschutzerklaerung/" target="_blank">Datenschutzerklärung</a>
+                    und einer
+                    Kontaktaufnahme durch IGEL Immobilien
                     GmbH per E-Mail oder Telefon für Rückfragen oder zu Informationszwecken zu.
                 </label>
             </div>
